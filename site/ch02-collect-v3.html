@@ -1,0 +1,3055 @@
+<!DOCTYPE html>
+<html lang="zh-Hans"><head>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-html/tabby.min.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.10.18">
+
+  <meta name="author" content="孙方 · 山东农业大学经济管理学院">
+  <title>统计学原理 · R 语言交互课件（v3 提升版） – 第二章 统计数据收集</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="site_libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="site_libs/revealjs/dist/reveal.css">
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="site_libs/revealjs/dist/theme/quarto-8879e1741d0e5dc2195ca89cb079d87b.css">
+  <link href="site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="site_libs/revealjs/plugin/reveal-chalkboard/font-awesome/css/all.css" rel="stylesheet">
+  <link href="site_libs/revealjs/plugin/reveal-chalkboard/style.css" rel="stylesheet">
+  <link href="site_libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">第二章 统计数据收集</h1>
+  <p class="subtitle">《统计学原理》R 语言交互课件</p>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+孙方 · 山东农业大学经济管理学院
+</div>
+</div>
+</div>
+
+</section>
+<section class="slide level2">
+
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a aria-label="1"></a><span class="co"># 《统计学原理》R 课件 · 公共配置</span></span>
+<span id="cb1-2"><a aria-label="2"></a><span class="co"># 每个章节 qmd 通过 ```{r, file="_setup.R"} 方式引入</span></span>
+<span id="cb1-3"><a aria-label="3"></a></span>
+<span id="cb1-4"><a aria-label="4"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(</span>
+<span id="cb1-5"><a aria-label="5"></a>  <span class="at">comment =</span> <span class="st">"#&gt;"</span>,</span>
+<span id="cb1-6"><a aria-label="6"></a>  <span class="at">collapse =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb1-7"><a aria-label="7"></a>  <span class="at">out.width =</span> <span class="st">"88%"</span>,</span>
+<span id="cb1-8"><a aria-label="8"></a>  <span class="at">fig.align =</span> <span class="st">"center"</span>,</span>
+<span id="cb1-9"><a aria-label="9"></a>  <span class="at">fig.width =</span> <span class="dv">8</span>,</span>
+<span id="cb1-10"><a aria-label="10"></a>  <span class="at">fig.height =</span> <span class="dv">5</span>,</span>
+<span id="cb1-11"><a aria-label="11"></a>  <span class="at">fig.retina =</span> <span class="dv">2</span>,</span>
+<span id="cb1-12"><a aria-label="12"></a>  <span class="at">dev.args =</span> <span class="fu">list</span>(<span class="at">family =</span> <span class="st">"sans"</span>)</span>
+<span id="cb1-13"><a aria-label="13"></a>)</span>
+<span id="cb1-14"><a aria-label="14"></a></span>
+<span id="cb1-15"><a aria-label="15"></a><span class="co"># 中文友好的 ggplot 主题</span></span>
+<span id="cb1-16"><a aria-label="16"></a><span class="cf">if</span> (<span class="fu">requireNamespace</span>(<span class="st">"ggplot2"</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>)) {</span>
+<span id="cb1-17"><a aria-label="17"></a>  ggplot2<span class="sc">::</span><span class="fu">theme_set</span>(</span>
+<span id="cb1-18"><a aria-label="18"></a>    ggplot2<span class="sc">::</span><span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>) <span class="sc">+</span></span>
+<span id="cb1-19"><a aria-label="19"></a>      ggplot2<span class="sc">::</span><span class="fu">theme</span>(</span>
+<span id="cb1-20"><a aria-label="20"></a>        <span class="at">plot.title =</span> ggplot2<span class="sc">::</span><span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb1-21"><a aria-label="21"></a>        <span class="at">panel.grid.minor =</span> ggplot2<span class="sc">::</span><span class="fu">element_blank</span>()</span>
+<span id="cb1-22"><a aria-label="22"></a>      )</span>
+<span id="cb1-23"><a aria-label="23"></a>  )</span>
+<span id="cb1-24"><a aria-label="24"></a>}</span>
+<span id="cb1-25"><a aria-label="25"></a></span>
+<span id="cb1-26"><a aria-label="26"></a><span class="co"># 讲义用统一调色板</span></span>
+<span id="cb1-27"><a aria-label="27"></a>stat_pal <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"#1a6b54"</span>, <span class="st">"#d97706"</span>, <span class="st">"#2563eb"</span>, <span class="st">"#c2410c"</span>, <span class="st">"#7c3aed"</span>, <span class="st">"#0891b2"</span>)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="第一节-统计数据的来源" class="slide level2">
+<h2>第一节 统计数据的来源</h2>
+<p>本节首先明确统计数据搜集的概念与资料类型，介绍数据的三种获取途径与五种搜集方法，然后按范围、时间、组织方式三个角度系统梳理统计调查的种类，最后说明我国的统计调查体系与统计系统；本节末尾以”数据的载体与状态”拓展小目打开数据形态视野，并附国内外数据平台一览表供课后检索。</p>
+</section>
+<section id="统计数据搜集的概念与资料的类型" class="slide level2">
+<h2>统计数据搜集的概念与资料的类型</h2>
+<p><strong>定义</strong>：统计数据搜集是按照预定的统计研究的目的和任务，运用科学的调查方法与手段，有计划有组织地从客观实际采集数据的过程。</p>
+<p><strong>（一）搜集资料的类型</strong>：统计数据搜集的主要是原始资料，同时也包括对次级资料的搜集。</p>
+<ul>
+<li><strong>原始资料</strong>：指说明总体单位特征的资料；</li>
+<li><strong>次级资料</strong>：指已经经过加工整理，由个体过渡到总体，能够在一定程度上说明所研究总体的统计资料，如统计年鉴、统计公告等。</li>
+</ul>
+</section>
+<section id="调查数据与实验数据" class="slide level2">
+<h2>调查数据与实验数据</h2>
+<p><strong>调查数据</strong>：运用相应的调查方法，向客观实际搜集数字资料的过程就是统计调查。通过统计调查获得的数据就是调查数据。</p>
+<p><strong>实验数据</strong>：在实验中控制实验对象、观测整个实验过程而搜集到的数据就是实验数据。</p>
+</section>
+<section id="阅读案例历史中的自然实验大楼还是大师" class="slide level2">
+<h2>阅读案例：历史中的”自然实验”——大楼还是大师</h2>
+<p><strong>问题背景</strong></p>
+<p>对于一个大学最重要的，是物质资本还是人才，似乎并不能简单地地下结论：</p>
+<ul>
+<li>一流科研人才的重要性自不必讲，但是拥有一流的研究设备、充足的科研基金也都是非常重要的。</li>
+<li>拥有一流科研条件的院校往往更能吸引到一流的科研人才，而一流的科研人才也会争取到更多的科研基金——两者相互促进，独立地研究人才对科研的影响，或者物质资本对科研的影响越来越困难。</li>
+</ul>
+<p><strong>研究方法与数据</strong></p>
+<p>Waldinger 发表的论文 <em>Bombs, Brains, and Science: The Role of Human and Physical Capital for the Creation of Scientific Knowledge</em>（直译为《炸弹，大脑和科学：人力和物质资本在创造科学知识方面的作用》），运用自然实验的方法，分析 20 世纪德国、奥地利大学数学、物理和化学学科的相关数据，对科研活动中人才与物质资本各自所起的作用做出了回答。</p>
+<p>作者搜集了 1926 至 1980 年间德国 35 所高校的 105 个系的年论文发表数量，论文发表数量在经过一定处理后用来衡量科研产出。最终，作者得到了 1926、1940、1950、1961、1970、1980 年六年的数据，并基于以下事实设计了自然实验。</p>
+<p><strong>背景事实（人才流失的冲击）</strong></p>
+</section>
+<section id="阅读案例历史中的自然实验大楼还是大师续" class="slide level2">
+<h2>阅读案例：历史中的”自然实验”——大楼还是大师（续）</h2>
+<ul>
+<li>1933 年 4 月起，纳粹政府开始驱逐境内公务员系统中的犹太裔人员和政治不可靠者，这项政策迅速波及全德的高等教育体系，并造成教员离职和提前退休的高潮。</li>
+<li>1938 年，驱逐政策扩展至奥地利。</li>
+<li>1933 至 1940 年间，超过 1000 名科研人员遭纳粹政府驱逐，德国在物理、化学和数学领域分别失去了 15%、14.1% 和 18.7% 的研究者，并且大多数流亡学者是其专业领域的佼佼者。</li>
+</ul>
+<p><strong>二战对德国物质资本的损毁</strong></p>
+<ul>
+<li>另一方面，1939 年起，英国空军开始对德军事目标的空袭行动，对德国包括教育领域在内的诸多行业带来极大的物质资本损毁。</li>
+<li>1939 至 1945 年间，约 135 万吨炸弹被投掷到德国本土，许多大学的科研设备、重要手稿等也遭到焚毁。</li>
+<li>战后大学建筑的修复重建，由于资金、工匠、建筑材料的短缺和德国城市的普遍受损而被搁置。</li>
+<li>大多数的学校被迫征募学生义务清理废墟、帮助重建。直至 20 世纪 50 年代末期，大部分学校才完成重建。</li>
+</ul>
+<p><strong>区分两种冲击的研究设计</strong></p>
+<ul>
+<li>相比于 1926 年，1940 年的论文发表主要受到人才流失的冲击；</li>
+<li>1950 年的论文发表则受到人才流失和物质资本损毁的双重影响。</li>
+<li>通过一定的技术手段，作者就可以在数据上将人才流失与物质资本损毁的影响区别开来独立研究；</li>
+<li>再结合 1961、1970、1980 年的数据，还可以分析两种影响的持续性。</li>
+</ul>
+</section>
+<section id="阅读案例历史中的自然实验大楼还是大师续-1" class="slide level2">
+<h2>阅读案例：历史中的”自然实验”——大楼还是大师（续）</h2>
+<p>本例展示了”自然实验”思想——利用历史事件造成的不同时间点上冲击来源的差异，识别并分离不同因素的影响。</p>
+<p><strong>研究结论与方法论启示</strong></p>
+<p>统计分析结果显示：</p>
+<ul>
+<li>在短期中，人力资本损失造成的论文发表减少四倍于物质资本损毁的冲击；高水平研究人员的流失对论文发表的负面影响更大。</li>
+<li>科研人员流失对论文发表存在显著的长期负影响，直到 1980 年左右才消失；</li>
+<li>而物质资本损毁虽然也会对论文发表产生负影响，但持续时间较短，在 1950 年以后就消失了。</li>
+</ul>
+<p><strong>结论</strong>：二战时期德国及奥地利大学的经历表明，相比于物质资本，人才是科学知识创新中更为重要的因素。</p>
+<p>方法论启示：</p>
+<ul>
+<li>掌握自然实验的思路以及相应的统计分析方法是较为简单的；</li>
+<li>困难的是发现自然实验，以及将自然实验与自己的研究方向结合起来，得出有益于人类知识创造的成果；</li>
+<li>要保持敏感性，发现问题，巧妙运用自然实验，解决问题。</li>
+</ul>
+</section>
+<section id="数据的来源与获取方式" class="slide level2 scrollable">
+<h2>数据的来源与获取方式</h2>
+<p>普通的数据使用者可以通过三种途径获得数据：</p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>数据源类型</th>
+<th>数据内容</th>
+<th>获取方式</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>已存在数据源——原始数据源（初级资料）</td>
+<td>原始数据</td>
+<td>通过<strong>统计调查</strong>直接取得</td>
+</tr>
+<tr class="even">
+<td>已存在数据源——加工数据源（次级资料）</td>
+<td>政府统计、企业统计、民间统计等机构，以数据库、出版物、账册等形式存在的加工数据</td>
+<td>通过<strong>数据查询（查阅）</strong>取得</td>
+</tr>
+<tr class="odd">
+<td>实验数据源</td>
+<td>实验数据</td>
+<td><strong>对过程加以控制</strong>（实验设计）获得</td>
+</tr>
+</tbody>
+</table>
+<p><strong>要点</strong>：</p>
+<ol type="1">
+<li>初级资料（原始数据源）是未经加工的第一手数据，需通过统计调查获取；</li>
+<li>次级资料（加工数据源）是他人已加工整理过的第二手数据，来源于政府统计、企业统计、民间统计等机构，形式包括数据库、出版物、账册等，通过数据查询获取；</li>
+<li>实验数据源不同于调查数据，它是在对过程加以控制的条件下取得的。</li>
+</ol>
+<p><em>（图示说明：示意图展示数据使用者通过统计调查、数据查询和对过程加以控制三条途径分别获得初级资料、次级资料和实验数据，直观呈现统计数据的三种来源。）</em></p>
+</section>
+<section id="统计数据的五种搜集方法" class="slide level2">
+<h2>统计数据的五种搜集方法</h2>
+<p><strong>1、直接观察法</strong></p>
+<p><strong>定义</strong>：调查人员亲自到现场调查，对所需调查的现象直接观察、计数或测量，以搜集统计资料的方法。</p>
+<p><strong>优点</strong>：获得资料可靠性强，简便易行。<strong>缺点</strong>：只能观察到外部行为，无法说明内在动机。</p>
+<p>课件以漫画形象——调查者手持放大镜仔细观察房屋对象——诠释直接观察法”亲临现场、实地查看”的本质，帮助学生建立对第一手资料搜集方式的感性认识。</p>
+<p><img data-src="images/ch02/pic/ch02_s011_01.png" class="fig-orig"></p>
+<p><strong>2、采访法</strong></p>
+<p>调查人员根据调查提纲向被调查者逐项询问，根据被调查者的答复来搜集统计资料的一种方法。</p>
+<ul>
+<li><strong>优点</strong>：可深入了解情况；</li>
+<li><strong>缺点</strong>：易带有主观倾向。</li>
+</ul>
+<p>访问调查中，“调查者”与”被调查者”两个角色之间是平等合作的关系：调查者是调查的实施方，负责提问并记录回答；被调查者是调查的对象，提供所需信息；两者以平等合作的方式完成访问，从而取得真实的调查资料。</p>
+<p><img data-src="images/ch02/pic/ch02_s013_02.png" class="fig-orig"></p>
+<p><img data-src="images/ch02/pic/ch02_s013_03.png" class="fig-orig"></p>
+<p><strong>3、报告法</strong></p>
+<p>是由报告单位根据原始记录和核算资料，按照统计调查机关颁发的统一的表格和要求，按一定的报送程序提供统计资料的方法。</p>
+</section>
+<section id="统计数据的五种搜集方法续" class="slide level2">
+<h2>统计数据的五种搜集方法（续）</h2>
+<p>报告式调查中，调查者（上级/统计机关）对被调查者（报告单位）存在强制、约束的自上而下关系，被调查者据此以报告的形式向调查者提供统计资料，体现了报告法依托行政隶属关系实行的特点。</p>
+<p><img data-src="images/ch02/pic/ch02_s014_04.png" class="fig-orig"></p>
+<p><img data-src="images/ch02/pic/ch02_s014_05.png" class="fig-orig"></p>
+<p><strong>4、问卷法</strong></p>
+<p>是以答卷形式提问，由被调查者自愿回答的一种搜集资料的方法。</p>
+<p><strong>5、实验法</strong></p>
+<p>是在所设定的特殊实验场所、特殊状态下，对调查对象进行实验以取得所需资料的调查方法。</p>
+</section>
+<section id="调查数据的三种实施形态自填式面访式与电话式" class="slide level2">
+<h2>调查数据的三种实施形态：自填式、面访式与电话式</h2>
+<p>问卷法与采访法在实施层面（问卷如何递送、访问如何进行）通常采取三种形态，各有明显的利弊：</p>
+<ul>
+<li><strong>自填式问卷调查</strong>：在没有调查员协助的情况下，由被调查者自己完成问卷；问卷递送方式包括调查员分发、邮寄、网络、媒体等。要求问卷结构严谨、有清楚的说明；缺点是问卷返回率比较低、不适合结构复杂的问卷、调查周期比较长、数据搜集过程中出现的问题难以及时采取调改措施。</li>
+<li><strong>面访式问卷调查</strong>：调查员与被调查者面对面提问、作答。优点是可提高回答率与数据质量、能调节数据搜集所花费的时间；缺点是调查成本较高、调查过程的质量控制有一定难度。</li>
+<li><strong>电话式问卷调查</strong>：通过电话向被调查者实施调查。速度快、能在短时间内完成调查、适合样本单位十分分散的情况；局限是被调查者没有电话便无法实施、访问时间不能太长、使用的问卷需要简单、被访者不愿接受时难以说服。</li>
+</ul>
+<p>三种实施形态在七个特征上的对比：</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>特征</th>
+<th>自填式</th>
+<th>面访式</th>
+<th>电话式</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>调查时间</td>
+<td>慢</td>
+<td>中等</td>
+<td>快捷</td>
+</tr>
+<tr class="even">
+<td>调查费用</td>
+<td>低</td>
+<td>高</td>
+<td>低</td>
+</tr>
+<tr class="odd">
+<td>问卷难度</td>
+<td>要求容易</td>
+<td>可以复杂</td>
+<td>要求容易</td>
+</tr>
+<tr class="even">
+<td>有形辅助物的使用</td>
+<td>中等利用</td>
+<td>充分利用</td>
+<td>无法利用</td>
+</tr>
+<tr class="odd">
+<td>调查过程控制</td>
+<td>简单</td>
+<td>复杂</td>
+<td>容易</td>
+</tr>
+<tr class="even">
+<td>调查员作用的发挥</td>
+<td>无法发挥</td>
+<td>充分发挥</td>
+<td>一般发挥</td>
+</tr>
+<tr class="odd">
+<td>回答率</td>
+<td>最低</td>
+<td>较高</td>
+<td>一般</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="调查数据的三种实施形态自填式面访式与电话式续" class="slide level2">
+<h2>调查数据的三种实施形态：自填式、面访式与电话式（续）</h2>
+</section>
+<section id="统计调查的种类总览" class="slide level2 scrollable">
+<h2>统计调查的种类总览</h2>
+<p>统计调查可以从以下三个角度进行分类：</p>
+<ol type="1">
+<li><strong>按调查单位的范围大小</strong>分为：全面调查、非全面调查；</li>
+<li><strong>按调查时间是否连续</strong>分为：经常性调查、一次性调查；</li>
+<li><strong>按调查的组织方式不同</strong>分为：定期报表、专门调查，其中专门调查又包括：普查、重点调查、典型调查、抽样调查。</li>
+</ol>
+<p>其中，按调查单位的范围大小（即全面调查与非全面调查）的对比为：</p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>全面调查</th>
+<th>非全面调查</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>含义</td>
+<td>对调查对象的<strong>全部单位一一加以调查</strong></td>
+<td>对调查对象中的<strong>一部分单位</strong>进行调查</td>
+</tr>
+<tr class="even">
+<td>举例/说明</td>
+<td>如普查和全面统计报表</td>
+<td>通过这些部分单位的调查来了解全面或一定范围（如某种类型）的情况</td>
+</tr>
+<tr class="odd">
+<td>特点/评价</td>
+<td>涉及面广，调查单位多；要耗费较多的人力、物力、财力，调查的时间也较长</td>
+<td>调查单位少，可以节省人力、物力和财力</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="全面调查之一普查" class="slide level2">
+<h2>全面调查之一：普查</h2>
+<p>统计调查按调查的范围，分为全面调查和非全面调查两大类。<strong>全面调查</strong>是对调查对象的所有单位一一进行调查；属于全面调查的方式有普查和全面统计报表。</p>
+<p><strong>（1）普查</strong></p>
+<p>普查是一种专门组织的一次性的全面调查。</p>
+<ul>
+<li><strong>特点</strong>：全面性；一次性；专门调查。</li>
+<li><strong>任务</strong>：搜集重要的国情国力和资源状况的全面资料，为政府制定规划、方针政策提供依据。</li>
+<li><strong>方式</strong>：建立专门机构，配备专门人员调查；利用基层单位原始记录和核算资料发表调查。</li>
+<li><strong>原则</strong>：一是规定统一的标准时点；二是规定统一的普查期限；三是规定调查的项目和指标；四是选择适宜的普查时期。</li>
+</ul>
+<p>组织方式示意图以”总体单位”与”调查单位”的标注说明：在普查中调查单位就是总体单位，即对全部单位进行调查、无一遗漏，因此普查取得的资料全面，但工作量较大。</p>
+<p><em>（图示说明：示意图以总体单位与调查单位的对应关系直观说明普查”对全部单位进行调查”的全面性特征。）</em></p>
+<p><strong>我国已经开展的普查类型</strong></p>
+<ul>
+<li><strong>人口普查、农业普查</strong>：每十年进行一次，分别于尾数为 0、7 的年份进行；</li>
+<li><strong>经济普查</strong>：2004 年末进行第一次经济普查（逢 3、8 的年份进行），2023 年开展第五次全国经济普查；</li>
+<li>另外还有基建项目普查、工业普查、科技人员普查等。</li>
+</ul>
+<p><strong>以人口普查为例</strong>：我国历次人口普查的开展年份如下，体现了普查作为全面调查定期、有组织实施的规律：</p>
+</section>
+<section id="全面调查之一普查续" class="slide level2">
+<h2>全面调查之一：普查（续）</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>年份</th>
+<th>普查</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1953 年</td>
+<td>第一次人口普查</td>
+</tr>
+<tr class="even">
+<td>1964 年</td>
+<td>第二次人口普查</td>
+</tr>
+<tr class="odd">
+<td>1982 年</td>
+<td>第三次人口普查</td>
+</tr>
+<tr class="even">
+<td>1990 年</td>
+<td>第四次人口普查</td>
+</tr>
+<tr class="odd">
+<td>2000 年</td>
+<td>第五次人口普查</td>
+</tr>
+<tr class="even">
+<td>2010 年</td>
+<td>第六次人口普查</td>
+</tr>
+<tr class="odd">
+<td>2020 年</td>
+<td>第七次人口普查</td>
+</tr>
+</tbody>
+</table>
+<p>观察可见，1990 年以后人口普查每 10 年开展一次（逢 0 的年份进行），与”尾数为 0、7 的年份进行”的普查安排相呼应，保证国情数据的连续性与可比性。</p>
+<p>国务院决定于 2020 年开展<strong>第七次全国人口普查</strong>，<strong>普查标准时点为 11 月 1 日零时</strong>。人口普查主要调查人口和住户的基本情况，内容包括：性别、年龄、民族、受教育程度、行业、职业、迁移流动、社会保障、婚姻生育、死亡、住房情况。组织实施上，国务院决定成立第七次全国人口普查领导小组，负责人口普查的组织和实施普查领导；小组办公室设在统计局，具体负责人口普查的日常组织和协调。普查是全面调查，必须统一规定标准时点，以保证资料的准确性和可比性。</p>
+</section>
+<section id="例题人口普查的时点概念" class="slide level2">
+<h2>例题：人口普查的”时点概念”</h2>
+<p>我国第七次人口普查，标准时间是 2020 年 11 月 1 日零时。人口普查登记的是标准时点上的人口存量，判断某人是否计入普查人口数，要看其在标准时点（11 月 1 日零时）是否存活。</p>
+<p><strong>例题</strong>：下列情况不应计算人口数的有（<strong>ACD</strong>）（时点概念）</p>
+<ul>
+<li><strong>A.</strong> 2020 年 11 月 3 日出生的婴儿；</li>
+<li><strong>B.</strong> 2020 年 10 月 29 日出生，但 11 月 1 日 8 时死亡的婴儿；</li>
+<li><strong>C.</strong> 2020 年 10 月 31 日 23 时死亡的人口；</li>
+<li><strong>D.</strong> 2020 年 10 月 29 日出生，20 时死亡的婴儿；</li>
+<li><strong>E.</strong> 2020 年 11 月 1 日 1 时死亡的人口。</li>
+</ul>
+<p><strong>解析</strong>：</p>
+<ul>
+<li>A：标准时点之后才出生，零时时尚不存在，不计入；</li>
+<li>C：标准时点之前（10 月 31 日 23 时）已死亡，不计入；</li>
+<li>D：出生后 20 时即死亡，标准时点时已不在世，不计入；</li>
+<li>B、E：在标准时点（11 月 1 日零时）存活，应计入人口数。</li>
+</ul>
+</section>
+<section id="全面调查之二统计报表制度" class="slide level2 scrollable">
+<h2>全面调查之二：统计报表制度</h2>
+<p><strong>（2）全面统计报表制度</strong></p>
+<p><strong>统计报表制度</strong>：指按照国家统一规定的各项要求，自下而上地定期向国家和主管部门报送基本统计资料的一种报告制度。</p>
+<p><strong>优点</strong>：</p>
+<ul>
+<li>能保证统计资料的<strong>全面性</strong>和<strong>连续性</strong>；</li>
+<li>能保证统计资料的<strong>统一性</strong>和<strong>及时性</strong>；</li>
+<li>能满足<strong>各级部门</strong>对统计资料的需要。</li>
+</ul>
+<p><strong>任务</strong>：搜集国民经济和社会发展基本情况的资料，为制订国民经济和社会发展计划和检查计划执行情况服务。</p>
+<p><strong>局限</strong>：</p>
+<ol type="1">
+<li>统计报表过多会增加基层负担；</li>
+<li>有可能由于虚报瞒报而影响统计资料质量。</li>
+</ol>
+<p>统计报表是我国搜集政府统计数据的重要方式，应辩证认识其优点与不足——报表设计须兼顾科学性与基层承受能力，并通过统计法规防止虚报瞒报。</p>
+<p><strong>统计报表的种类</strong>（按不同标准可作三种分类）：</p>
+<ul>
+<li><strong>（1）按报表内容和实施范围的不同</strong>，分为：国家统计报表、部门统计报表、地方统计报表；</li>
+<li><strong>（2）按填报单位不同</strong>，分为：基层统计报表、综合统计报表；</li>
+<li><strong>（3）按报送周期长短不同</strong>，分为：日报、旬报、月报、季报、半年报、年报等。</li>
+</ul>
+</section>
+<section id="非全面调查之一抽样调查" class="slide level2 scrollable">
+<h2>非全面调查之一：抽样调查</h2>
+<p><strong>非全面调查</strong>是指对调查对象中的一部分单位进行调查，以取得调查对象的部分资料，用来推断总体或反映总体的基本情况。其调查范围只涉及总体中的一部分单位，而非全部单位；调查目的虽只调查部分单位，但目的仍在于认识总体——据以推断总体数量特征或反映总体的基本情况；与全面调查相对，非全面调查调查单位少，可节省人力、物力和财力。</p>
+<p><strong>（1）抽样调查</strong></p>
+<p><strong>定义</strong>：抽样调查是一种非全面调查。它是按照<strong>随机原则</strong>从全部研究对象中抽取部分单位作为总体的代表进行调查。</p>
+<p><strong>特点</strong>：</p>
+<ol type="1">
+<li>属于一种非全面调查；</li>
+<li>按随机原则选择调查单位进行调查；</li>
+<li>目的在于了解总体的全面情况。</li>
+</ol>
+<p>“随机原则”是抽样调查区别于其他非全面调查（如重点调查、典型调查）的核心特征；虽然只调查部分单位，但其目的仍是推断和了解总体的全面情况。</p>
+<p>组织方式示意图中，大圆内全部圆点表示总体单位，按随机原则从中抽选出的部分单位即为调查单位——抽样调查的关键在于”随机原则”，不掺杂主观意愿，每个总体单位中选机会均等，从而保证样本对总体的代表性。</p>
+<p><em>（图示说明：示意图用大圆内的总体单位与随机抽中的调查单位的对比，直观展示抽样调查按随机原则选择调查单位、各单位中选机会相同的原理。）</em></p>
+</section>
+<section id="非全面调查之二重点调查" class="slide level2 scrollable">
+<h2>非全面调查之二：重点调查</h2>
+<p><strong>重点调查</strong>是一种专门组织的非全面调查，它是在所研究的对象中只选择一部分重点单位进行调查。</p>
+<p><strong>重点单位</strong>：指单位数量占总体单位数的比重较小，但其标志总量却占总体标志总量比重较大的那部分调查单位。</p>
+<blockquote>
+<p>例：我国粮食主产区包括辽宁、河北、山东、吉林、内蒙古、江西、湖南省、四川、河南、湖北省、江苏、安徽、黑龙江等<strong>十三个省份</strong>。</p>
+</blockquote>
+<p><strong>特点</strong>：</p>
+<ol type="1">
+<li>属于一种非全面调查；</li>
+<li>选择一部分重点单位进行调查；</li>
+<li>目的在于了解总体的基本情况。</li>
+</ol>
+<p>示意图说明：重点单位数量不多，但其标志量占标志总量的比重较大；只调查这些重点单位，即可了解总体的基本情况，因而省时省力、效率较高。</p>
+<p><em>（图示说明：示意图以总体单位与被选中的调查单位（重点单位）的对比，直观展示重点调查”只调查单位数不多但标志量比重大的重点单位”的原理。）</em></p>
+</section>
+<section id="非全面调查之三典型调查" class="slide level2 scrollable">
+<h2>非全面调查之三：典型调查</h2>
+<p><strong>定义</strong>：典型调查是一种非全面调查，它是有意识地选取少数几个具有代表性的典型单位进行深入细致的调查。</p>
+<p><strong>典型单位</strong>：指在被分析研究的现象方面具有突出特征的单位。</p>
+<p><strong>特点</strong>：</p>
+<ol type="1">
+<li>属于一种非全面调查；</li>
+<li>选择一部分典型单位进行调查；</li>
+<li>目的在于了解总体的一般情况。一定条件下，利用典型调查资料可以从数量上推算总体的指标。</li>
+</ol>
+<p><strong>类型</strong>：解剖麻雀式；划类选典式。</p>
+<p>示意图说明：典型调查对典型单位进行调查，典型单位的选择并不一定按规模——典型单位根据调查目的和分析判断选取，而非随机抽取，也非单纯按单位规模大小确定。</p>
+<p><em>（图示说明：示意图以总体单位与被选中的调查单位（典型单位）的对比，直观说明典型调查”对典型单位进行调查、选择不一定按规模”的特点。）</em></p>
+</section>
+<section id="重点调查与典型调查的区别" class="slide level2">
+<h2>重点调查与典型调查的区别</h2>
+<p>两者都是非全面调查，但调查的着眼点不同：</p>
+<ul>
+<li><strong>重点调查</strong>：选取一部分重要样本进行调查，这些样本在<strong>量</strong>上占优势；</li>
+<li><strong>典型调查</strong>：有目的地选取有<strong>代表性</strong>的样本进行调查，侧重该样本<strong>质</strong>的方面。</li>
+</ul>
+<p><strong>a. 选择对象的标准不同</strong></p>
+<ul>
+<li>典型调查选典型样本；</li>
+<li>重点调查选择集中性的单位作为调查对象。</li>
+</ul>
+<p><strong>b. 调查目的不同</strong></p>
+<ul>
+<li>典型调查的目的是认识事物的本质和规律，侧重<strong>定性分析</strong>；</li>
+<li>重点调查进行<strong>定量调查</strong>。</li>
+</ul>
+</section>
+<section id="r-实践-用-sample-体验不同的抽样组织方式" class="slide level2 r-demo">
+<h2>R 实践 · 用 sample() 体验不同的抽样组织方式</h2>
+<p>以某专业 <strong>120 名学生</strong>（三个班各 40 人）为总体，各抽 12 人：</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a aria-label="1"></a><span class="fu">set.seed</span>(<span class="dv">2026</span>)</span>
+<span id="cb2-2"><a aria-label="2"></a>students <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb2-3"><a aria-label="3"></a>  学号 <span class="ot">=</span> <span class="dv">202601</span><span class="sc">:</span><span class="dv">2026120</span>,</span>
+<span id="cb2-4"><a aria-label="4"></a>  班级 <span class="ot">=</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"一班"</span>, <span class="st">"二班"</span>, <span class="st">"三班"</span>), <span class="at">each =</span> <span class="dv">40</span>)</span>
+<span id="cb2-5"><a aria-label="5"></a>)</span>
+<span id="cb2-6"><a aria-label="6"></a></span>
+<span id="cb2-7"><a aria-label="7"></a><span class="co"># 1. 简单随机抽样：人人机会均等，全凭"抽签"</span></span>
+<span id="cb2-8"><a aria-label="8"></a>srs <span class="ot">&lt;-</span> students<span class="sc">$</span>学号[<span class="fu">sample</span>(students<span class="sc">$</span>学号, <span class="dv">12</span>)]</span>
+<span id="cb2-9"><a aria-label="9"></a><span class="fu">sort</span>(srs)</span>
+<span id="cb2-10"><a aria-label="10"></a><span class="co">#&gt;  [1]  423926  479917  494120  639872  712687  999046 1181706 1193279 1476284</span></span>
+<span id="cb2-11"><a aria-label="11"></a><span class="co">#&gt; [10] 1531470 1584927</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a aria-label="1"></a><span class="co"># 2. 等距（系统）抽样：每隔 N/n = 10 人抽 1 人，起点随机</span></span>
+<span id="cb3-2"><a aria-label="2"></a>start <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">10</span>, <span class="dv">1</span>)</span>
+<span id="cb3-3"><a aria-label="3"></a>sys <span class="ot">&lt;-</span> students<span class="sc">$</span>学号[<span class="fu">seq</span>(start, <span class="dv">120</span>, <span class="at">by =</span> <span class="dv">10</span>)]</span>
+<span id="cb3-4"><a aria-label="4"></a></span>
+<span id="cb3-5"><a aria-label="5"></a><span class="co"># 3. 分层抽样：每班固定抽 4 人，保证样本结构与总体一致</span></span>
+<span id="cb3-6"><a aria-label="6"></a>str <span class="ot">&lt;-</span> <span class="fu">unlist</span>(<span class="fu">tapply</span>(students<span class="sc">$</span>学号, students<span class="sc">$</span>班级, sample, <span class="at">size =</span> <span class="dv">4</span>))</span>
+<span id="cb3-7"><a aria-label="7"></a></span>
+<span id="cb3-8"><a aria-label="8"></a><span class="fu">table</span>(方式 <span class="ot">=</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">"简单随机"</span>, <span class="dv">12</span>), <span class="fu">rep</span>(<span class="st">"等距"</span>, <span class="dv">12</span>), <span class="fu">rep</span>(<span class="st">"分层"</span>, <span class="dv">12</span>)),</span>
+<span id="cb3-9"><a aria-label="9"></a>      班级 <span class="ot">=</span> students<span class="sc">$</span>班级[<span class="fu">match</span>(<span class="fu">c</span>(srs, sys, str), students<span class="sc">$</span>学号)])</span>
+<span id="cb3-10"><a aria-label="10"></a><span class="co">#&gt;           班级</span></span>
+<span id="cb3-11"><a aria-label="11"></a><span class="co">#&gt; 方式     一班 三班 二班</span></span>
+<span id="cb3-12"><a aria-label="12"></a><span class="co">#&gt;   分层        4    4    4</span></span>
+<span id="cb3-13"><a aria-label="13"></a><span class="co">#&gt;   等距        4    4    4</span></span>
+<span id="cb3-14"><a aria-label="14"></a><span class="co">#&gt;   简单随机    4    4    3</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div title="观察">
+<div class="callout callout-note callout-titled callout-style-simple">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>观察</strong></p>
+</div>
+<div class="callout-content">
+<p>简单随机抽样三个班抽中的人数<strong>波动很大</strong>（随机性）；分层抽样则严格每班 4 人。当总体内部差异明显时，分层抽样能用同样多的样本获得更精确的推断——这是第五章抽样误差理论的先声。</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="经常性调查与一次性调查" class="slide level2">
+<h2>经常性调查与一次性调查</h2>
+<p>按调查时间是否连续，统计调查分为：</p>
+<p><strong>1. 经常性调查</strong>：指随着被研究现象的变化，连续不断地进行登记，以反映现象在一段时间内的全部发展过程。如工业产品产量、商品销售量等。</p>
+<p><strong>2. 一次性调查</strong>：对时点现象进行定期或不定期的调查登记，以反映现象在某一时点上的发展水平或规模。</p>
+<p>区分两类调查的关键在于现象的性质——时期现象（如产量、销量）采用经常性调查；时点现象（如人口数、库存量）采用一次性调查。</p>
+</section>
+<section id="r-实践-重点单位少数企业占了多大比重" class="slide level2 r-demo">
+<h2>R 实践 · 重点单位：少数企业占了多大比重</h2>
+<p>重点调查不抽签，而是抓<strong>标志量集中</strong>的少数单位。下面 8 家企业的产值里，先看前两家占了多少。</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a aria-label="1"></a>output <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">420</span>, <span class="dv">310</span>, <span class="dv">80</span>, <span class="dv">55</span>, <span class="dv">40</span>, <span class="dv">30</span>, <span class="dv">25</span>, <span class="dv">20</span>)   <span class="co"># 万元</span></span>
+<span id="cb4-2"><a aria-label="2"></a>share <span class="ot">&lt;-</span> output <span class="sc">/</span> <span class="fu">sum</span>(output)</span>
+<span id="cb4-3"><a aria-label="3"></a>firm <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb4-4"><a aria-label="4"></a>  企业 <span class="ot">=</span> <span class="fu">paste0</span>(<span class="st">"企业"</span>, LETTERS[<span class="fu">seq_along</span>(output)]),</span>
+<span id="cb4-5"><a aria-label="5"></a>  产值 <span class="ot">=</span> output,</span>
+<span id="cb4-6"><a aria-label="6"></a>  比重 <span class="ot">=</span> <span class="fu">round</span>(share, <span class="dv">3</span>),</span>
+<span id="cb4-7"><a aria-label="7"></a>  累计比重 <span class="ot">=</span> <span class="fu">round</span>(<span class="fu">cumsum</span>(share), <span class="dv">3</span>)</span>
+<span id="cb4-8"><a aria-label="8"></a>)</span>
+<span id="cb4-9"><a aria-label="9"></a>firm</span>
+<span id="cb4-10"><a aria-label="10"></a><span class="co">#&gt;    企业 产值  比重 累计比重</span></span>
+<span id="cb4-11"><a aria-label="11"></a><span class="co">#&gt; 1 企业A  420 0.429    0.429</span></span>
+<span id="cb4-12"><a aria-label="12"></a><span class="co">#&gt; 2 企业B  310 0.316    0.745</span></span>
+<span id="cb4-13"><a aria-label="13"></a><span class="co">#&gt; 3 企业C   80 0.082    0.827</span></span>
+<span id="cb4-14"><a aria-label="14"></a><span class="co">#&gt; 4 企业D   55 0.056    0.883</span></span>
+<span id="cb4-15"><a aria-label="15"></a><span class="co">#&gt; 5 企业E   40 0.041    0.923</span></span>
+<span id="cb4-16"><a aria-label="16"></a><span class="co">#&gt; 6 企业F   30 0.031    0.954</span></span>
+<span id="cb4-17"><a aria-label="17"></a><span class="co">#&gt; 7 企业G   25 0.026    0.980</span></span>
+<span id="cb4-18"><a aria-label="18"></a><span class="co">#&gt; 8 企业H   20 0.020    1.000</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a aria-label="1"></a><span class="fu">barplot</span>(share, <span class="at">names.arg =</span> firm<span class="sc">$</span>企业, <span class="at">col =</span> <span class="st">"#1a6b54"</span>, <span class="at">border =</span> <span class="st">"white"</span>,</span>
+<span id="cb5-2"><a aria-label="2"></a>        <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.5</span>), <span class="at">ylab =</span> <span class="st">"产值比重"</span>,</span>
+<span id="cb5-3"><a aria-label="3"></a>        <span class="at">main =</span> <span class="st">"8 家企业产值比重"</span>)</span>
+<span id="cb5-4"><a aria-label="4"></a><span class="fu">abline</span>(<span class="at">h =</span> <span class="dv">0</span>, <span class="at">col =</span> <span class="st">"grey70"</span>)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+
+</div>
+<img data-src="ch02-collect-v3_files/figure-revealjs/unnamed-chunk-5-1.png" class="quarto-figure quarto-figure-center r-stretch" style="width:88.0%"><div title="观察">
+<div class="callout callout-note callout-titled callout-style-simple">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>观察</strong></p>
+</div>
+<div class="callout-content">
+<p>企业 A、B 只占单位数的 2/8，产值累计比重已约 <strong>74.5%</strong>。调查这两家，就能掌握该行业产量的大部分——这是重点调查，不是随机抽样。把 <code>output</code> 改成差不多一样大，累计曲线会变平，重点单位也就不明显了。</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="定期报表与专门调查" class="slide level2">
+<h2>定期报表与专门调查</h2>
+<p>按调查的组织方式不同，统计调查分为：</p>
+<p><strong>1. 定期报表</strong>：指基层单位和企业，根据一定的原始记录或统计台帐，按照一定的统计表式、统一的指标、统一的报送时间和程序，自下而上定期向上级统计机关报告基本统计资料的一种统计调查方式方法。</p>
+<p><strong>2. 专门调查</strong>：专门调查是为了研究某些专门问题或为某一目的而对某些社会经济现象专门组织的登记和调查。</p>
+<blockquote>
+<p><strong>注意</strong>：专门调查又多为一次性调查。</p>
+</blockquote>
+</section>
+<section id="课堂练习调查方式与搜集方法的辨析" class="slide level2">
+<h2>课堂练习：调查方式与搜集方法的辨析</h2>
+<p><strong>1.</strong> 调查几个主要产棉区，就可以了解我国棉花生产的基本情况，这种调查方式属于（<strong>B</strong>）。</p>
+<ul>
+<li>A. 典型调查</li>
+<li>B. 重点调查</li>
+<li>C. 普查</li>
+<li>D. 抽样调查</li>
+</ul>
+<blockquote>
+<p>解析：只调查客观上在总体中占绝大比重的少数重点单位（主要产棉区），属于重点调查。</p>
+</blockquote>
+<p><strong>2.</strong> 了解某工业企业期末的原材料库存量，调查人员亲自盘点库存，这种搜集资料的方法是（<strong>B</strong>）。</p>
+<ul>
+<li>A. 实验法</li>
+<li>B. 直接观察法</li>
+<li>C. 采访法</li>
+<li>D. 报告法</li>
+</ul>
+<blockquote>
+<p>解析：调查人员亲自到现场对盘点对象进行清点计数，属于直接观察法。</p>
+</blockquote>
+<p><strong>3.</strong> 下列调查中，适合用普查方式的是（<strong>D</strong>）。</p>
+<ul>
+<li><strong>A.</strong> 了解一批炮弹的杀伤半径</li>
+<li><strong>B.</strong> 某企业检查其生产的日光灯的寿命</li>
+<li><strong>C.</strong> 了解长江中鱼的种类</li>
+<li><strong>D.</strong> 了解某班学生对某知识点的掌握情况</li>
+</ul>
+<p><strong>解析</strong>：A、B 均具有破坏性（炮弹试爆、日光灯寿命测试需毁坏产品），只能用抽样调查；C 的调查对象（长江中的鱼）数量庞大且难以逐一清点，适合抽样调查；D 的调查对象是一个班级的学生，总体范围小、便于逐一调查，且无破坏性，适合采用普查方式。</p>
+<p><strong>结论</strong>：普查适用于总体范围小、无破坏性、需要全面准确信息的调查；抽样调查适用于破坏性试验、总体庞大的情况。</p>
+</section>
+<section id="我国的统计调查体系" class="slide level2">
+<h2>我国的统计调查体系</h2>
+<p>我国统计调查方法体系改革的目标模式：建立<strong>以周期性普查为基础，以经常性的抽样调查为主体，以必要的统计报表、重点调查、综合分析等为补充</strong>，搜集、整理基本统计资料的统计调查方法体系模式。</p>
+<p>要点解析：</p>
+<ul>
+<li><strong>基础</strong>——周期性普查；</li>
+<li><strong>主体</strong>——经常性的抽样调查；</li>
+<li><strong>补充</strong>——必要的统计报表、重点调查、综合分析等。</li>
+</ul>
+</section>
+<section id="我国的统计系统统计的组织系统" class="slide level2">
+<h2>我国的统计系统（统计的组织系统）</h2>
+<p>我国的统计系统由以下三部分组成：</p>
+<ul>
+<li><strong>一、国家综合统计系统</strong>：由国家统计局和地方各级政府的统计机构组成，是我国国家统计组织的<strong>主系统</strong>。</li>
+<li><strong>二、业务部门专业统计系统</strong>：由中央及地方各级业务部门的统计机构组成。各级业务部门专业统计机构在业务上受国家统计或同级地方政府统计机构的指导，组织执行本部门的各项统计任务。</li>
+<li><strong>三、基层单位统计组织</strong>：是我国统计系统的<strong>基础</strong>。乡、镇政府是国家的基层行政组织，需要建立专门的统计机构或配备专职统计人员。乡、镇统计员在业务上受县人民政府统计机构的领导。</li>
+</ul>
+</section>
+<section id="拓展小目数据的载体与状态" class="slide level2">
+<h2>拓展小目：数据的载体与状态</h2>
+<p>前文按”来源”把数据分为调查数据与实验数据、原始资料与次级资料。面对真实的研究工作，还需要进一步追问两个问题：数据以什么形态<strong>存在</strong>（载体）？数据处于什么<strong>加工程度</strong>（状态）？</p>
+<p><strong>（一）数据来源的完整谱系</strong></p>
+<p>按产生数据的研究方法，数据分为观察数据、调查数据、实验数据——与本章前文一致；按具体收集方式，又可分为问卷数据、访谈数据、文献数据与<strong>痕迹数据</strong>。痕迹数据指人们行为留下的记录（购物订单、上网日志、刷卡记录等），是大数据的主要来源。注意”痕迹数据”不等于”痕迹证据”：前者是原始记录，后者是经研究者甄别、可用于论证的材料。</p>
+<p>此外，在获得数据的同时，还应同步获得一份”记录数据获得过程”的数据——<strong>日志数据</strong>：记录数据从哪里来、在什么情况下得到、基本特征是什么（文字有多少页、图片有多少张）。日志是数据可信度的”出生证明”。</p>
+<p><strong>（二）数据的载体：数字化不等于数值化</strong></p>
+<ul>
+<li>从<strong>是否数字化</strong>看：数字化数据／非数字化数据；</li>
+<li>从<strong>是否数值化</strong>看：数值数据／非数值数据；</li>
+<li>从<strong>具体形态</strong>看：文本（访问记录、纸质文书）、图片（照片、底片）、音频（访谈录音）、视频（访谈录像）、实物（出土文物、建筑）五类载体。</li>
+</ul>
+<p>课堂思考两问（可作讨论题）：</p>
+</section>
+<section id="拓展小目数据的载体与状态续" class="slide level2 scrollable">
+<h2>拓展小目：数据的载体与状态（续）</h2>
+<ol type="1">
+<li>数码照片是”数字的”，它是”数值的”吗？——数码照片的”数字”指像素点的编码，不等于可直接进入统计计算的数值；</li>
+<li>信息化时代，手写记录还有价值吗？——原始手写记录是数据真实性的凭证，数字化副本不能替代原件。</li>
+</ol>
+<p><strong>（三）数据的状态：原始数据与研究数据</strong></p>
+<ul>
+<li><strong>原始数据</strong>：一般不能直接用于研究分析，如一摞尚未编码的纸质问卷；</li>
+<li><strong>研究数据</strong>：经过处理成为结构化的数据——有变量、有取值、有变量标签，能直接进入统计软件。</li>
+</ul>
+<p>按持续性，研究数据又分为”已经存在的数据”（政府统计数据、上市公司公开数据、研究机构公开数据）与”将要产生的数据”（系统采集、不断补充的数据）；按是否由研究者本人产生，分为一手数据与二手数据。</p>
+<p><strong>“二手优先”的论证</strong>——有能力的研究者为什么应把二手数据作为第一选择？</p>
+<ol type="1">
+<li>二手数据（尤其是被反复使用过的数据）的<strong>可靠性已经被检验过</strong>；</li>
+<li>用同一批数据做研究，<strong>成果之间具有可比性</strong>，便于学术对话与积累；</li>
+<li>自己调查是”不得已的第二选择”——需要专门的组织能力、获取数据的能力、评估数据质量的能力，还要投入资源。</li>
+</ol>
+<p>这一结论与本节”次级资料”的论述相互印证：次级资料由专业机构加工整理，规范、系统、成本低，应优先使用；只有当现成数据无法回答研究问题时，才启动自己的调查。</p>
+<p><strong>（四）数据获取权限的三种情形</strong></p>
+</section>
+<section id="拓展小目数据的载体与状态续-1" class="slide level2 scrollable">
+<h2>拓展小目：数据的载体与状态（续）</h2>
+<ol type="1">
+<li><strong>无需授权</strong>：正式出版物提供的数据，正式说明出处后即可使用；</li>
+<li><strong>需申请授权的公开数据</strong>：大多数学术调查数据（如 CFPS、CGSS）需注册申请；</li>
+<li><strong>需授权的未公开数据</strong>：政府、银行、电信等机构管理的行为痕迹数据。</li>
+</ol>
+<p><strong>（五）国内外主要数据平台一览</strong></p>
+</section>
+<section id="拓展小目数据的载体与状态续-2" class="slide level2">
+<h2>拓展小目：数据的载体与状态（续）</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>平台/数据库</th>
+<th>主管机构</th>
+<th>主要数据内容</th>
+<th>获取方式</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>CFPS 中国家庭追踪调查</td>
+<td>北京大学中国社会科学调查中心（ISSS）</td>
+<td>全国家庭户追踪调查</td>
+<td>注册申请</td>
+</tr>
+<tr class="even">
+<td>CHARLS 中国健康与养老追踪调查</td>
+<td>北京大学 ISSS</td>
+<td>45 岁及以上人群健康与养老追踪</td>
+<td>注册申请</td>
+</tr>
+<tr class="odd">
+<td>CGSS 中国综合社会调查</td>
+<td>中国人民大学中国调查与数据中心（NSRC）</td>
+<td>综合社会状况连续调查</td>
+<td>注册申请</td>
+</tr>
+<tr class="even">
+<td>CEPS 中国教育追踪调查</td>
+<td>中国人民大学 NSRC</td>
+<td>初中阶段教育追踪</td>
+<td>注册申请</td>
+</tr>
+<tr class="odd">
+<td>CLASS 中国老年社会追踪调查</td>
+<td>中国人民大学 NSRC</td>
+<td>老年社会状况追踪</td>
+<td>注册申请</td>
+</tr>
+<tr class="even">
+<td>国家统计局数据发布库</td>
+<td>国家统计局</td>
+<td>月度/季度/年度官方统计数据与统计公报</td>
+<td>免费查询</td>
+</tr>
+<tr class="odd">
+<td>中国知网统计年鉴数据库</td>
+<td>中国知网（校园图书馆入口）</td>
+<td>历年中央与地方统计年鉴</td>
+<td>校内订阅</td>
+</tr>
+<tr class="even">
+<td>ICPSR</td>
+<td>美国校际政治与社会研究数据联盟（驻密歇根大学）</td>
+<td>全球最大规模的学术数据存档之一</td>
+<td>注册申请</td>
+</tr>
+<tr class="odd">
+<td>GSS 综合社会调查</td>
+<td>美国芝加哥大学 NORC</td>
+<td>美国综合社会调查</td>
+<td>公开获取</td>
+</tr>
+<tr class="even">
+<td>PSID 收入动态追踪调查</td>
+<td>美国密歇根大学</td>
+<td>美国家庭收入动态面板</td>
+<td>注册申请</td>
+</tr>
+<tr class="odd">
+<td>HRS 健康与退休调查</td>
+<td>美国密歇根大学</td>
+<td>51 岁以上人群健康与退休（始于 1990 年代初）</td>
+<td>注册申请</td>
+</tr>
+<tr class="even">
+<td>Understanding Society</td>
+<td>英国埃塞克斯大学</td>
+<td>英国家庭追踪调查（“理解社会”）</td>
+<td>注册申请</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="拓展小目数据的载体与状态续-3" class="slide level2">
+<h2>拓展小目：数据的载体与状态（续）</h2>
+<p>此外，中国疾病预防控制中心（CDC）发布慢病、流行病等健康监测数据，适合公共卫生方向的选题。</p>
+<blockquote>
+<p><strong>时效性提示</strong>：检索二手数据时，优先使用校内可用渠道（图书馆数据库、EPS 数据平台、国泰安 CSMAR 等）与官方免费渠道（国家统计局数据发布库）；部分课件列举的境外搜索引擎与网络论坛渠道存在访问受限、权限与合规问题，不在本课程推荐之列。引用年鉴等正式出版物数据，应通过图书馆等正规途径获取并标注出处。</p>
+</blockquote>
+</section>
+<section id="第二节-统计调查方案的设计" class="slide level2">
+<h2>第二节 统计调查方案的设计</h2>
+<p>“凡事预则立”——统计调查必须先设计、后实施。本节按照”目的→对象→内容→时间→方法→组织”的顺序，介绍统计调查方案设计的六个组成部分；节末的阅读框进一步把”确定调查目的”延伸为研究设计中的 problem→question 训练。</p>
+</section>
+<section id="调查方案的基本内容总览" class="slide level2 scrollable">
+<h2>调查方案的基本内容（总览）</h2>
+<p>统计调查方案的设计是开展统计调查前的首要工作，调查方案的主要内容包括以下六个方面：</p>
+<ol type="1">
+<li><strong>确定调查目的（Why）</strong>——明确为什么要进行调查，解决什么问题；</li>
+<li><strong>确定调查对象和调查单位（Who）</strong>——明确向谁调查、由谁提供资料；</li>
+<li><strong>拟订调查提纲（What）</strong>——确定需要调查登记的具体项目内容；</li>
+<li><strong>确定调查时间（When）与地点（Where）</strong>——明确调查的时空范围；</li>
+<li><strong>确定调查方式与方法</strong>——选择合适的调查组织形式和采集资料的方法；</li>
+<li><strong>编制调查的组织实施计划</strong>——对调查的组织领导、人员培训、经费安排等作出计划。</li>
+</ol>
+<blockquote>
+<p>记忆要点：前四项对应 4W——Why（目的）、Who（对象与单位）、What（提纲）、When/Where（时间与地点），加上方式方法与组织计划，构成完整的调查方案。</p>
+</blockquote>
+</section>
+<section id="一确定调查目的objective-of-survey" class="slide level2 scrollable">
+<h2>一、确定调查目的（objective of survey）</h2>
+<p>确定调查目的需要明确两点：</p>
+<ol type="1">
+<li><strong>调查要达到的具体目标</strong>；</li>
+<li><strong>回答”为什么调查？“</strong></li>
+</ol>
+<p><strong>示例</strong>：人口普查的调查目的——准确查清人口的数量、地区分布、构成和素质状况及其变化情况。</p>
+</section>
+<section id="二确定调查对象调查单位与填报单位respondent-and-survey-unit" class="slide level2">
+<h2>二、确定调查对象、调查单位与填报单位（Respondent and Survey unit）</h2>
+<p><strong>（1）调查对象</strong>：指所要调查的现象<strong>总体</strong>，即<strong>统计总体</strong>。</p>
+<blockquote>
+<p><strong>例</strong>：人口普查的调查对象为：具有中国国籍并在中国境内常住的自然人。</p>
+</blockquote>
+<p><strong>（2）调查单位</strong>：调查研究的<strong>总体单位（个体）</strong>，是调查内容的承担者。</p>
+<p><strong>两者的关系</strong>：调查对象由许多性质相同的调查单位组成；调查对象是总体，调查单位是构成总体的个体。示意图画出由许多个体组成的调查对象（总体），并从中确定调查单位（个体），直观说明总体与个体的构成关系。</p>
+<p><em>（图示说明：示意图画出由许多笑脸个体组成的调查对象（总体），并从中抽取一个椭圆代表调查单位（个体），直观说明总体与个体的构成关系。）</em></p>
+<p><strong>（3）填报单位</strong>：按照规定日期、表式，负责提供统计资料的单位，即填写、上报统计资料的单位。</p>
+<p><strong>调查单位与填报单位的关系</strong>：两者不一定一致——</p>
+<ul>
+<li><strong>一致的情形</strong>：想要了解某市工业企业的经济效益，则该市的工业企业为调查对象，每个工业企业是调查单位，填报单位也是每个工业企业；</li>
+<li><strong>不一致的情形</strong>：如果了解一个市的汽车状况，汽车为调查单位，拥有汽车的单位或个人是填报单位。</li>
+</ul>
+</section>
+<section id="三拟定调查提纲调查项目survey-items" class="slide level2 scrollable">
+<h2>三、拟定调查提纲（调查项目）(Survey items)</h2>
+<p>调查提纲即调查项目，是统计调查方案设计中的重要组成部分。</p>
+<ol type="1">
+<li><strong>调查项目</strong>：根据调查的目的确定的必要的调查内容；</li>
+<li><strong>表现形式</strong>：通常表现为表格或问卷中的项目或问题；</li>
+<li><strong>核心作用</strong>：回答”调查什么？“这一问题。</li>
+</ol>
+<p>也就是说，在明确了调查目的和调查对象之后，需要进一步把调查目的具体化为若干个必须调查的项目（如问卷中的 Q1、Q2、Q3、Q4 等问题，或调查表格中的栏目），这些项目共同构成调查提纲。</p>
+
+<img data-src="images/ch02/pic/ch02_s046_06.png" class="fig-orig r-stretch"></section>
+<section id="四确定调查时间和调查期限" class="slide level2">
+<h2>四、确定调查时间和调查期限</h2>
+<p>确定调查的时间有两方面的涵义：</p>
+<p><strong>1、规定资料所属的时间</strong></p>
+<ul>
+<li>如果调查的是<strong>时期现象</strong>，资料所属时间是调查规定的<strong>起止时间</strong>；</li>
+<li>如果是<strong>时点现象</strong>，则是统一规定的<strong>标准时点</strong>。</li>
+</ul>
+<p><strong>2、规定调查期限</strong></p>
+<ul>
+<li>调查期限指<strong>调查工作</strong>的起止时间。</li>
+</ul>
+<p>注意区分”资料所属时间”（资料反映的现象所属的时间范围或时点）与”调查期限”（进行调查工作所经历的时间），两者涵义不同，不可混淆。时期现象对应起止时间，时点现象对应标准时点。</p>
+</section>
+<section id="例题调查时间与调查期限的区分" class="slide level2">
+<h2>例题：调查时间与调查期限的区分</h2>
+<p><strong>概念区分</strong>：</p>
+<ul>
+<li><strong>调查时间</strong>：调查资料所属的时间（即资料所反映的时期或时点）。</li>
+<li><strong>调查期限</strong>：进行调查工作的起讫时间（即收集资料工作的时间范围）。</li>
+</ul>
+<p><strong>例题</strong>：如果在 2017 年 1 月调查一个企业 2014 年 -2016 年上缴的利税总额。调查时间是？调查期限是？</p>
+<p><strong>解答</strong>：</p>
+<ul>
+<li>调查时间：2014 年 1 月 1 日 -2016 年 12 月 31 日</li>
+<li>调查期限：2017 年 1 月 1 日 -2017 年 1 月 31 日</li>
+</ul>
+<p><strong>教学要点</strong>：调查时间是资料所属的时期（三年），调查期限是实际开展调查工作的时段（一个月），二者不可混淆。</p>
+</section>
+<section id="五确定调查的组织方式和技术方法" class="slide level2">
+<h2>五、确定调查的组织方式和技术方法</h2>
+<p><strong>（一）调查的组织方式</strong>：即数据资料来源方式，包括：</p>
+<ul>
+<li>普查</li>
+<li>抽样调查</li>
+<li>重点调查</li>
+</ul>
+<p>注意：在一次调查中可同时采用多种调查形式。</p>
+<p><strong>（二）调查的技术方法</strong>：指收集资料的具体方法，包括：</p>
+<ul>
+<li>询问法</li>
+<li>观察法</li>
+<li>实验法</li>
+<li>网上调查法等</li>
+</ul>
+<p>组织方式解决”向谁调查、调查范围如何确定”的问题；技术方法解决”用什么手段收集资料”的问题，二者需结合方案设计综合考虑。</p>
+</section>
+<section id="六确定调查的组织实施计划" class="slide level2">
+<h2>六、确定调查的组织实施计划</h2>
+<p>在统计调查方案中，还需要明确调查机构、调查地点等问题，并对以下事项做出具体规定：</p>
+<ul>
+<li>调查人员培训</li>
+<li>文件印刷</li>
+<li>调查资料报送办法</li>
+<li>调查经费预算和开支办法</li>
+</ul>
+<p><strong>试点调查</strong>：在正式调查前，尤其对于大规模统计调查来说，最好开展试点调查，以检验方案可行性、发现问题并及时修正。</p>
+</section>
+<section id="阅读框从调查方案到研究设计problem-到-question-的训练" class="slide level2">
+<h2>阅读框：从调查方案到研究设计——problem 到 question 的训练</h2>
+<p>本节的六要素方案回答”怎样组织一次调查”；而在更前端，研究实践还要先完成一次”翻译”——把现实中的困难（problem）转译为可研究的问题（question）。这是”确定调查目的”在研究设计中的深化。</p>
+<p><strong>第一步：陈述现实难点（problem）</strong>。将难点具体化、说明其重要性、设定研究的目的与目标。例如：“X 学校的教师难以识别和指导教室里有天赋的学生”是一个现实难点；“越来越多的年轻人从事零工经济而非全职工作，但很少有人研究他们的工作经历”也是一个现实难点。</p>
+<p><strong>第二步：提出研究问题（question）</strong>。把难点改写为一个可以通过数据回答的问题，如：“X 学校的教师可以使用哪些实用方法来更好地识别和指导有天赋的孩子？”“影响年轻人参与零工经济决策的主要因素是什么？”</p>
+<p><strong>好问题的六条基本要求</strong>：专注于单个问题；可使用主要和/或次要来源进行研究；在时限和现实限制条件下可行；具体到足以彻底回答；足够复杂、能在论文范围内得出有深度的答案；与学习或社会有广泛相关性。</p>
+<p><strong>七类研究问题”公式”</strong>：</p>
+</section>
+<section id="阅读框从调查方案到研究设计problem-到-question-的训练续" class="slide level2 scrollable">
+<h2>阅读框：从调查方案到研究设计——problem 到 question 的训练（续）</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>研究问题类型</th>
+<th>公式</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>描述性研究</td>
+<td>X 的特征是什么？</td>
+</tr>
+<tr class="even">
+<td>比较研究</td>
+<td>X 和 Y 之间有什么区别和相似之处？</td>
+</tr>
+<tr class="odd">
+<td>相关研究</td>
+<td>变量 X 和变量 Y 之间有什么关系？</td>
+</tr>
+<tr class="even">
+<td>探索性研究</td>
+<td>X 的主要因素是什么？Y 在 Z 中起什么作用？</td>
+</tr>
+<tr class="odd">
+<td>解释性研究</td>
+<td>X 对 Y 有影响吗？X 的原因是什么？</td>
+</tr>
+<tr class="even">
+<td>评估研究</td>
+<td>X 的优缺点是什么？Y 运行得如何？</td>
+</tr>
+<tr class="odd">
+<td>行为（对策）研究</td>
+<td>如何实现 X？改善 Y 的最有效策略是什么？</td>
+</tr>
+</tbody>
+</table>
+<p><strong>好/坏研究问题对照（精选二组）</strong>：</p>
+<ol type="1">
+<li>社交媒体：
+<ul>
+<li>（坏）“社交媒体对人们的思想有什么影响？”——什么平台？对什么人群？什么影响？过于笼统，无从下手；</li>
+<li>（好）“每天使用社交平台对 16 岁以下青少年的注意力有什么影响？”——平台、人群、结果变量均已明确，可用定性与定量数据回答。</li>
+</ul></li>
+<li>住房问题：
+<ul>
+<li>（坏）“为什么出现住房危机？”——“为什么”式问题过于开放，可能的答案太多，没有明确的研究起点；</li>
+<li>（好）“高校扩招与国际化政策对本市租赁住房的可得性与可负担性产生了哪些影响？”——聚焦问题的一个侧面，术语明确，有清晰的回答路径。</li>
+</ul></li>
+</ol>
+</section>
+<section id="阅读框从调查方案到研究设计problem-到-question-的训练续-1" class="slide level2">
+<h2>阅读框：从调查方案到研究设计——problem 到 question 的训练（续）</h2>
+<p><strong>与本节方案的衔接</strong>：好问题一旦确立，六要素便顺次展开——问题决定调查目的（Why），概念与人群决定调查对象与单位（Who），变量清单决定调查提纲（What），可行性与时限决定调查时间与组织方式。做课程调查作业时，可先用本阅读框打磨问题，再套用六要素写方案。</p>
+</section>
+<section id="第三节-统计调查问卷的设计" class="slide level2">
+<h2>第三节 统计调查问卷的设计</h2>
+<p>调查表与调查问卷是采集第一手资料的两种基本工具。本节先讲调查表的编制，再按”开头—背景资料—主体—结尾”的结构系统讲解问卷设计的方法与技巧，并配以完整的问卷案例供研读；在”提问项目的设计技巧”之后，专设”坏题改写”课堂练习，把设计技巧转化为可操作的改题能力。</p>
+</section>
+<section id="一调查表单一表与一览表" class="slide level2">
+<h2>一、调查表：单一表与一览表</h2>
+<p><strong>定义</strong>：为了便于填写和重新汇总，通常把调查项目按合理的顺序排在表格里，这种表达调查项目的表格叫调查表，它是统计调查的重要工具。</p>
+<p><strong>分类</strong>：</p>
+<p><strong>1. 单一表</strong>：每张表只登记一个调查单位，可容纳较多标志项目，适用于调查项目较多、每单位资料较丰富的调查。如：体检表。例如职工个人情况调查表：</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>姓名</th>
+<th></th>
+<th>性别</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>年龄</td>
+<td></td>
+<td>职务</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>年收入</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>联系方式</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>家庭住址</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>2. 一览表</strong>：每张表可登记多个调查单位，便于汇总和比较，适用于调查项目较少、需同时登记多个调查单位的调查。如：全国人口普查登记表、学生联系方式采集表。例如体格检查一览表：</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>检查序号</th>
+<th>姓名</th>
+<th>性别</th>
+<th>出生年月日</th>
+<th>年龄</th>
+<th>身高</th>
+<th>体重</th>
+<th>胸围</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="二调查问卷的基本结构" class="slide level2">
+<h2>二、调查问卷的基本结构</h2>
+<p>调查问卷的基本结构一般由<strong>四部分</strong>组成：</p>
+<ul>
+<li><strong>（一）开头部分</strong>：问卷标题；卷首语（说明词）；填写说明；调查甄别内容。开头部分用于说明调查目的并筛选合适对象。</li>
+<li><strong>（二）被调查者背景资料</strong>。</li>
+<li><strong>（三）主体部分</strong>：问题和答案。主体部分是问卷核心，承载所有调查问题与备选答案。</li>
+<li><strong>（四）结尾部分</strong>：被访者联系方式记录；调查过程记录。结尾部分用于记录访问信息，便于后续核查与回访。</li>
+</ul>
+</section>
+<section id="开头部分之一问卷标题与卷首语" class="slide level2">
+<h2>开头部分之一：问卷标题与卷首语</h2>
+<p><strong>1、问卷标题——调查研究的主题</strong></p>
+<p><strong>要求</strong>：简明扼要，引起兴趣。</p>
+<p>标题的格式一般是：<strong>调查时间 + 被调查地区或单位名称 + 调查任务关键词</strong>。例：</p>
+<ul>
+<li>“关于XXX年XX大学毕业生就业情况的调查问卷”</li>
+<li>“—–XX年XX市居民住房状况调查”</li>
+</ul>
+<p><strong>2、卷首语（说明词）</strong></p>
+<p>说明调查者的身份、调查内容、调查目的、调查意义、抽样方法、保密措施和致谢等。</p>
+<p><strong>要求</strong>：</p>
+<ul>
+<li>简洁、扼要、不超过三百字；</li>
+<li>问候语的语气应该亲切、诚恳而有礼貌，吸引被调查者。</li>
+</ul>
+</section>
+<section id="案例一调查访问开场白封面信的写作范例" class="slide level2">
+<h2>案例一：调查访问开场白（封面信）的写作范例</h2>
+<p>这是一份规范的问卷调查开场白，展示了访问员开场说明应包含的全部要素：</p>
+<blockquote>
+<p><strong>尊敬的先生/女士：</strong></p>
+<p>上午好！</p>
+<p>我叫刘东，是四川农业大学的学生。</p>
+<p>我们正在进行一项关于手机通信质量方面的市场调研。</p>
+<p>您的回答将有助于厂家进一步改善产品品质和服务质量。</p>
+<p>您的资料只供研究参考，绝不公开。</p>
+<p>在完成访问后，我们将赠予您一份纪念品以示感谢。</p>
+<p>现在，我们麻烦您抽 5 分钟时间回答问题吗？</p>
+</blockquote>
+<p><strong>开场白构成要素解析</strong>：</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>开场白内容</th>
+<th>对应要素</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>上午好！</td>
+<td>问候语</td>
+</tr>
+<tr class="even">
+<td>我叫刘东，是四川农业大学的学生。</td>
+<td>身份说明</td>
+</tr>
+<tr class="odd">
+<td>我们正在进行一项关于手机通信质量方面的市场调研。</td>
+<td>调查主题</td>
+</tr>
+<tr class="even">
+<td>您的回答将有助于厂家进一步改善产品品质和服务质量。</td>
+<td>调查用途</td>
+</tr>
+<tr class="odd">
+<td>您的资料只供研究参考，绝不公开。</td>
+<td>保密措施</td>
+</tr>
+<tr class="even">
+<td>在完成访问后，我们将赠予您一份纪念品以示感谢。</td>
+<td>礼品信息</td>
+</tr>
+<tr class="odd">
+<td>现在，我们麻烦您抽 5 分钟时间回答问题吗？</td>
+<td>访问邀请</td>
+</tr>
+</tbody>
+</table>
+<p><strong>教学要点</strong>：一份合格的开场白应依次包含问候语、身份说明、调查主题、调查用途、保密措施、礼品信息和访问邀请七个要素，以取得被访者的信任与配合。</p>
+</section>
+<section id="案例二市场调查问卷封面信街头拦截法" class="slide level2 scrollable">
+<h2>案例二：市场调查问卷封面信（街头拦截法）</h2>
+<p><strong>封面信正文</strong>：</p>
+<blockquote>
+<p>尊敬的先生/女士：</p>
+<p>您好！</p>
+<p>我们是XX公司的调研员，受XX公司的委托，正进行一项影响电动自行车消费的因素的市场调查。我们采用的是<strong>街头拦截法</strong>，确定您作为我们的调查对象，非常希望得到您的支持！此次调研采用<strong>无记名方式</strong>，所获得的有关信息只作为本次研究分析之用，我们承诺保守秘密并不将所获信息用作其他用途。为表示对您的感谢，我们将<strong>赠送一份精美的小礼物</strong>！谢谢您的参与和支持！</p>
+<p>XX公司调研中心</p>
+<p>X年X月X日</p>
+</blockquote>
+<p><strong>教学要点</strong>：一份规范的封面信应包含以下要素——</p>
+<ol type="1">
+<li>自我介绍与调查委托方（身份说明）；</li>
+<li>调查目的与调查主题（影响电动自行车消费的因素）；</li>
+<li>抽取调查对象的方法（街头拦截法）；</li>
+<li>保密承诺（无记名方式，信息仅作研究分析之用）；</li>
+<li>致谢与激励措施（赠送小礼品）；</li>
+<li>落款（调研组织与日期）。</li>
+</ol>
+<p><strong>编写注意事项</strong>：问卷的介绍部分应尽量仔细，并为后面的调研打下基础。那些被听到或被看到的开场白，往往会影响受访者决定是否参与此项调研。开场白（介绍部分）是问卷的”第一印象”，其措辞和详略程度直接关系到受访者的参与意愿，编写时必须认真对待，为整个调研工作的顺利开展奠定基础。</p>
+</section>
+<section id="开头部分之二填写说明" class="slide level2">
+<h2>开头部分之二：填写说明</h2>
+<p>填写说明示例：</p>
+<p>为使调研顺利进行，请您关注下面的填写说明：</p>
+<p>1）本问卷已将所有需要回答的问题编号，您只需按照卷面上表明的要求回答即可，请在您选择的答案对应的符号前画 √，不论单选或多选。</p>
+<p>2）有些题目如果没有您想选的答案需要您填写，请直接填写在横线上。</p>
+</section>
+<section id="开头部分之三甄别过滤问题" class="slide level2 scrollable">
+<h2>开头部分之三：甄别（过滤）问题</h2>
+<p>甄别（过滤）问题用于确保被调查者符合调查研究的需要。以”关于手机通信质量方面的市场调研”为例，问卷开头应设置甄别（过滤）性问题，以排除与调查主题有利益关联或近期接受过类似调查的人员，保证样本的独立性与客观性。</p>
+<p><strong>甄别问题示例</strong>：请问，您或您经常来往的亲朋好友中是否有过以下经历？</p>
+<ol type="1">
+<li>在邮电部门工作</li>
+<li>在手机生产企业工作</li>
+<li>在手机经销单位工作</li>
+<li>在市场研究、广告公司工作</li>
+<li>在半年内接受过市场调查</li>
+<li>在新闻机构工作</li>
+<li>都没有</li>
+</ol>
+<p><strong>处理规则</strong>：</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>回答情况</th>
+<th>处理方式</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>选 1）~6）中任一项</td>
+<td>中止访问</td>
+</tr>
+<tr class="even">
+<td>选 7）都没有</td>
+<td>继续访问</td>
+</tr>
+</tbody>
+</table>
+<p>凡从事邮电、手机生产、手机经销、市场研究/广告、新闻机构相关工作，或半年内接受过市场调查者，均可能因行业关联或被调查疲劳而影响回答的客观性，故应中止访问；只有选”都没有”的普通消费者才是本调查的目标对象，可继续访问。</p>
+<p>另一类常见的筛选问题（甄别题）示例：</p>
+<blockquote>
+<p>我们正在寻找一些合适的人选，请问您平均一周使用手机的时间超过一小时吗？</p>
+</blockquote>
+<ul>
+<li><strong>是</strong>——继续（受访者符合条件，进入正式调查）；</li>
+<li><strong>不是</strong>——中断（受访者不符合条件，终止访问）。</li>
+</ul>
+<p>这类问题的作用是在正式调查开始前对样本进行甄别，保证调查对象符合研究要求，提高抽样调查的针对性和有效性。</p>
+</section>
+<section id="二被调查者背景资料" class="slide level2">
+<h2>（二）被调查者背景资料</h2>
+<p>在问卷设计中，除调查主题问题外，通常还需设置被调查者的背景资料（人口统计学特征）题项，以便后续进行分组统计与交叉分析。以下为一份背景资料题的实际示例：</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>题项</th>
+<th>选项</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>您的性别</td>
+<td>1 男　2 女</td>
+</tr>
+<tr class="even">
+<td>您的年龄</td>
+<td>____周岁（填空）</td>
+</tr>
+<tr class="odd">
+<td>您的婚姻状况</td>
+<td>1 已婚　2 未婚</td>
+</tr>
+<tr class="even">
+<td>您的家庭人口</td>
+<td>____人（填空）</td>
+</tr>
+<tr class="odd">
+<td>您的教育程度</td>
+<td>1 初中及以下；2 高中中专；3 大专；4 本科及以上</td>
+</tr>
+<tr class="even">
+<td>您的职务</td>
+<td>1 高级管理人员；2 中级管理人员；3 普通工作人员；4 无职务</td>
+</tr>
+</tbody>
+</table>
+<p><strong>职业分类（19 类）</strong>：01 退休/离休人员；02 党政机关干部；03 教育工作者；04 财经人员；05 医护人员；06 金融从业人员；07 科技人员；08 工商/企业管理人员；09 法律工作者；10 工人；11 公司职员；12 大中学生；13 商业/服务业从业人员；14 自由职业者；15 个体经营者；16 军人/警察；17 私营企业人员；18 待业或无业人员；19 其它（请列明）______。</p>
+<p><strong>教学要点</strong>：背景资料题多采用封闭型（选项式）提问并预先编码（如 1、2、01、02……），便于数据处理；少数项（年龄、家庭人口、其它职业）采用填空式开放提问。</p>
+</section>
+<section id="三主体部分封闭式问题与开放式问题" class="slide level2">
+<h2>（三）主体部分：封闭式问题与开放式问题</h2>
+<p>问卷主体部分的核心是问题的设计。按照提问方式的不同，问题可分为两大类：<strong>封闭式问题和开放式问题</strong>。</p>
+<ul>
+<li>封闭式问题是研究者事先给出固定的备选答案，由被调查者从中选择；</li>
+<li>开放式问题则不提供备选选项，由被调查者自由作答。</li>
+</ul>
+<p>两类问题各有优劣，在问卷主体设计中需根据调查目的合理选用与搭配。</p>
+<p>以”您认为吸烟有哪些害处？“为例，比较两种提问方式：</p>
+<p><strong>封闭式问题</strong>（给出固定备选答案，由被调查者从中选择）：</p>
+<p>① 危害自身健康　② 影响他人健康　③ 浪费钱财　④ 容易引起火灾　⑤ 破坏家庭团结　⑥ 其他______</p>
+<p><strong>开放式问题</strong>：同一问题”您认为吸烟有哪些害处？“，不给出备选答案，由被调查者自由作答。</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>问题类型</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>封闭式问题</td>
+<td>容易控制，但不易全面</td>
+</tr>
+<tr class="even">
+<td>开放式问题</td>
+<td>不易控制，但内容丰富</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="问卷示例研读吸烟情况调查问卷" class="slide level2">
+<h2>问卷示例研读：吸烟情况调查问卷</h2>
+<p>以下是一份关于吸烟情况的调查问卷，并用批注说明各题目对应的调查目的：</p>
+<p><strong>问题1．您是否吸烟（如果选②，则跳过后面的题目）</strong></p>
+<ul>
+<li>① 吸烟　② 不吸</li>
+</ul>
+<blockquote>
+<p>批注：本题目的是<strong>调查单位中吸烟人所占比例</strong>。</p>
+</blockquote>
+<p><strong>问题2．您每天大约吸多少支烟</strong></p>
+<ul>
+<li>① 5支以下　② 5-10支　③ 10-15支　④ 15-20支　⑤ 20支以上</li>
+</ul>
+<blockquote>
+<p>批注：本题目的是了解<strong>吸烟人群日吸烟数量情况</strong>。</p>
+</blockquote>
+<p><strong>问题3．您的吸烟历史大约有多长</strong></p>
+<ul>
+<li>① 1年以下　② 1-5年　③ 5-10年（以上）</li>
+</ul>
+<blockquote>
+<p>批注：本题目的是了解<strong>吸烟人群吸烟历史情况</strong>。</p>
+</blockquote>
+<p><strong>问题4．您是否认为吸烟有害健康（请写出理由）</strong></p>
+<blockquote>
+<p>批注：本题目的是了解<strong>调查对象对吸烟的看法</strong>（开放性问题）。</p>
+</blockquote>
+<p><strong>教学要点</strong>：问卷每一道题都应服务于明确的调查目的——过滤题（跳答设计）用于划分总体与子样本，选择题用于获取可分组的数量资料，开放题用于收集意见性资料。</p>
+</section>
+<section id="提问项目的设计技巧" class="slide level2">
+<h2>提问项目的设计技巧</h2>
+<p>设计问卷的提问项目时，应注意以下六点：</p>
+<p><strong>1. 内容尽可能短</strong>：完成问卷的时间一般 &lt; 10 分钟。</p>
+<p><strong>2. 用词要准确、通俗</strong>：避免专业术语，避免抽象内容。例如：“您所在的项目小组的内聚性有多高？”——什么是”内聚性”（cohesion）？除非有一个明确的定义写在问卷中，调查对象不会知道你在问什么。</p>
+<p><strong>3. 一项提问只包含一项内容</strong>：不要把多个问题合并成一条提问。</p>
+<p><strong>4. 避免诱导性提问</strong>：提问不应带有倾向性引导，否则会暗示受访者顺着提问者的观点作答。例如：“海尔是中国家电第一品牌，你喜欢吗？”——这一提问先给出”第一品牌”的判断，再询问喜好，属于典型的诱导性提问。</p>
+<p><strong>5. 避免否定形式的提问</strong>：否定式提问容易使受访者产生理解偏差。例如：“你觉得大学的生活不开心吗？”</p>
+<p><strong>6. 避免敏感性问题</strong>：涉及个人隐私或敏感内容的问题容易引起受访者反感或拒答。例如：收入、党员身份等。</p>
+</section>
+<section id="课堂练习坏题改写训练" class="slide level2 scrollable">
+<h2>课堂练习：坏题改写训练</h2>
+<p>设计技巧只有在亲手”改题”中才能内化。下面先给出一道”诊断开场题”示范操作化改写，再给五则真实坏题，请先按”改题四步法”自己动手修改（留白试改），然后再对照参考改法。</p>
+<p><strong>改题四步法</strong>：</p>
+<ol type="1">
+<li><strong>定位病灶</strong>：对照上面六条技巧逐条检查——概念可理解吗？选项穷尽吗？是否一题多问？是否诱导、否定或敏感？</li>
+<li><strong>换位思考</strong>：站在被调查者（留意其年龄、知识背景）的角度把题目读三遍；</li>
+<li><strong>动手改写</strong>：改提问或改选项，必要时拆分题目、增加”其他”项或跳答说明；</li>
+<li><strong>试填检验</strong>：请几位未参与设计、背景不同的人试填——绝大多数问题都会在试填中暴露。</li>
+</ol>
+<p><strong>开场诊断题（自编）</strong></p>
+<blockquote>
+<p><strong>原题</strong>：你有”削苹果依赖症”吗？A. 有　B. 没有</p>
+</blockquote>
+<p><strong>点评</strong>：“削苹果依赖症”是杜撰的概念，被调查者既没听说过，也无法自查——同时犯了”用词不通俗”“超出认知范围”“概念不可操作化”三重毛病。修改的关键不是换个问法，而是把”伪概念”还原为<strong>可观察的行为</strong>。</p>
+<p><strong>参考改法（操作化示范）</strong>：</p>
+<ul>
+<li>Q1（行为频率）：最近一周，您有几天吃过苹果？______ 天</li>
+<li>Q2（处理方式）：您吃苹果前通常如何处理？① 用刀削皮　② 用削皮器　③ 不削皮直接吃　④ 基本不吃苹果（选④则结束）</li>
+</ul>
+<p>——把”依赖症”这样的抽象判断，还原为”频率＋方式”的行为事实，统计结果才有意义。</p>
+<p><strong>练习一：选项未穷尽</strong></p>
+</section>
+<section id="课堂练习坏题改写训练续" class="slide level2">
+<h2>课堂练习：坏题改写训练（续）</h2>
+<blockquote>
+<p><strong>原题</strong>：请问您现在使用的手机是智能手机吗？A. 是　B. 不是</p>
+</blockquote>
+<p><strong>点评</strong>：看似考虑周全，实则默认了受访者都有手机——没有手机的人无选项可选。</p>
+<p><strong>试改</strong>：____________________</p>
+<p><strong>参考改法</strong>：增加”C. 没有手机”。经验法则：对可能出现多种情形的问题，加”其他／以上情况都有”选项兜底，保证人人有选。</p>
+<p><strong>练习二：选项不符合生活惯例</strong></p>
+<blockquote>
+<p><strong>原题</strong>：您去超市购物的频率是？A. 一天一次　B. 五天一次　C. 十天一次　D. 有优惠时才去　E. 没有规律</p>
+</blockquote>
+<p><strong>点评</strong>：普通人不会记自己”五天去一次”还是”十天去一次”，选项脱离生活口径。</p>
+<p><strong>试改</strong>：____________________</p>
+<p><strong>参考改法</strong>：改为 A. 一天一次　B. 一周一次　C. 半个月一次　D. 一个月一次　E. 有优惠时才去　F. 没有规律。经验法则：问卷定稿前，先请几位未参与设计、文化水平不同的人试填。</p>
+<p><strong>练习三：重点不明</strong></p>
+<blockquote>
+<p><strong>原题</strong>：您最希望超市扩展的业务是？A. 机票、酒店预订　B. 水电费查询　C. 免费 Wi-Fi 服务　D. 移动支付方式　E. 其他</p>
+</blockquote>
+<p><strong>点评</strong>：选项看起来更像多选题，而调查者想了解的是”最希望”（单选），作答口径不明。</p>
+<p><strong>试改</strong>：____________________</p>
+</section>
+<section id="课堂练习坏题改写训练续-1" class="slide level2">
+<h2>课堂练习：坏题改写训练（续）</h2>
+<p><strong>参考改法</strong>：在题干中把重点显式标注——“您【最希望】超市扩展的业务是？（单选）”。经验法则：必要时用加粗、【】或着重号标出题眼。</p>
+<p><strong>练习四：答案选项相互重叠</strong></p>
+<blockquote>
+<p><strong>原题</strong>：您的职业：A. 工人　B. 知识分子　C. 职员　D. 小商贩　E. 农民　F. 领导干部　G. 学生　H. 私人企业主</p>
+</blockquote>
+<p><strong>点评</strong>：选项两两交叉——某研究所领导既是”领导干部”又是”知识分子”；“知识分子”本身并非一种职业；目前无工作者无选项可选。</p>
+<p><strong>试改</strong>：____________________</p>
+<p><strong>参考改法</strong>：改用互斥且穷尽的职业分类框架作选项（可参照本章背景资料题的 19 类职业分类，末设”其他（请列明）“与”目前无职业”）。经验法则：常识性分类须经反复确认后再入卷。</p>
+<p><strong>练习五：超出被调查者认知范围</strong></p>
+<blockquote>
+<p><strong>原题</strong>：请问您家属于下列哪一类家庭？A. 单身家庭　B. 核心家庭　C. 主干家庭　D. 联合家庭　E. 其他家庭</p>
+</blockquote>
+<p><strong>点评</strong>：“核心家庭”“主干家庭”“联合家庭”是社会学术语，一般被调查者无从判断自家属于哪一类，选项等于没设。</p>
+<p><strong>试改</strong>：____________________</p>
+</section>
+<section id="课堂练习坏题改写训练续-2" class="slide level2">
+<h2>课堂练习：坏题改写训练（续）</h2>
+<p><strong>参考改法</strong>：把术语还原为通俗事实——“您家同住人员情况：① 独自一人　② 夫妻二人（或带未婚子女）③ 两代及以上同住　④ 其他____“（研究者可据作答结果自行归类）。经验法则：把理论化、学术化、专业化的用词转换为被调查者能直接理解的语言。</p>
+</section>
+<section id="问题顺序的设计" class="slide level2 scrollable">
+<h2>问题顺序的设计</h2>
+<p>设计问卷时，问题的排列顺序直接影响调查质量，应遵循以下原则：</p>
+<ol type="1">
+<li><strong>问题安排要有逻辑性</strong>：符合人们的思维习惯。</li>
+<li><strong>提问顺序应先易后难</strong>：例如先问”您有使用化妆品的习惯吗？“，再问”您喜欢什么质地的化妆品……“。</li>
+<li><strong>易引起被调查者兴趣的问题放在前面</strong>，以提高回答的积极性。</li>
+<li><strong>开放性问题放后面</strong>，避免一开始造成回答负担。</li>
+<li><strong>整个问卷要便于统计整理</strong>，方便后期数据处理。</li>
+</ol>
+</section>
+<section id="四结尾部分" class="slide level2">
+<h2>（四）结尾部分</h2>
+<p>问卷的结尾部分主要包括两项内容：</p>
+<p><strong>1. 被访者联系方式记录</strong></p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>项目</th>
+<th>项目</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>被访人姓名：</td>
+<td>调查地点：</td>
+</tr>
+<tr class="even">
+<td>被访人的手机号码：</td>
+<td>其他联络方式：</td>
+</tr>
+</tbody>
+</table>
+<p><strong>2. 调查过程记录</strong></p>
+<ul>
+<li>调查员姓名：</li>
+<li>督导员姓名：</li>
+</ul>
+<p><strong>调查过程中有无如下情况发生：</strong></p>
+<p>1）在调查过程中有客人来访，但没有打断调查；</p>
+<p>2）在调查过程中有客人来访，中断过调查（多少时间）；</p>
+<p>3）在调查过程中被访者对调查内容有不明白的地方；</p>
+<p>4）其他（请详细说明）；</p>
+<p>5）在调查过程中被访者的合作情况：A、合作；B、一半；C、不合作。</p>
+<p>结尾部分的记录便于复核调查质量、进行回访核实，是保证调查资料真实可靠的重要环节。</p>
+</section>
+<section id="问卷说明词案例上海市城市居民消费与投资倾向调查问卷" class="slide level2 scrollable">
+<h2>问卷说明词案例：上海市城市居民消费与投资倾向调查问卷</h2>
+<p>以下是一份完整问卷的导语（说明词）实例：</p>
+<blockquote>
+<p><strong>上海市城市居民消费与投资倾向调查问卷</strong></p>
+<p>尊敬的先生、女士：</p>
+<p>我们是上海财经大学的学生。为了积极参与贯彻国家关于扩大内需推动经济增长的方针和理论与实践相结合的教育原则，在老师指导下我们组织了这次千户居民的社会调查。请您给予支持。调查不记名，全部资料用计算机处理，绝对保密和安全，您只需在符合您的情况的答案上打个勾，花费几分钟时间。谢谢！</p>
+</blockquote>
+<p><strong>教学要点</strong>：</p>
+<ol type="1">
+<li><strong>表明调查者身份</strong>：说明来自上海财经大学的学生，取得被调查者信任。</li>
+<li><strong>说明调查目的</strong>：贯彻国家扩大内需、推动经济增长的方针，以及理论与实践相结合的教育原则。</li>
+<li><strong>说明调查规模与组织方式</strong>：千户居民的社会调查，在教师指导下组织进行。</li>
+<li><strong>承诺保密性</strong>：调查不记名，全部资料用计算机处理，绝对保密和安全——这是消除被调查者顾虑的关键。</li>
+<li><strong>说明填答负担</strong>：只需在符合情况的答案上打勾，花费几分钟时间——降低被调查者的心理成本，提高回收率。</li>
+<li><strong>致谢</strong>：结尾表达感谢，体现礼貌。</li>
+</ol>
+</section>
+<section id="问卷设计综合示例家庭消费状况调查问卷第110题" class="slide level2 scrollable">
+<h2>问卷设计综合示例：家庭消费状况调查问卷（第1～10题）</h2>
+<p>以下题目出自一份家庭消费状况调查问卷，体现了多项选择式、排序式、填空式等问卷题型的设计形式。</p>
+<p><strong>（1）您家是否已经拥有下列耐用家电设备</strong></p>
+<p>1、□彩电　　2、□组合音箱　　3、□VCD（或DVD） 4、□冰箱　　5、□空调　　　 6、□电脑</p>
+<p><strong>（2）您家的住房是：</strong></p>
+<p>1、□租赁公房 2、□有产权公房 3、□新商品房 4、□其他（请注明）____</p>
+<blockquote>
+<p>说明：选项4为开放式提问，允许被调查者自由填写，弥补预设选项的不足。</p>
+</blockquote>
+<p><strong>（3）您家今明两年是否准备以下项目支出：</strong></p>
+<p>1、□购买家电设备　　5、□现有住房装修 2、□购买成套家具　　6、□支付子女教育费 3、□购买汽车　　　　7、□国内或国际旅游 4、□购买（或置换）房屋</p>
+<p>以上三题均为<strong>多项选择题</strong>，被调查者可同时勾选多个答案，适用于对拥有状况、消费意向等内容的调查。</p>
+<p><strong>（4）您今明两年不准备上列大项目支出的主要原因是：（选填3项）</strong></p>
+<ol type="1">
+<li>□没有必要</li>
+<li>□经济不宽裕</li>
+<li>□品牌不中意</li>
+<li>□质量信不过</li>
+<li>□售后服务差</li>
+<li>□价格不合理</li>
+<li>□其他（请注明）____</li>
+</ol>
+<blockquote>
+<p>限定选择项数（选填3项）是多选题设计的常见约束，可控制答案离散程度。</p>
+</blockquote>
+<p><strong>（5）您购买商品考虑的主要因素是：</strong></p>
+<ol type="1">
+<li>□实用价值</li>
+<li>□商品质量</li>
+<li>□价格</li>
+<li>□品牌</li>
+<li>□售后服务</li>
+</ol>
+<p>（请按您认为的重要性在□中写上位序）</p>
+</section>
+<section id="问卷设计综合示例家庭消费状况调查问卷第110题续" class="slide level2 scrollable">
+<h2>问卷设计综合示例：家庭消费状况调查问卷（第1～10题）（续）</h2>
+<blockquote>
+<p>这是排序式（位序式）问题：被调查者按重要性在选项方框中填写序号，可同时反映各因素的重要性顺序信息。</p>
+</blockquote>
+<p><strong>（6）您家平均每月总收入是：</strong></p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>选项</th>
+<th>区间</th>
+<th>选项</th>
+<th>区间</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1、□</td>
+<td>500元以下</td>
+<td>5、□</td>
+<td>2000~3000元</td>
+</tr>
+<tr class="even">
+<td>2、□</td>
+<td>500~1000元</td>
+<td>6、□</td>
+<td>3000~5000元</td>
+</tr>
+<tr class="odd">
+<td>3、□</td>
+<td>1000~1500元</td>
+<td>7、□</td>
+<td>5000~8000元</td>
+</tr>
+<tr class="even">
+<td>4、□</td>
+<td>1500~2000元</td>
+<td>8、□</td>
+<td>8000元以上</td>
+</tr>
+</tbody>
+</table>
+<p><strong>（7）您家平均每月日常生活费开支是__________元</strong></p>
+<ul>
+<li>A、其中用于吃（食品）支出大约是__________元</li>
+</ul>
+<blockquote>
+<p>教学提示：第（7）题通过总收入与食品支出之比，可用于计算恩格尔系数，反映家庭消费结构。</p>
+</blockquote>
+<p><strong>（8）您认为您家近几年生活水平是</strong></p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>1.□</th>
+<th>2.□</th>
+<th>3.□</th>
+<th>4.□</th>
+<th>5.□</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>提高很多</td>
+<td>略有提高</td>
+<td>没有变化</td>
+<td>略有下降</td>
+<td>下降很多</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>教学提示：第（8）题为定序尺度的态度量表，选项按程度排列，便于统计汇总。</p>
+</blockquote>
+<p><strong>题（9）您家庭金融资产投资比重？</strong></p>
+<ol type="1">
+<li>银行储蓄 （　）%</li>
+<li>国债（国库卷） （　）%</li>
+<li>基金 （　）%</li>
+<li>其他债券 （　）%</li>
+<li>股票 （　）%</li>
+<li>保险 （　）%</li>
+<li>其他 （　）%</li>
+</ol>
+</section>
+<section id="问卷设计综合示例家庭消费状况调查问卷第110题续-1" class="slide level2">
+<h2>问卷设计综合示例：家庭消费状况调查问卷（第1～10题）（续）</h2>
+<p><strong>题（10）您存钱的主要目的是：</strong></p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>序号</th>
+<th>选项</th>
+<th>序号</th>
+<th>选项</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>□购买设备</td>
+<td>4</td>
+<td>□子女教育</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>□购买住房</td>
+<td>5</td>
+<td>□养老防病</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>□结婚</td>
+<td>6</td>
+<td>□旅游</td>
+</tr>
+</tbody>
+</table>
+<p>（请按你认为的重要性在□中写位序）</p>
+<p><strong>教学要点</strong>：以上两题分别示范了<strong>填空式（比重分配）</strong>与<strong>排序式（按重要性填位序）</strong>问卷题型，用于收集调查对象的家庭资产结构与储蓄目的信息。</p>
+</section>
+<section id="问卷设计综合示例续信贷消费与背景资料第1115题" class="slide level2">
+<h2>问卷设计综合示例（续）：信贷消费与背景资料（第11～15题）</h2>
+<p><strong>（11）您是否了解现在推行的信贷消费</strong></p>
+<ul>
+<li>1、□不了解</li>
+<li>2、□了解一点</li>
+<li>3、□了解</li>
+<li>4、□很了解</li>
+</ul>
+<p><strong>（12）您是否打算参加信贷消费：</strong></p>
+<ul>
+<li>1、□是</li>
+<li>2、□不　（跳过第13问题）</li>
+</ul>
+<p><strong>（13）您信贷消费的项目是（　　　　　　）</strong>（请按第3题的编号填写）</p>
+<blockquote>
+<p>教学要点：本页展示问卷中的跳答设计——第12题选择”不”的受访者跳过第13题；第13题为开放（填空）题，答案须按第3题的编号填写，属于问卷内部逻辑关联的设计。</p>
+</blockquote>
+<p><strong>（14）您是否同意下列看法：</strong></p>
+<p>本页展示问卷调查中测量态度的<strong>李克特量表</strong>设计实例。被调查者需对以下 8 个关于”信贷消费”的看法，在五级选项中勾选自己的态度：很同意、同意、无所谓、很不同意（五级量表选项由左至右排列于表格上方的回答栏中，供逐题勾选）。</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>题项</th>
+<th>看法内容</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>信贷消费不合中国国情</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>信贷消费是资本主义国家的做法</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>信贷消费是先甜后苦</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>借债享受有风险</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>借债消费不光彩</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>信贷消费是现代通行的做法</td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td>只要量力借贷，有利无害</td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td>发展信贷消费能促进经济增长</td>
+</tr>
+</tbody>
+</table>
+<p><strong>教学要点</strong>：该量表通过若干正向与反向陈述混合排列，测量受访者对信贷消费的态度倾向；回收后可对各题项赋值（如 5=很同意 … 1=很不同意），加总得到态度总分，用于后续统计分析。</p>
+</section>
+<section id="问卷设计综合示例续信贷消费与背景资料第1115题续" class="slide level2">
+<h2>问卷设计综合示例（续）：信贷消费与背景资料（第11～15题）（续）</h2>
+<p><strong>问卷基本资料部分示例（第15题）</strong></p>
+<p>问卷的最后，通常需要了解受访者的基本情况进行背景信息采集：</p>
+<ul>
+<li><strong>A、您的性别：</strong> 1、□男，2、□女</li>
+<li><strong>B、您的年龄：______周岁</strong></li>
+<li><strong>C、您的文化程度：</strong> 1、□不识字或识字不多 2、□小学 3、□初中 4、□高中或中专 5、□大专或大学以上</li>
+<li><strong>D、您家庭人口数______人</strong>
+<ul>
+<li>D（1）在业______人</li>
+<li>D（2）离退休______人</li>
+<li>D（3）失业、下岗______人</li>
+<li>D（4）在校学生______人</li>
+</ul></li>
+<li><strong>E、您的职业____________（见卡片）</strong></li>
+<li><strong>F、职务____________</strong></li>
+</ul>
+<p><strong>教学要点</strong>：性别、文化程度等分类项目采用封闭式选项（打勾选择）；年龄、人口数等数量项目采用填空式；职业调查可借助出示卡片辅助回答，体现问卷题型设计的多样性。</p>
+</section>
+<section id="第四节-统计调查数据的质量" class="slide level2">
+<h2>第四节 统计调查数据的质量</h2>
+<p>数据质量是统计调查的生命线。本节从误差来源入手，区分代表性误差与登记性误差两类，并给出控制调查误差的具体措施；在此基础上，引入社会调查”总误差”的扩展视角与应答率指标，帮助我们从教材的二元分类走向真实调查工作的全误差视野。</p>
+</section>
+<section id="统计调查误差的概念与分类" class="slide level2 scrollable">
+<h2>统计调查误差的概念与分类</h2>
+<p>统计调查数据的误差会影响调查数据的质量。</p>
+<p><strong>统计调查误差</strong>：指统计调查所得到的数字与调查对象实际数量之间的差异。</p>
+<p>数据误差按来源不同可分为：</p>
+<ol type="1">
+<li><strong>代表性误差</strong></li>
+<li><strong>登记性误差</strong></li>
+</ol>
+</section>
+<section id="一代表性误差" class="slide level2">
+<h2>一、代表性误差</h2>
+<p><strong>1、定义</strong>：指用样本数据进行推断时产生的随机误差。</p>
+<p><strong>2、产生原因</strong>：</p>
+<p>（1）抽样时没有遵循随机原则； （2）样本结构与总体结构存在差异； （3）样本容量不足。</p>
+<p><strong>注意</strong>：这类误差通常无法彻底消除，但可事先进行控制。</p>
+</section>
+<section id="二登记性误差" class="slide level2">
+<h2>二、登记性误差</h2>
+<p><strong>1、定义</strong>：指调查过程中由于调查者或被调查者的<strong>人为因素</strong>造成的误差。</p>
+<p><strong>2、产生原因</strong>：</p>
+<ul>
+<li><strong>调查者造成</strong>：调查方案有关规定不明确，导致的填报错误、抄录错误、汇总错误等；</li>
+<li><strong>被调查者造成</strong>：因人为因素干扰导致的虚报或瞒报。</li>
+</ul>
+<blockquote>
+<p><strong>重要结论：这类误差可消除。</strong></p>
+</blockquote>
+<p>登记性误差与代表性（随机）误差不同，它源于人为因素，因此通过完善调查方案、加强审核与培训等措施可以消除。</p>
+</section>
+<section id="社会调查的总误差视角从两类误差到总误差框架" class="slide level2 scrollable">
+<h2>社会调查的总误差视角：从两类误差到总误差框架</h2>
+<p>“代表性误差＋登记性误差”的二元分类抓住了教材主线；而真实调查工作中，误差贯穿数据收集、整理、清洗的每一个环节。社会调查方法学把误差细分为四类，并统一到”总误差”框架之下。</p>
+<p><strong>（一）四类误差</strong></p>
+<ol type="1">
+<li><strong>覆盖性误差</strong>（又称抽样框误差）：目标总体与抽样框总体不一致导致调查对象错位产生的误差。来源有三——抽样框丢失或重叠目标总体要素、混入非目标总体要素（如把保安人员列入学生抽样框）、辅助信息不正确。覆盖性误差存在于一切调查（含文献、访谈、观察）之中；</li>
+<li><strong>测量性误差</strong>：来源于测量工具（问卷设计不当）与工具使用（调查员操作不当）两方面的误差，对应测量的信度与效度问题；</li>
+<li><strong>应答性误差</strong>：调查者发出调查请求后，调查对象未回应或未完整回应造成的数据缺失（详见下文”应答率”）；</li>
+<li><strong>抽样性误差</strong>：仅出现在抽样调查中的一类误差，即本节前文的代表性误差；抽样调查中的覆盖性误差，其实也是抽样性误差的一部分。</li>
+</ol>
+<p><strong>（二）树状图：调查总误差</strong></p>
+</section>
+<section id="社会调查的总误差视角从两类误差到总误差框架续" class="slide level2">
+<h2>社会调查的总误差视角：从两类误差到总误差框架（续）</h2>
+<pre><code>统计调查总误差（以均方误 MSE 综合度量）
+├── 抽样性误差（仅抽样调查存在）
+│     ├── 随机抽样波动（代表性误差的主体：可计算、可事先控制）
+│     └── 抽样框制作中的覆盖性问题
+└── 非抽样误差（各类调查均可能出现）
+      ├── 覆盖性误差：丢失/重叠目标要素；混入非目标要素；辅助信息错误
+      ├── 测量性误差：工具误差（问卷设计）＋使用误差（调查员操作）→ 信度、效度
+      └── 应答性误差：单元无应答（unit）／项目无应答（item）→ 数据缺失</code></pre>
+<p><strong>（三）两套分类的对照</strong></p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>本节教材分类</th>
+<th>总误差框架对应</th>
+<th>可否消除</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>代表性误差（随机误差）</td>
+<td>抽样性误差（随机抽样波动）</td>
+<td>不可彻底消除，但可事先计算与控制</td>
+</tr>
+<tr class="even">
+<td>登记性误差（人为因素）</td>
+<td>非抽样误差中的测量性误差（填报、抄录、汇总差错）及部分应答性误差（虚报、瞒报）</td>
+<td>通过完善方案、加强审核培训可以消除</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="社会调查的总误差视角从两类误差到总误差框架续-1" class="slide level2">
+<h2>社会调查的总误差视角：从两类误差到总误差框架（续）</h2>
+<p>按可改进性，上述误差又可归纳为两类：<strong>随机误差</strong>——在调查活动中随机产生（如访问员的不规范行为），表现为增大变量测量的方差，可通过规范行为予以减少；<strong>系统误差</strong>——由设计因素产生（如测量工具有缺陷，凡采用该工具的调查都会出现同类偏差），表现为增大测量的偏移量（bias），一旦出现几乎没有补救余地。所有这些由数据收集、整理、清洗活动产生的误差的综合，称为<strong>调查总误差</strong>，通常用<strong>均方误（MSE）</strong>表示。</p>
+<p><strong>（四）应答率及其计算</strong></p>
+<p>应答性误差的大小常用<strong>应答率</strong>刻画。无应答分两类：</p>
+<ul>
+<li><strong>单元无应答（unit nonresponse）</strong>：一整份问卷无应答（未接触到、拒访）；非问卷类调查中称为”失访”；</li>
+<li><strong>项目无应答（item nonresponse）</strong>：接受了访问，但个别题目未作答。</li>
+</ul>
+<p>应答率＝应答样本数 ÷ 样本总数 × 100%。实际计算必须明确两个口径——<strong>分子</strong>：完全应答（完成所有应答题）还是含部分应答（部分应答可按完成题目的比例折算一个百分数）？<strong>分母</strong>：无效样本（不符合甄别条件）是否剔除？未接触到的样本如何认定？</p>
+<p><strong>算例</strong>：某课程小组发放问卷 400 份，回收 312 份，其中完整应答 260 份、部分应答 52 份；未回收的 88 份中，拒访 31 份、未接触到 41 份、经甄别属无效样本 16 份。三种口径下的应答率：</p>
+</section>
+<section id="社会调查的总误差视角从两类误差到总误差框架续-2" class="slide level2">
+<h2>社会调查的总误差视角：从两类误差到总误差框架（续）</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>口径</th>
+<th>计算</th>
+<th>应答率</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>严格口径：完全应答 ÷ 全部样本</td>
+<td>260 ÷ 400</td>
+<td>65.0%</td>
+</tr>
+<tr class="even">
+<td>宽口径：含部分应答</td>
+<td>312 ÷ 400</td>
+<td>78.0%</td>
+</tr>
+<tr class="odd">
+<td>分母剔除无效样本</td>
+<td>260 ÷（400 − 16）</td>
+<td>67.7%</td>
+</tr>
+</tbody>
+</table>
+<p>无应答既可能是<strong>随机现象</strong>（个别样本偶然遗漏），也可能是<strong>系统现象</strong>（如高收入人群完全接触不到）。系统性无应答会使样本偏离等概率性、损害代表性——此时即使应答率不低，误差依然可能很大。因此报告调查结果时，应同时报告应答率及其统计口径。</p>
+<p><strong>（五）史话与更正：普查还是抽样之争</strong></p>
+<p>19 世纪末，围绕”逐户清点的普查”与”部分代表整体”的抽样孰优孰劣，统计界发生了一场著名争论。1895 年，挪威统计学家安德斯·凯尔（A. N. Kiær）在国际统计学会（ISI）年会上系统提出”代表方法”（representative method）——主张用科学组织的部分调查代替全面清点，被公认为现代抽样调查的起点。这场争论最终以”普查与抽样并行、互为补充”收场，也正是本章”以周期性普查为基础、以经常性抽样调查为主体”这一调查体系的百年回响。</p>
+</section>
+<section id="社会调查的总误差视角从两类误差到总误差框架续-3" class="slide level2">
+<h2>社会调查的总误差视角：从两类误差到总误差框架（续）</h2>
+<blockquote>
+<p><strong>事实核查说明</strong>：胡华平课件原文把这段史话记为”数学家柯西曾赴美国国会作证、反对美国人口普查”。经查证：柯西（Cauchy）于 1857 年去世，其生平与美国国会的人口普查听证无据可考，疑为张冠李戴；倡导”代表方法”、置身普查与抽样之争中心的关键人物是凯尔。本讲义按史实更正后引用。</p>
+</blockquote>
+<p><strong>脚注二则</strong>：</p>
+<blockquote>
+<p><strong>脚注 1（公式更正）</strong>：抽样性误差的计算针对具体变量。经验标准之一是”均值变异系数”——按调查方法文献通行口径应为<strong>标准误 ÷ 样本均值</strong>（比例变量为 √(p(1−p)) ÷ p），经验上小于 50% 视为调查质量可以接受。胡华平课件 part05 p24 原页印作”样本均值 ÷ 标准误”，分子分母颠倒，本讲义已按通行口径更正。</p>
+</blockquote>
+</section>
+<section id="社会调查的总误差视角从两类误差到总误差框架续-4" class="slide level2">
+<h2>社会调查的总误差视角：从两类误差到总误差框架（续）</h2>
+<blockquote>
+<p><strong>脚注 2（延伸阅读）</strong>：测量性误差的深入讨论涉及测量的<strong>信度</strong>（reliability，同一工具重复测量同一对象得到相同结果的稳定性；检验方法有前后测、折半、复本、一致性信度）与<strong>效度</strong>（validity，是否测到了要测的东西）。问卷研究中常用的内部一致性信度系数 Cronbach α 的经验判读标准为：α≥0.9 可靠性极高，0.8≤α&lt;0.9 较好，0.7≤α&lt;0.8 能够接受。此内容属研究方法类课程，本课程不展开。</p>
+</blockquote>
+</section>
+<section id="三调查误差的控制" class="slide level2 scrollable">
+<h2>三、调查误差的控制</h2>
+<p>在实际调查工作中，控制误差的方法主要有以下几种：</p>
+<ol type="1">
+<li><strong>正确制定调查方案</strong>：力求调查范围明确、调查项目解释清楚、方法科学适用；</li>
+<li><strong>加强调查人员培训</strong>，提高调查技术水平；</li>
+<li><strong>做好思想教育工作</strong>：坚持实事求是，加强法律观念；</li>
+<li><strong>严格要求调查人员认真细致</strong>：多加审核、及时更正；</li>
+<li><strong>完善各种计量、测量工具</strong>。</li>
+</ol>
+<p>以上五条分别从方案设计、人员素质、思想作风、工作流程和计量工具五个方面入手，系统性降低调查误差。</p>
+</section>
+<section id="拓展专题-a从问卷到数据集数据工程入门选讲自学" class="slide level2">
+<h2>拓展专题 A：从问卷到数据集——数据工程入门（选讲/自学）</h2>
+<p><strong>定位与学法</strong>：本专题为拓展内容，不占主线课时，供课程调查作业与毕业论文的数据工作参考。以观念与方法为主、工具为辅——全部内容均可用 Excel 复现；配套两个 R 实践块见”新增实践/ch02-v3实践.md”。学完本专题应能回答三个问题：一份问卷怎样变成一张数据表？一份”烦人”的年鉴表格怎样变成可分析的数据？一个数据项目的文件怎样管得井井有条？</p>
+</section>
+<section id="a.1-为什么要数据库化" class="slide level2">
+<h2>A.1 为什么要”数据库化”</h2>
+<p>手工计算的时代已经结束：数据的数量与复杂程度超出了人脑、纸笔直接处理的程度，调查数据的分析自计算机普及以来主要依靠软件完成。而计算机对数据有明确的要求——<strong>数据库格式</strong>：把变量、变量值、变量属性标签输入计算机，变成<strong>结构化的数据矩阵</strong>。</p>
+<p>统计软件中的数据表因此有两个视图：<strong>数据视图</strong>（每行代表一个样本，每列代表一个变量，单元格为数据取值）与<strong>变量视图</strong>（每行代表一个变量，各列描述变量的名称、类型、标签等性质）。理解这两个视图，就理解了”数据集”的物理形态。</p>
+</section>
+<section id="a.2-数据库化三步与产出清单" class="slide level2">
+<h2>A.2 数据库化三步与产出清单</h2>
+<p>问卷在审核、归档、清理之后、进入分析软件之前，需经三步入库：</p>
+<p><strong>第一步：编码</strong>。把每道访题转换为代码——访题对应数据库表中的<strong>变量</strong>，选项应答赋值对应<strong>变量值</strong>，各种属性说明对应<strong>变量标签</strong>。编码时机有三法：<strong>原始编码</strong>（直接沿用问卷自带编码，仅适用于访题极少的情形）、<strong>先编码</strong>（调查开始前完成，适用于基本为封闭题的问卷）、<strong>后编码</strong>（调查完成后进行，凡有开放题必用）。编码的成果是<strong>编码手册</strong>——它相当于问卷数据的”数据字典”，把变量、变量值、变量标签系统地关联起来。</p>
+<p><strong>第二步：录入与转化</strong>。纸版问卷须录入数据（简单问卷可用 Excel、SPSS 等；庞大复杂的问卷建议用专门录入软件，如免费的 EpiData——可把纸版问卷完整呈现在屏幕上，并通过对跳转、阈值、变量类型的控制减少录入误差）；计算机辅助调查则须做内容与格式的转化。</p>
+</section>
+<section id="a.2-数据库化三步与产出清单续" class="slide level2">
+<h2>A.2 数据库化三步与产出清单（续）</h2>
+<p><strong>第三步：检验与清理</strong>。①<strong>录入错误清理</strong>：双录入核对，输出冲突数据逐一裁决；②<strong>编码清理</strong>：清理超出编码值范围的取值（如性别编码只有 1、2 却出现了 5）；③<strong>逻辑清理</strong>：清理违背基本事实的记录（如男性样本带有怀孕记录）；④<strong>离群值确认</strong>：极大极小值需再次核实——偏离常识的未必是错的（16—49 岁女性怀孕正常，70 岁则须查证）；⑤<strong>无应答处理</strong>：依据已应答数值决定处理方式（如插值）；⑥<strong>变量再编码</strong>：清洗中可产生衍生变量（如按受教育程度与收入构造社会经济地位分组）。</p>
+<p><strong>数据库化的产出清单（7 项文件）</strong>：①调查问卷；②编码手册（数据字典）；③完成问卷库与未完成问卷库（两个数据库）；④样本库（含抽样单位、分层变量、权重变量等）；⑤抽样报告与实施报告（用于判断数据质量、制订分析策略）；⑥完成/未完成问卷数量统计表；⑦数据清理报告（说明各变量的可分析性）。拿到任何一份”入库”数据，都可用这 7 项清单检查其完备性。</p>
+</section>
+<section id="a.3-数据清洗的四性评估" class="slide level2">
+<h2>A.3 数据清洗的”四性”评估</h2>
+<p>数据整理重在分类与梳理，数据清洗重在<strong>检错</strong>。清洗工作包括四项评估内容：</p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>评估维度</th>
+<th>要问的问题</th>
+<th>调查问卷数据的对应</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>真实性</strong></td>
+<td>数据确实来源于调查？不是道听途说、张冠李戴、杜撰臆想？</td>
+<td>确认数据来自受访者本人（“假新闻”式转发即真实性事故的极端形态）</td>
+</tr>
+<tr class="even">
+<td><strong>完整性</strong></td>
+<td>研究需要的不缺、不需要的不混？</td>
+<td>样本无应答与选项无应答；缺项应继续补采</td>
+</tr>
+<tr class="odd">
+<td><strong>可用性</strong></td>
+<td>能否直接用于数据库化与分析？</td>
+<td>编码是否完成、权数是否可行、缺失值如何标记；图片音视频文本是否数字化、大数据是否抽样、隐私是否脱敏</td>
+</tr>
+<tr class="even">
+<td><strong>错误性</strong></td>
+<td>错误从哪里来、可能多大、对质量影响如何？</td>
+<td>样本错误、应答人错误、应答方式错误</td>
+</tr>
+</tbody>
+</table>
+<p><strong>清洗要有记录</strong>：每一步的做法、参与人、时间、地点都应记录在案，形成”清洗日志”；配合可复现的分析文档（如 R Markdown：参数区＋目录树，从原始数据到结论一键重跑），是现代数据工作的基本规范。</p>
+<p><strong>两点忠告</strong>：清洗不是”扔东西”，而是让数据清晰化——把私用数据转化为所有研究者可读的公用数据；清洗过程中千万保留原始记录——原始问卷至少保留十年以上，访谈记录与观察笔记要求永久保留。</p>
+</section>
+<section id="a.4-真实数据长什么样cgss2015-的缺失值编码与清洗" class="slide level2 scrollable">
+<h2>A.4 真实数据长什么样：CGSS2015 的缺失值编码与清洗</h2>
+<p>中国综合社会调查（CGSS）是国内最常用的学术调查数据之一。CGSS2015 共有样本 10968 个、变量 1398 个。打开真实数据，第一课往往是<strong>缺失值编码</strong>——受访者”无法回答、拒绝回答、不知道、不适用”不会被留空，而是用专门的负值编码：</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>编码</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>−8</td>
+<td>无法回答</td>
+</tr>
+<tr class="even">
+<td>−3</td>
+<td>拒绝回答</td>
+</tr>
+<tr class="odd">
+<td>−2</td>
+<td>不知道</td>
+</tr>
+<tr class="even">
+<td>−1</td>
+<td>不适用</td>
+</tr>
+<tr class="odd">
+<td>9999996</td>
+<td>封顶码（如个人年收入高于百万位数）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>清洗三步实例</strong>（课件以 CGSS2015 随机抽取的 100 个样本演示）：</p>
+<ol type="1">
+<li><strong>变量重命名</strong>：把原始题号变量 a36、a10、a8a 改为含义明确的 Happ、Pol、Inc，并生成对数收入变量 Lninc；</li>
+<li><strong>异常值处理</strong>：对右偏严重的收入变量取自然对数（如收入 20000→对数 9.90、150000→11.92、600000→13.30），分布立即趋于对称；也可按分位数截尾（如截去大于 0.99 分位的观测）；</li>
+<li><strong>缺失值解码</strong>：负值编码必须先还原为缺失值（NA）再作统计，否则均值、方差全部失真。</li>
+</ol>
+<p>配套 R 实操见”新增实践/ch02-v3实践.md”实践一。</p>
+</section>
+<section id="实践一问卷模拟数据的清洗实操解码去重纠错一步到位" class="slide level2 r-demo scrollable">
+<h2>实践一：问卷模拟数据的清洗实操——解码、去重、纠错一步到位</h2>
+<p>讲义拓展专题 A 说：真实调查数据的第一课是<strong>缺失值编码</strong>——“无法回答、拒答、不知道、不适用”用负值编码（−8/−3/−2/−1）填充，绝不能当数值直接统计。本实践用 10 份模拟问卷走一遍清洗全流程：先”体检”（对应”四性”中的错误性评估），再动手洗（去重→解码→纠错→重命名→取对数），最后验证（清洗前后均值对照、各变量缺失比例——正好呼应讲义第四节的”项目无应答”）。</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a aria-label="1"></a><span class="co"># 实践一：问卷模拟数据的清洗实操（raw data -&gt; analysis data）</span></span>
+<span id="cb7-2"><a aria-label="2"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb7-3"><a aria-label="3"></a></span>
+<span id="cb7-4"><a aria-label="4"></a><span class="co"># ---------- 第 0 步：一份刚录入的“原始问卷数据”（10 份问卷，混入 1 行重复录入） ----------</span></span>
+<span id="cb7-5"><a aria-label="5"></a>raw_q <span class="ot">&lt;-</span> <span class="fu">tribble</span>(</span>
+<span id="cb7-6"><a aria-label="6"></a>  <span class="sc">~</span>id,   <span class="sc">~</span>gender, <span class="sc">~</span>age, <span class="sc">~</span>edu, <span class="sc">~</span>income, <span class="sc">~</span>sat,</span>
+<span id="cb7-7"><a aria-label="7"></a>  <span class="dv">1001</span>,  <span class="dv">1</span>,       <span class="dv">21</span>,   <span class="dv">3</span>,   <span class="dv">12000</span>,   <span class="dv">4</span>,</span>
+<span id="cb7-8"><a aria-label="8"></a>  <span class="dv">1002</span>,  <span class="dv">2</span>,       <span class="dv">20</span>,   <span class="dv">3</span>,    <span class="dv">8000</span>,   <span class="dv">5</span>,</span>
+<span id="cb7-9"><a aria-label="9"></a>  <span class="dv">1003</span>,  <span class="dv">2</span>,       <span class="dv">22</span>,   <span class="dv">4</span>,      <span class="sc">-</span><span class="dv">3</span>,   <span class="dv">3</span>,   <span class="co"># income = -3：拒绝回答</span></span>
+<span id="cb7-10"><a aria-label="10"></a>  <span class="dv">1004</span>,  <span class="dv">1</span>,       <span class="dv">21</span>,   <span class="dv">3</span>,   <span class="dv">15000</span>,   <span class="dv">2</span>,</span>
+<span id="cb7-11"><a aria-label="11"></a>  <span class="dv">1004</span>,  <span class="dv">1</span>,       <span class="dv">21</span>,   <span class="dv">3</span>,   <span class="dv">15000</span>,   <span class="dv">2</span>,   <span class="co"># 与上一行完全相同：重复录入</span></span>
+<span id="cb7-12"><a aria-label="12"></a>  <span class="dv">1005</span>,  <span class="dv">5</span>,       <span class="dv">23</span>,   <span class="dv">2</span>,      <span class="sc">-</span><span class="dv">8</span>,   <span class="dv">4</span>,   <span class="co"># gender = 5 越界（编码只有 1/2）；income = -8：无法回答</span></span>
+<span id="cb7-13"><a aria-label="13"></a>  <span class="dv">1006</span>,  <span class="dv">2</span>,      <span class="dv">999</span>,   <span class="dv">3</span>,    <span class="dv">9000</span>,   <span class="dv">7</span>,   <span class="co"># age = 999 越界；sat = 7 超出 1-5 量表</span></span>
+<span id="cb7-14"><a aria-label="14"></a>  <span class="dv">1007</span>,  <span class="dv">1</span>,       <span class="dv">22</span>,   <span class="dv">4</span>,      <span class="sc">-</span><span class="dv">2</span>,   <span class="dv">5</span>,   <span class="co"># income = -2：不知道</span></span>
+<span id="cb7-15"><a aria-label="15"></a>  <span class="dv">1008</span>,  <span class="dv">2</span>,       <span class="dv">21</span>,   <span class="dv">2</span>,    <span class="dv">6000</span>,   <span class="dv">3</span>,</span>
+<span id="cb7-16"><a aria-label="16"></a>  <span class="dv">1009</span>,  <span class="dv">1</span>,       <span class="dv">20</span>,   <span class="dv">3</span>,      <span class="sc">-</span><span class="dv">1</span>,   <span class="dv">4</span>,   <span class="co"># income = -1：不适用（如学生暂无收入）</span></span>
+<span id="cb7-17"><a aria-label="17"></a>  <span class="dv">1010</span>,  <span class="dv">2</span>,       <span class="dv">22</span>,   <span class="dv">3</span>,   <span class="dv">11000</span>,   <span class="dv">1</span></span>
+<span id="cb7-18"><a aria-label="18"></a>)</span>
+<span id="cb7-19"><a aria-label="19"></a></span>
+<span id="cb7-20"><a aria-label="20"></a><span class="co"># ---------- 第 1 步：体检——按“看行 / 看列 / 看单元格”三步排查 ----------</span></span>
+<span id="cb7-21"><a aria-label="21"></a><span class="fu">glimpse</span>(raw_q)               <span class="co"># 看列：每列的类型对不对？</span></span>
+<span id="cb7-22"><a aria-label="22"></a><span class="co">#&gt; Rows: 11</span></span>
+<span id="cb7-23"><a aria-label="23"></a><span class="co">#&gt; Columns: 6</span></span>
+<span id="cb7-24"><a aria-label="24"></a><span class="co">#&gt; $ id     &lt;dbl&gt; 1001, 1002, 1003, 1004, 1004, 1005, 1006, 1007, 1008, 1009, 1010</span></span>
+<span id="cb7-25"><a aria-label="25"></a><span class="co">#&gt; $ gender &lt;dbl&gt; 1, 2, 2, 1, 1, 5, 2, 1, 2, 1, 2</span></span>
+<span id="cb7-26"><a aria-label="26"></a><span class="co">#&gt; $ age    &lt;dbl&gt; 21, 20, 22, 21, 21, 23, 999, 22, 21, 20, 22</span></span>
+<span id="cb7-27"><a aria-label="27"></a><span class="co">#&gt; $ edu    &lt;dbl&gt; 3, 3, 4, 3, 3, 2, 3, 4, 2, 3, 3</span></span>
+<span id="cb7-28"><a aria-label="28"></a><span class="co">#&gt; $ income &lt;dbl&gt; 12000, 8000, -3, 15000, 15000, -8, 9000, -2, 6000, -1, 11000</span></span>
+<span id="cb7-29"><a aria-label="29"></a><span class="co">#&gt; $ sat    &lt;dbl&gt; 4, 5, 3, 2, 2, 4, 7, 5, 3, 4, 1</span></span>
+<span id="cb7-30"><a aria-label="30"></a><span class="fu">summary</span>(raw_q)               <span class="co"># 看单元格：负值码与越界值在极值处现形（income 最小 -8，age 最大 999）</span></span>
+<span id="cb7-31"><a aria-label="31"></a><span class="co">#&gt;        id           gender           age             edu        income       </span></span>
+<span id="cb7-32"><a aria-label="32"></a><span class="co">#&gt;  Min.   :1001   Min.   :1.000   Min.   : 20.0   Min.   :2   Min.   :   -8.0  </span></span>
+<span id="cb7-33"><a aria-label="33"></a><span class="co">#&gt;  1st Qu.:1004   1st Qu.:1.000   1st Qu.: 21.0   1st Qu.:3   1st Qu.:   -1.5  </span></span>
+<span id="cb7-34"><a aria-label="34"></a><span class="co">#&gt;  Median :1005   Median :2.000   Median : 21.0   Median :3   Median : 8000.0  </span></span>
+<span id="cb7-35"><a aria-label="35"></a><span class="co">#&gt;  Mean   :1005   Mean   :1.818   Mean   :110.2   Mean   :3   Mean   : 6907.8  </span></span>
+<span id="cb7-36"><a aria-label="36"></a><span class="co">#&gt;  3rd Qu.:1008   3rd Qu.:2.000   3rd Qu.: 22.0   3rd Qu.:3   3rd Qu.:11500.0  </span></span>
+<span id="cb7-37"><a aria-label="37"></a><span class="co">#&gt;  Max.   :1010   Max.   :5.000   Max.   :999.0   Max.   :4   Max.   :15000.0  </span></span>
+<span id="cb7-38"><a aria-label="38"></a><span class="co">#&gt;       sat       </span></span>
+<span id="cb7-39"><a aria-label="39"></a><span class="co">#&gt;  Min.   :1.000  </span></span>
+<span id="cb7-40"><a aria-label="40"></a><span class="co">#&gt;  1st Qu.:2.500  </span></span>
+<span id="cb7-41"><a aria-label="41"></a><span class="co">#&gt;  Median :4.000  </span></span>
+<span id="cb7-42"><a aria-label="42"></a><span class="co">#&gt;  Mean   :3.636  </span></span>
+<span id="cb7-43"><a aria-label="43"></a><span class="co">#&gt;  3rd Qu.:4.500  </span></span>
+<span id="cb7-44"><a aria-label="44"></a><span class="co">#&gt;  Max.   :7.000</span></span>
+<span id="cb7-45"><a aria-label="45"></a><span class="fu">sum</span>(<span class="fu">duplicated</span>(raw_q))       <span class="co"># 看行：1 —— 存在 1 行完全重复（重复录入）</span></span>
+<span id="cb7-46"><a aria-label="46"></a><span class="co">#&gt; [1] 1</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a aria-label="1"></a><span class="co"># ---------- 第 2 步：清洗——去重、解码、纠错、重命名、变换 ----------</span></span>
+<span id="cb8-2"><a aria-label="2"></a>q_clean <span class="ot">&lt;-</span> raw_q <span class="sc">%&gt;%</span></span>
+<span id="cb8-3"><a aria-label="3"></a>  <span class="fu">distinct</span>() <span class="sc">%&gt;%</span>                                              <span class="co"># (a) 删除重复录入行：11 行 -&gt; 10 行</span></span>
+<span id="cb8-4"><a aria-label="4"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb8-5"><a aria-label="5"></a>    <span class="at">income =</span> <span class="fu">if_else</span>(income <span class="sc">&lt;</span> <span class="dv">0</span>, <span class="cn">NA_real_</span>, income),           <span class="co"># (b) 负值缺失码 -8/-3/-2/-1 -&gt; NA</span></span>
+<span id="cb8-6"><a aria-label="6"></a>    <span class="at">gender =</span> <span class="fu">if_else</span>(gender <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), gender, <span class="cn">NA_real_</span>),  <span class="co"># (c) 编码清理：性别只能取 1/2</span></span>
+<span id="cb8-7"><a aria-label="7"></a>    <span class="at">age    =</span> <span class="fu">if_else</span>(<span class="fu">between</span>(age, <span class="dv">16</span>, <span class="dv">60</span>), age, <span class="cn">NA_real_</span>),    <span class="co">#     越界值（999）改 NA，留待与问卷核对</span></span>
+<span id="cb8-8"><a aria-label="8"></a>    <span class="at">sat    =</span> <span class="fu">if_else</span>(<span class="fu">between</span>(sat, <span class="dv">1</span>, <span class="dv">5</span>), sat, <span class="cn">NA_real_</span>),      <span class="co">#     量表越界（7）同样处理</span></span>
+<span id="cb8-9"><a aria-label="9"></a>    <span class="at">ln_inc =</span> <span class="fu">log</span>(income)                                      <span class="co"># (d) 右偏变量取对数（NA 自动保留）</span></span>
+<span id="cb8-10"><a aria-label="10"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb8-11"><a aria-label="11"></a>  <span class="fu">rename</span>(<span class="at">sex =</span> gender)                                        <span class="co"># (e) 变量重命名（对照编码手册）</span></span>
+<span id="cb8-12"><a aria-label="12"></a></span>
+<span id="cb8-13"><a aria-label="13"></a>q_clean</span>
+<span id="cb8-14"><a aria-label="14"></a><span class="co">#&gt; # A tibble: 10 × 7</span></span>
+<span id="cb8-15"><a aria-label="15"></a><span class="co">#&gt;       id   sex   age   edu income   sat ln_inc</span></span>
+<span id="cb8-16"><a aria-label="16"></a><span class="co">#&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;</span></span>
+<span id="cb8-17"><a aria-label="17"></a><span class="co">#&gt;  1  1001     1    21     3  12000     4   9.39</span></span>
+<span id="cb8-18"><a aria-label="18"></a><span class="co">#&gt;  2  1002     2    20     3   8000     5   8.99</span></span>
+<span id="cb8-19"><a aria-label="19"></a><span class="co">#&gt;  3  1003     2    22     4     NA     3  NA   </span></span>
+<span id="cb8-20"><a aria-label="20"></a><span class="co">#&gt;  4  1004     1    21     3  15000     2   9.62</span></span>
+<span id="cb8-21"><a aria-label="21"></a><span class="co">#&gt;  5  1005    NA    23     2     NA     4  NA   </span></span>
+<span id="cb8-22"><a aria-label="22"></a><span class="co">#&gt;  6  1006     2    NA     3   9000    NA   9.10</span></span>
+<span id="cb8-23"><a aria-label="23"></a><span class="co">#&gt;  7  1007     1    22     4     NA     5  NA   </span></span>
+<span id="cb8-24"><a aria-label="24"></a><span class="co">#&gt;  8  1008     2    21     2   6000     3   8.70</span></span>
+<span id="cb8-25"><a aria-label="25"></a><span class="co">#&gt;  9  1009     1    20     3     NA     4  NA   </span></span>
+<span id="cb8-26"><a aria-label="26"></a><span class="co">#&gt; 10  1010     2    22     3  11000     1   9.31</span></span>
+<span id="cb8-27"><a aria-label="27"></a><span class="fu">summary</span>(q_clean)</span>
+<span id="cb8-28"><a aria-label="28"></a><span class="co">#&gt;        id            sex             age             edu        income     </span></span>
+<span id="cb8-29"><a aria-label="29"></a><span class="co">#&gt;  Min.   :1001   Min.   :1.000   Min.   :20.00   Min.   :2   Min.   : 6000  </span></span>
+<span id="cb8-30"><a aria-label="30"></a><span class="co">#&gt;  1st Qu.:1003   1st Qu.:1.000   1st Qu.:21.00   1st Qu.:3   1st Qu.: 8250  </span></span>
+<span id="cb8-31"><a aria-label="31"></a><span class="co">#&gt;  Median :1006   Median :2.000   Median :21.00   Median :3   Median :10000  </span></span>
+<span id="cb8-32"><a aria-label="32"></a><span class="co">#&gt;  Mean   :1006   Mean   :1.556   Mean   :21.33   Mean   :3   Mean   :10167  </span></span>
+<span id="cb8-33"><a aria-label="33"></a><span class="co">#&gt;  3rd Qu.:1008   3rd Qu.:2.000   3rd Qu.:22.00   3rd Qu.:3   3rd Qu.:11750  </span></span>
+<span id="cb8-34"><a aria-label="34"></a><span class="co">#&gt;  Max.   :1010   Max.   :2.000   Max.   :23.00   Max.   :4   Max.   :15000  </span></span>
+<span id="cb8-35"><a aria-label="35"></a><span class="co">#&gt;                 NAs    :1       NAs    :1                   NAs    :4      </span></span>
+<span id="cb8-36"><a aria-label="36"></a><span class="co">#&gt;       sat            ln_inc     </span></span>
+<span id="cb8-37"><a aria-label="37"></a><span class="co">#&gt;  Min.   :1.000   Min.   :8.700  </span></span>
+<span id="cb8-38"><a aria-label="38"></a><span class="co">#&gt;  1st Qu.:3.000   1st Qu.:9.017  </span></span>
+<span id="cb8-39"><a aria-label="39"></a><span class="co">#&gt;  Median :4.000   Median :9.205  </span></span>
+<span id="cb8-40"><a aria-label="40"></a><span class="co">#&gt;  Mean   :3.444   Mean   :9.184  </span></span>
+<span id="cb8-41"><a aria-label="41"></a><span class="co">#&gt;  3rd Qu.:4.000   3rd Qu.:9.371  </span></span>
+<span id="cb8-42"><a aria-label="42"></a><span class="co">#&gt;  Max.   :5.000   Max.   :9.616  </span></span>
+<span id="cb8-43"><a aria-label="43"></a><span class="co">#&gt;  NAs    :1       NAs    :4</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a aria-label="1"></a><span class="co"># ---------- 第 3 步：验证——清洗前后的对照 ----------</span></span>
+<span id="cb9-2"><a aria-label="2"></a><span class="co"># 反面演示：不解码直接求均值，会发生什么？</span></span>
+<span id="cb9-3"><a aria-label="3"></a><span class="fu">mean</span>(raw_q<span class="sc">$</span>income)                    <span class="co"># 6907.8 —— 被负值码拉低，严重失真</span></span>
+<span id="cb9-4"><a aria-label="4"></a><span class="co">#&gt; [1] 6907.818</span></span>
+<span id="cb9-5"><a aria-label="5"></a><span class="fu">mean</span>(q_clean<span class="sc">$</span>income, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)    <span class="co"># 10166.7 —— 解码后的真实水平（低约 32%）</span></span>
+<span id="cb9-6"><a aria-label="6"></a><span class="co">#&gt; [1] 10166.67</span></span>
+<span id="cb9-7"><a aria-label="7"></a></span>
+<span id="cb9-8"><a aria-label="8"></a><span class="co"># 各变量缺失比例（item nonresponse：项目无应答视角，呼应第四节“应答性误差”）</span></span>
+<span id="cb9-9"><a aria-label="9"></a>q_clean <span class="sc">%&gt;%</span></span>
+<span id="cb9-10"><a aria-label="10"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), <span class="sc">~</span> <span class="fu">round</span>(<span class="fu">mean</span>(<span class="fu">is.na</span>(.)), <span class="dv">3</span>)))</span>
+<span id="cb9-11"><a aria-label="11"></a><span class="co">#&gt; # A tibble: 1 × 7</span></span>
+<span id="cb9-12"><a aria-label="12"></a><span class="co">#&gt;      id   sex   age   edu income   sat ln_inc</span></span>
+<span id="cb9-13"><a aria-label="13"></a><span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;</span></span>
+<span id="cb9-14"><a aria-label="14"></a><span class="co">#&gt; 1     0   0.1   0.1     0    0.4   0.1    0.4</span></span>
+<span id="cb9-15"><a aria-label="15"></a><span class="co"># income 与 ln_inc 缺失 0.4：十份问卷中四份的收入题无应答</span></span>
+<span id="cb9-16"><a aria-label="16"></a></span>
+<span id="cb9-17"><a aria-label="17"></a><span class="co"># “应答率”视角：收入题的作答比例</span></span>
+<span id="cb9-18"><a aria-label="18"></a><span class="dv">1</span> <span class="sc">-</span> <span class="fu">mean</span>(<span class="fu">is.na</span>(q_clean<span class="sc">$</span>income))       <span class="co"># 0.6 —— 60% 的样本对该题作了应答</span></span>
+<span id="cb9-19"><a aria-label="19"></a><span class="co">#&gt; [1] 0.6</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>注记</strong></p>
+</div>
+<div class="callout-content">
+<p><strong>清洗三步对照（讲义 A.3/A.4 的代码化）</strong></p>
+<ol type="1">
+<li><strong>体检先行</strong>：<code>glimpse()</code> 看列类型、<code>summary()</code> 看极值、<code>duplicated()</code> 看重复——对应年鉴体检法的”看行、看列、看单元格”；</li>
+<li><strong>解码即正义</strong>：不解码直接求均值得 6907.8，解码后为 10166.7——四个负值码（−8/−3/−2/−1）把均值拉低了约 32%。负值码不是数，是”缺失的别名”；</li>
+<li><strong>纠错不删行</strong>：越界值（gender=5、age=999、sat=7）改为 NA 而非整行删除——受访者其他题目仍有效，待与原始问卷核对后再定去留。</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>提示</strong></p>
+</div>
+<div class="callout-content">
+<p><strong>衔接与延伸</strong>：真实 CGSS 数据的缺失值编码体系正是本实践模拟的 −8/−3/−2/−1（另有 9999996 封顶码），清洗套路完全相同，只需把 <code>if_else(income &lt; 0, ...)</code> 换成 <code>if_else(income %in% c(-8, -3, -2, -1), ...)</code>。变量重命名与取对数（a36/a10/a8a → Happ/Pol/Inc/Lninc）见讲义 A.4；申请真实数据走 CGSS 官网（中国人民大学中国调查与数据中心）。</p>
+</div>
+</div>
+</div>
+<div class="callout callout-warning callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>警告</strong></p>
+</div>
+<div class="callout-content">
+
+</div>
+</div>
+</div>
+</section>
+<section id="a.5-二手数据的整理年鉴表格体检法" class="slide level2 scrollable">
+<h2>A.5 二手数据的整理：年鉴表格体检法</h2>
+<p>使用二手数据（如《中国科技统计年鉴》）建库，第一步是给”原始表格的烦人状况”做<strong>体检</strong>，检查三个层面：</p>
+<ul>
+<li><strong>看行</strong>：有没有空行？地区名称字符是否标准（混入空格、意外字符）？</li>
+<li><strong>看列</strong>：列变量是什么？中英文是否混杂？表头是否跨多行？</li>
+<li><strong>看单元格</strong>：是数值（number）还是文字（character）？——文字型数字无法直接参与计算。</li>
+</ul>
+<p><strong>从”烦人表格”到可分析数据的整理规则</strong>（课件以 2010—2017 年历年年鉴的同一张表为例）：</p>
+<ol type="1">
+<li><strong>按内容而非年份建文件夹</strong>：各年年鉴中同一张表集中管理，便于对照与合并；</li>
+<li><strong>文件与文件夹命名用英文</strong>、遵循统一规则（每年表格单独命名，含义可查目录）；</li>
+<li><strong>逐年取表</strong>：从每本年鉴中只提取研究所需的表，并确保每个文件的行列结构一致；</li>
+<li><strong>统一变量命名、写入年份信息、行合并</strong>各年度文件——得到 257 行的”干净宽表”（无空行、地区字符标准、各列为统一命名的数值）。</li>
+</ol>
+</section>
+<section id="a.6-tidy-长格式标准化的数据形态" class="slide level2">
+<h2>A.6 tidy 长格式：标准化的数据形态</h2>
+<p>干净宽表仍不是终点。标准化数据集（tidy data）遵循三条原则：<strong>每行一个观测、每列一个变量、每个单元格一个取值</strong>。</p>
+<p>据此把宽表”折叠”：行按年度（year）、省份（province）组织，把 4 个统计指标折叠成一列 variables，全部取值折叠成一列 value——257 行的宽表变成 1025 行的长表；再把各个子数据集纵向聚合，最终得到 3329 行的完整长格式数据集。</p>
+<p>为什么要”长”？因为主流统计软件与绘图工具（包括第 3 章的分组图、第 8、9 章的多序列对比）大多按”一个变量一列取值”的长格式读写数据——长格式一次整理、处处可用。宽表便于人眼浏览与录入，长表便于机器计算与作图，两者可通过”透视”操作随时互转（R 实操见”新增实践/ch02-v3实践.md”实践二）。</p>
+</section>
+<section id="实践二tidy-长宽格式转换2571025的迷你复现" class="slide level2 r-demo scrollable">
+<h2>实践二：tidy 长宽格式转换——“257→1025”的迷你复现</h2>
+<p>讲义 A.6 讲了 tidy 长格式的三原则与”257 行宽表 → 1025 行长表 → 聚合 3329 行”的故事。本实践用 5 省 × 2 年 × 3 项 R&amp;D 经费（外加合计）的迷你宽表复现全过程：<code>pivot_longer()</code> 把指标折叠成 variables/value 两列，<code>pivot_wider()</code> 原路转回核对无损，最后体会长格式的”作图红利”。</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a aria-label="1"></a><span class="co"># 实践二：tidy 长宽格式转换（wide &lt;-&gt; long）</span></span>
+<span id="cb10-2"><a aria-label="2"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb10-3"><a aria-label="3"></a></span>
+<span id="cb10-4"><a aria-label="4"></a><span class="co"># ---------- 宽表：5 省 x 2 年的 R&amp;D 经费（模拟“年鉴体检后”的干净宽表） ----------</span></span>
+<span id="cb10-5"><a aria-label="5"></a>rd_wide <span class="ot">&lt;-</span> <span class="fu">tribble</span>(</span>
+<span id="cb10-6"><a aria-label="6"></a>  <span class="sc">~</span>province, <span class="sc">~</span>year, <span class="sc">~</span>basic, <span class="sc">~</span>apply, <span class="sc">~</span>test,</span>
+<span id="cb10-7"><a aria-label="7"></a>  <span class="st">"陕西"</span>, <span class="dv">2010</span>, <span class="dv">45</span>,  <span class="dv">88</span>,  <span class="dv">62</span>,</span>
+<span id="cb10-8"><a aria-label="8"></a>  <span class="st">"陕西"</span>, <span class="dv">2015</span>, <span class="dv">92</span>, <span class="dv">175</span>, <span class="dv">130</span>,</span>
+<span id="cb10-9"><a aria-label="9"></a>  <span class="st">"甘肃"</span>, <span class="dv">2010</span>, <span class="dv">21</span>,  <span class="dv">39</span>,  <span class="dv">27</span>,</span>
+<span id="cb10-10"><a aria-label="10"></a>  <span class="st">"甘肃"</span>, <span class="dv">2015</span>, <span class="dv">43</span>,  <span class="dv">78</span>,  <span class="dv">55</span>,</span>
+<span id="cb10-11"><a aria-label="11"></a>  <span class="st">"宁夏"</span>, <span class="dv">2010</span>,  <span class="dv">6</span>,  <span class="dv">11</span>,   <span class="dv">8</span>,</span>
+<span id="cb10-12"><a aria-label="12"></a>  <span class="st">"宁夏"</span>, <span class="dv">2015</span>, <span class="dv">12</span>,  <span class="dv">24</span>,  <span class="dv">17</span>,</span>
+<span id="cb10-13"><a aria-label="13"></a>  <span class="st">"青海"</span>, <span class="dv">2010</span>,  <span class="dv">3</span>,   <span class="dv">6</span>,   <span class="dv">4</span>,</span>
+<span id="cb10-14"><a aria-label="14"></a>  <span class="st">"青海"</span>, <span class="dv">2015</span>,  <span class="dv">7</span>,  <span class="dv">13</span>,   <span class="dv">9</span>,</span>
+<span id="cb10-15"><a aria-label="15"></a>  <span class="st">"新疆"</span>, <span class="dv">2010</span>,  <span class="dv">9</span>,  <span class="dv">17</span>,  <span class="dv">12</span>,</span>
+<span id="cb10-16"><a aria-label="16"></a>  <span class="st">"新疆"</span>, <span class="dv">2015</span>, <span class="dv">19</span>,  <span class="dv">36</span>,  <span class="dv">26</span></span>
+<span id="cb10-17"><a aria-label="17"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb10-18"><a aria-label="18"></a>  <span class="fu">mutate</span>(<span class="at">total =</span> basic <span class="sc">+</span> apply <span class="sc">+</span> test)   <span class="co"># 派生变量：三项合计</span></span>
+<span id="cb10-19"><a aria-label="19"></a></span>
+<span id="cb10-20"><a aria-label="20"></a>rd_wide    <span class="co"># 10 行 x 6 列：每行一个“省-年”观测，每列一个变量（人眼好读的宽表）</span></span>
+<span id="cb10-21"><a aria-label="21"></a><span class="co">#&gt; # A tibble: 10 × 6</span></span>
+<span id="cb10-22"><a aria-label="22"></a><span class="co">#&gt;    province  year basic apply  test total</span></span>
+<span id="cb10-23"><a aria-label="23"></a><span class="co">#&gt;    &lt;chr&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span id="cb10-24"><a aria-label="24"></a><span class="co">#&gt;  1 陕西      2010    45    88    62   195</span></span>
+<span id="cb10-25"><a aria-label="25"></a><span class="co">#&gt;  2 陕西      2015    92   175   130   397</span></span>
+<span id="cb10-26"><a aria-label="26"></a><span class="co">#&gt;  3 甘肃      2010    21    39    27    87</span></span>
+<span id="cb10-27"><a aria-label="27"></a><span class="co">#&gt;  4 甘肃      2015    43    78    55   176</span></span>
+<span id="cb10-28"><a aria-label="28"></a><span class="co">#&gt;  5 宁夏      2010     6    11     8    25</span></span>
+<span id="cb10-29"><a aria-label="29"></a><span class="co">#&gt;  6 宁夏      2015    12    24    17    53</span></span>
+<span id="cb10-30"><a aria-label="30"></a><span class="co">#&gt;  7 青海      2010     3     6     4    13</span></span>
+<span id="cb10-31"><a aria-label="31"></a><span class="co">#&gt;  8 青海      2015     7    13     9    29</span></span>
+<span id="cb10-32"><a aria-label="32"></a><span class="co">#&gt;  9 新疆      2010     9    17    12    38</span></span>
+<span id="cb10-33"><a aria-label="33"></a><span class="co">#&gt; 10 新疆      2015    19    36    26    81</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a aria-label="1"></a><span class="co"># ---------- 宽 -&gt; 长：把 4 个指标折叠成 variable / value 两列 ----------</span></span>
+<span id="cb11-2"><a aria-label="2"></a>rd_long <span class="ot">&lt;-</span> rd_wide <span class="sc">%&gt;%</span></span>
+<span id="cb11-3"><a aria-label="3"></a>  <span class="fu">pivot_longer</span>(</span>
+<span id="cb11-4"><a aria-label="4"></a>    <span class="at">cols      =</span> basic<span class="sc">:</span>total,     <span class="co"># 被折叠的 4 个指标列</span></span>
+<span id="cb11-5"><a aria-label="5"></a>    <span class="at">names_to  =</span> <span class="st">"variable"</span>,      <span class="co"># 指标名 -&gt; variable 列</span></span>
+<span id="cb11-6"><a aria-label="6"></a>    <span class="at">values_to =</span> <span class="st">"value"</span>          <span class="co"># 取值   -&gt; value 列</span></span>
+<span id="cb11-7"><a aria-label="7"></a>  )</span>
+<span id="cb11-8"><a aria-label="8"></a></span>
+<span id="cb11-9"><a aria-label="9"></a>rd_long    <span class="co"># 40 行 x 4 列（10 个省-年 x 4 个指标）——课件“257 行宽表 -&gt; 1025 行长表”的迷你版</span></span>
+<span id="cb11-10"><a aria-label="10"></a><span class="co">#&gt; # A tibble: 40 × 4</span></span>
+<span id="cb11-11"><a aria-label="11"></a><span class="co">#&gt;    province  year variable value</span></span>
+<span id="cb11-12"><a aria-label="12"></a><span class="co">#&gt;    &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;</span></span>
+<span id="cb11-13"><a aria-label="13"></a><span class="co">#&gt;  1 陕西      2010 basic       45</span></span>
+<span id="cb11-14"><a aria-label="14"></a><span class="co">#&gt;  2 陕西      2010 apply       88</span></span>
+<span id="cb11-15"><a aria-label="15"></a><span class="co">#&gt;  3 陕西      2010 test        62</span></span>
+<span id="cb11-16"><a aria-label="16"></a><span class="co">#&gt;  4 陕西      2010 total      195</span></span>
+<span id="cb11-17"><a aria-label="17"></a><span class="co">#&gt;  5 陕西      2015 basic       92</span></span>
+<span id="cb11-18"><a aria-label="18"></a><span class="co">#&gt;  6 陕西      2015 apply      175</span></span>
+<span id="cb11-19"><a aria-label="19"></a><span class="co">#&gt;  7 陕西      2015 test       130</span></span>
+<span id="cb11-20"><a aria-label="20"></a><span class="co">#&gt;  8 陕西      2015 total      397</span></span>
+<span id="cb11-21"><a aria-label="21"></a><span class="co">#&gt;  9 甘肃      2010 basic       21</span></span>
+<span id="cb11-22"><a aria-label="22"></a><span class="co">#&gt; 10 甘肃      2010 apply       39</span></span>
+<span id="cb11-23"><a aria-label="23"></a><span class="co">#&gt; # ℹ 30 more rows</span></span>
+<span id="cb11-24"><a aria-label="24"></a></span>
+<span id="cb11-25"><a aria-label="25"></a><span class="co"># ---------- 长 -&gt; 宽：pivot_wider() 原路转回，核对无损 ----------</span></span>
+<span id="cb11-26"><a aria-label="26"></a>rd_back <span class="ot">&lt;-</span> rd_long <span class="sc">%&gt;%</span></span>
+<span id="cb11-27"><a aria-label="27"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> variable, <span class="at">values_from =</span> value)</span>
+<span id="cb11-28"><a aria-label="28"></a></span>
+<span id="cb11-29"><a aria-label="29"></a><span class="fu">identical</span>(<span class="fu">as.data.frame</span>(rd_wide), <span class="fu">as.data.frame</span>(rd_back))</span>
+<span id="cb11-30"><a aria-label="30"></a><span class="co">#&gt; [1] TRUE</span></span>
+<span id="cb11-31"><a aria-label="31"></a><span class="co"># TRUE —— 宽长转换完全可逆、数据无损（若列顺序不同，可用 all_equal() 核对）</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a aria-label="1"></a><span class="co"># ---------- 长格式的红利：一次整理、处处可用 ----------</span></span>
+<span id="cb12-2"><a aria-label="2"></a><span class="co"># (1) 构成对比：按省观察三类经费的内部结构，一个百分比堆积条形图直接成形</span></span>
+<span id="cb12-3"><a aria-label="3"></a><span class="fu">ggplot</span>(rd_long <span class="sc">%&gt;%</span> <span class="fu">filter</span>(variable <span class="sc">!=</span> <span class="st">"total"</span>),</span>
+<span id="cb12-4"><a aria-label="4"></a>       <span class="fu">aes</span>(<span class="at">x =</span> province, <span class="at">y =</span> value, <span class="at">fill =</span> variable)) <span class="sc">+</span></span>
+<span id="cb12-5"><a aria-label="5"></a>  <span class="fu">geom_col</span>(<span class="at">position =</span> <span class="st">"fill"</span>) <span class="sc">+</span></span>
+<span id="cb12-6"><a aria-label="6"></a>  <span class="fu">scale_fill_brewer</span>(<span class="at">palette =</span> <span class="st">"Blues"</span>, <span class="at">name =</span> <span class="st">"经费类型"</span>,</span>
+<span id="cb12-7"><a aria-label="7"></a>                    <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"基础研究"</span>, <span class="st">"应用研究"</span>, <span class="st">"试验发展"</span>)) <span class="sc">+</span></span>
+<span id="cb12-8"><a aria-label="8"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"五省 R&amp;D 经费内部结构（2010 与 2015 合并视角）"</span>,</span>
+<span id="cb12-9"><a aria-label="9"></a>       <span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="st">"构成比例"</span>,</span>
+<span id="cb12-10"><a aria-label="10"></a>       <span class="at">caption =</span> <span class="st">"模拟数据；长格式下分组、分面、堆积一步到位"</span>) <span class="sc">+</span></span>
+<span id="cb12-11"><a aria-label="11"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a aria-label="1"></a></span>
+<span id="cb13-2"><a aria-label="2"></a><span class="co"># (2) 总量排序：只需一行 filter</span></span>
+<span id="cb13-3"><a aria-label="3"></a>rd_long <span class="sc">%&gt;%</span></span>
+<span id="cb13-4"><a aria-label="4"></a>  <span class="fu">filter</span>(variable <span class="sc">==</span> <span class="st">"total"</span>, year <span class="sc">==</span> <span class="dv">2015</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb13-5"><a aria-label="5"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(value))</span>
+<span id="cb13-6"><a aria-label="6"></a><span class="co">#&gt; # A tibble: 5 × 4</span></span>
+<span id="cb13-7"><a aria-label="7"></a><span class="co">#&gt;   province  year variable value</span></span>
+<span id="cb13-8"><a aria-label="8"></a><span class="co">#&gt;   &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;</span></span>
+<span id="cb13-9"><a aria-label="9"></a><span class="co">#&gt; 1 陕西      2015 total      397</span></span>
+<span id="cb13-10"><a aria-label="10"></a><span class="co">#&gt; 2 甘肃      2015 total      176</span></span>
+<span id="cb13-11"><a aria-label="11"></a><span class="co">#&gt; 3 新疆      2015 total       81</span></span>
+<span id="cb13-12"><a aria-label="12"></a><span class="co">#&gt; 4 宁夏      2015 total       53</span></span>
+<span id="cb13-13"><a aria-label="13"></a><span class="co">#&gt; 5 青海      2015 total       29</span></span>
+<span id="cb13-14"><a aria-label="14"></a><span class="co"># 2015 年 R&amp;D 经费合计排序：陕西 397 &gt; 甘肃 176 &gt; 新疆 81 &gt; 宁夏 53 &gt; 青海 29</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<img data-src="ch02-collect-v3_files/figure-revealjs/unnamed-chunk-11-1.png" class="quarto-figure quarto-figure-center r-stretch" style="width:88.0%"><div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>注记</strong></p>
+</div>
+<div class="callout-content">
+<p><strong>三处对照（讲义 A.6 的代码化）</strong></p>
+<ol type="1">
+<li><strong>tidy 三原则</strong>：长表中每行一个观测（省-年-指标）、每列一个变量（province/year/variable/value）、每个单元格一个取值——40 行 = 10 个省-年 × 4 个指标，与课件 257→1025、聚合 3329 的折叠逻辑完全同构；</li>
+<li><strong>转换可逆</strong>：<code>pivot_wider()</code> 转回后 <code>identical()</code> 为 TRUE——长格式不损失任何信息，“人眼读宽表、机器吃长表”可以随时切换；</li>
+<li><strong>作图红利</strong>：宽表想画”按指标分色”的图须手工逐列拼凑；长表只需 <code>fill = variable</code> 一句映射，分组、分面、堆积全部就位——这正是第 3 章 ggplot2 与后续各章默认长格式的原因。</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>提示</strong></p>
+</div>
+<div class="callout-content">
+<p><strong>举一反三</strong>：把 <code>pivot_longer()</code> 的 <code>cols</code> 换成更多指标列，即可复现课件”各子数据集聚合为完整数据集”的纵向合并（<code>bind_rows()</code>）；想按年份分面对比结构变化，在 (1) 的图上再加 <code>facet_wrap(~year)</code> 即可。第 3 章的累计曲线与第 9 章的多序列对比都将复用这套长格式习惯。</p>
+</div>
+</div>
+</div>
+<div class="callout callout-warning callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>警告</strong></p>
+</div>
+<div class="callout-content">
+
+</div>
+</div>
+</div>
+</section>
+<section id="a.7-项目的五层数据文件夹与变量命名" class="slide level2">
+<h2>A.7 项目的五层数据文件夹与变量命名</h2>
+<p>一个数据项目（如”旱区 16 省农业科技资源配置研究”）的文件，应按数据加工程度分五层管理：</p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>层</th>
+<th>文件夹（英文命名）</th>
+<th>存放内容</th>
+<th>典型格式</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td><strong>material</strong>（文献资料）</td>
+<td>收集到的各种相关原始资料</td>
+<td>.pdf、.docx、.html、.png</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td><strong>raw data</strong>（粗制数据）</td>
+<td>摘录、数值化得到的原始表格</td>
+<td>.xlsx</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td><strong>extract data</strong>（提取数据）</td>
+<td>整合、合并后的干净宽表</td>
+<td>.xlsx</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td><strong>process data</strong>（加工数据）</td>
+<td>标准化长表，持续更新维护</td>
+<td>.xlsx</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td><strong>analysis data</strong>（分析数据）</td>
+<td>供分析调用、按需子集化</td>
+<td>.xlsx</td>
+</tr>
+</tbody>
+</table>
+<p>分层的要义是<strong>单向流动</strong>：原始材料永远留在 material/raw 层不动，每一步加工都生成新文件放入下一层——任何时候发现加工出错，都能回溯重来。</p>
+<p><strong>变量命名系统</strong>：数据集变量较多时，宜采用”唯一识别变量名＋中文短名＋英文短名＋版本号”的四字段规范。例如唯一名 v4_zh_nbzc_hj，中文短名”合计”，英文短名 total，版本号 flag 记为 v2018.6——变量系统的每一次动态调整都有迹可查。</p>
+</section>
+<section id="a.7-项目的五层数据文件夹与变量命名续" class="slide level2">
+<h2>A.7 项目的五层数据文件夹与变量命名（续）</h2>
+<p><strong>手算/软件双轨声明</strong>（全课程统一口径）：考试以手算为主，软件用于验证与探索。本专题所有观念性内容均可用 Excel 复现，R 实践为选做、不计入考试。</p>
+</section>
+<section id="本章知识点清单" class="slide level2 scrollable">
+<h2>本章知识点清单</h2>
+<p><strong>第一节 统计数据的来源</strong></p>
+<ol type="1">
+<li><p>统计数据搜集的定义；原始资料与次级资料的区别</p></li>
+<li><p>调查数据与实验数据</p></li>
+<li><p>自然实验案例（大楼还是大师）：研究设计（1926、1940、1950、1961、1970、1980 年数据；人才流失与物质资本损毁两种冲击）、结论（人才更重要）与方法论启示</p></li>
+<li><p>数据的三种获取途径：统计调查（初级资料）、数据查询（次级资料）、对过程加以控制（实验数据）</p></li>
+<li><p>五种搜集方法：直接观察法、采访法、报告法、问卷法、实验法（各自的含义与优缺点）</p></li>
+<li><p>调查数据的三种实施形态：自填式、面访式、电话式——七特征对比表（时间/费用/问卷难度/辅助物/过程控制/调查员作用/回答率）</p></li>
+<li><p>统计调查的三个分类角度：按范围（全面/非全面）、按时间（经常性/一次性）、按组织方式（定期报表/专门调查）</p></li>
+<li><p>普查：定义、特点、任务、方式、四条原则；我国普查制度（人口/农业普查逢 0、7，经济普查逢 3、8）；第七次人口普查标准时点（2020 年 11 月 1 日零时）</p></li>
+<li><p>时点概念例题（标准时点上存活者才计入人口数，答案 ACD）</p></li>
+<li><p>统计报表制度：定义、三大优点、任务、两点局限、三种分类</p></li>
+<li><p>非全面调查：抽样调查（随机原则）、重点调查（重点单位；十三个粮食主产省）、典型调查（典型单位；解剖麻雀式/划类选典式）</p></li>
+<li><p>重点调查与典型调查的区别（量与质、选择标准、定性分析与定量调查）</p></li>
+<li><p>经常性调查（时期现象）与一次性调查（时点现象）</p></li>
+<li><p>定期报表与专门调查（专门调查多为一次性）</p></li>
+<li><p>课堂练习：重点调查（产棉区）、直接观察法（盘点库存）、普查适用情形（判断题答案 D）</p></li>
+<li><p>我国统计调查体系：以周期性普查为基础，以经常性的抽样调查为主体，以必要的统计报表、重点调查、综合分析等为补充</p></li>
+<li><p>我国统计系统：国家综合统计系统（主系统）、业务部门专业统计系统、基层单位统计组织（基础）</p></li>
+<li><p>数据的载体与状态（拓展小目）：观察/调查/实验与问卷/访谈/文献/痕迹数据的来源谱系；日志数据；数字化≠数值化；五类载体；原始数据 vs 研究数据；一手/二手与”二手优先”论证；获取权限三分</p></li>
+<li><p>国内外数据平台一览：CFPS/CHARLS（北大 ISSS）、CGSS/CEPS/CLASS（人大 NSRC）、国家统计局数据发布库、知网统计年鉴库；ICPSR/GSS/PSID/HRS/Understanding Society</p></li>
+</ol>
+<p><strong>第二节 统计调查方案的设计</strong></p>
+<ol type="1">
+<li><p>调查方案的六项内容与 4W 记忆法（Why、Who、What、When/Where）</p></li>
+<li><p>确定调查目的（两点；人口普查目的示例）</p></li>
+<li><p>调查对象（总体）、调查单位（总体单位/个体）、填报单位及其一致与不一致的情形</p></li>
+<li><p>拟定调查提纲（调查项目的含义、表现形式、“调查什么”）</p></li>
+<li><p>调查时间（时期现象—起止时间；时点现象—标准时点）与调查期限（调查工作的起止时间）</p></li>
+<li><p>例题：2017 年 1 月调查 2014-2016 年利税总额的时间与期限区分</p></li>
+<li><p>调查的组织方式（普查、抽样调查、重点调查）与技术方法（询问法、观察法、实验法、网上调查法等）</p></li>
+<li><p>组织实施计划（培训、印刷、报送、经费）与试点调查</p></li>
+<li><p>阅读框：从调查方案到研究设计（problem→question 两步法；好问题六条基本要求；七类研究问题公式；好/坏研究问题对照二组）</p></li>
+</ol>
+<p><strong>第三节 统计调查问卷的设计</strong></p>
+<ol type="1">
+<li><p>调查表：单一表（如体检表）与一览表（如人口普查登记表）</p></li>
+<li><p>调查问卷的四部分结构：开头部分、被调查者背景资料、主体部分、结尾部分</p></li>
+<li><p>问卷标题的格式（调查时间＋地区/单位＋任务关键词）与卷首语的要求（不超过三百字）</p></li>
+<li><p>封面信案例：手机通信质量开场白（七要素）、电动自行车街头拦截封面信、上海居民消费与投资倾向问卷导语</p></li>
+<li><p>填写说明的编写（画√与横线填写）</p></li>
+<li><p>甄别（过滤）问题的设置与处理规则；筛选题示例（一周手机使用超一小时）</p></li>
+<li><p>被调查者背景资料题（性别、年龄、婚姻、家庭人口、教育程度、职务；19 类职业分类）</p></li>
+<li><p>封闭式问题（容易控制、不易全面）与开放式问题（不易控制、内容丰富）</p></li>
+<li><p>吸烟情况问卷示例（过滤题、数量题、开放题与调查目的的对应）</p></li>
+<li><p>提问项目设计六技巧：内容短（&lt;10 分钟）、用词准确通俗、一题一问、避免诱导性、避免否定式、避免敏感性提问</p></li>
+<li><p>坏题改写训练：改题四步法（定位病灶→换位思考→动手改写→试填检验）与五类坏题（选项未穷尽、不符惯例、重点不明、答案重叠、超出认知范围）；开场诊断题”削苹果依赖症”的操作化示范</p></li>
+<li><p>问题顺序设计五原则（逻辑性、先易后难、兴趣在前、开放题在后、便于整理）</p></li>
+<li><p>结尾部分：被访者联系方式记录与调查过程记录</p></li>
+<li><p>问卷题型综合示例：多项选择、限定选择（选填3项）、排序（位序）、区间选择、填空（恩格尔系数提示）、比重分配、跳答设计、李克特五级量表、背景资料题（第1～15题）</p></li>
+</ol>
+<p><strong>第四节 统计调查数据的质量</strong></p>
+<ol type="1">
+<li><p>统计调查误差的定义与两类误差（代表性误差、登记性误差）</p></li>
+<li><p>代表性误差：定义（随机误差）、三点产生原因、无法彻底消除但可事先控制</p></li>
+<li><p>登记性误差：定义（人为因素）、调查者与被调查者两方面的原因、可以消除</p></li>
+<li><p>社会调查的总误差视角：覆盖性/测量性/应答性/抽样性四类误差；抽样性误差 vs 非抽样误差树状图；与教材两分类的对照表；随机误差（增大方差）与系统误差（增大偏移 bias）；调查总误差＝均方误（MSE）</p></li>
+<li><p>应答性误差与应答率：单元无应答（unit）与项目无应答（item）；应答率的分子分母口径；三口径算例（260/400=65%、312/400=78%、260/384≈67.7%）；随机性 vs 系统性无应答对代表性的影响</p></li>
+<li><p>史话与更正：普查与抽样之争（凯尔 1895 年 ISI”代表方法”；课件”柯西”之说查无实据，已按史实更正）</p></li>
+<li><p>脚注二则：均值变异系数经验标准（标准误÷均值&lt;50% 可接受；课件原页印反已更正）；信度、效度与 Cronbach α 判读标准（≥0.9 极高/0.8–0.9 较好/0.7–0.8 可接受）</p></li>
+<li><p>调查误差控制的五条措施（方案、培训、思想教育、认真审核、完善计量工具）</p></li>
+</ol>
+<p><strong>拓展专题 A：从问卷到数据集——数据工程入门（选讲/自学）</strong></p>
+<ol type="1">
+<li><p>数据库化：数据视图与变量视图；结构化数据矩阵</p></li>
+<li><p>数据库化三步：编码（原始/先编码/后编码；编码手册＝数据字典）、录入与转化、检验与清理（双录入、编码清理、逻辑清理、离群值、无应答、再编码）；产出清单 7 项</p></li>
+<li><p>数据清洗四性：真实性、完整性、可用性、错误性（问卷数据的对应）；清洗记录与可复现文档；原始记录保留年限（问卷十年以上、访谈记录永久）</p></li>
+<li><p>CGSS2015 实例：缺失值编码（−8/−3/−2/−1/9999996）、变量重命名（a36/a10/a8a→Happ/Pol/Inc/Lninc）、右偏取对数与分位数截尾</p></li>
+<li><p>年鉴表格体检法：看行（空行/字符）、看列（中英文/跨行）、看单元格（number vs character）；整理四规则（按内容建夹、英文命名、逐年取表、统一命名写入年份行合并）</p></li>
+<li><p>tidy 长格式三原则：每行一个观测、每列一个变量、每个单元格一个取值；宽表折叠为 variables/value 两列（257 行→1025 行→聚合 3329 行）</p></li>
+<li><p>五层数据文件夹：material→raw→extract→process→analysis（单向流动）；变量命名四字段（唯一名＋中英短名＋版本号）</p></li>
+<li><p>配套 R 实践：问卷模拟数据清洗（实践一）、tidy 长宽转换（实践二）——见”新增实践/ch02-v3实践.md”</p></li>
+</ol>
+
+
+</section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<div class="footer footer-default">
+
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="site_libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="site_libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="site_libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="site_libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="site_libs/revealjs/plugin/reveal-chalkboard/plugin.js"></script>
+  <script src="site_libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="site_libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="site_libs/revealjs/plugin/search/search.js"></script>
+  <script src="site_libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="site_libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': true,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"8\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'chalkboard': {"buttons":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealChalkboard, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    
+
+    <script>
+
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+
+      // slide changes (different for each slide format).
+
+      (function () {
+
+        // dispatch for htmlwidgets
+
+        function fireSlideEnter() {
+
+          const event = window.document.createEvent("Event");
+
+          event.initEvent("slideenter", true, true);
+
+          window.document.dispatchEvent(event);
+
+        }
+
+    
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+
+          fireSlideEnter();
+
+    
+
+          // dispatch for shiny
+
+          if (window.jQuery) {
+
+            if (previousSlide) {
+
+              window.jQuery(previousSlide).trigger("hidden");
+
+            }
+
+            if (currentSlide) {
+
+              window.jQuery(currentSlide).trigger("shown");
+
+            }
+
+          }
+
+        }
+
+    
+
+        // hookup for slidy
+
+        if (window.w3c_slidy) {
+
+          window.w3c_slidy.add_observer(function (slide_num) {
+
+            // slide_num starts at position 1
+
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+
+          });
+
+        }
+
+    
+
+      })();
+
+    </script>
+
+    
+
+    <script id="quarto-html-after-body" type="application/javascript">
+      window.document.addEventListener("DOMContentLoaded", function (event) {
+        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+        tabsets.forEach(function(tabset) {
+          const tabby = new Tabby('#' + tabset.id);
+        });
+        const isCodeAnnotation = (el) => {
+          for (const clz of el.classList) {
+            if (clz.startsWith('code-annotation-')) {                     
+              return true;
+            }
+          }
+          return false;
+        }
+        const onCopySuccess = function(e) {
+          // button target
+          const button = e.trigger;
+          // don't keep focus
+          button.blur();
+          // flash "checked"
+          button.classList.add('code-copy-button-checked');
+          var currentTitle = button.getAttribute("title");
+          button.setAttribute("title", "已复制");
+          let tooltip;
+          if (window.bootstrap) {
+            button.setAttribute("data-bs-toggle", "tooltip");
+            button.setAttribute("data-bs-placement", "left");
+            button.setAttribute("data-bs-title", "已复制");
+            tooltip = new bootstrap.Tooltip(button, 
+              { trigger: "manual", 
+                customClass: "code-copy-button-tooltip",
+                offset: [0, -8]});
+            tooltip.show();    
+          }
+          setTimeout(function() {
+            if (tooltip) {
+              tooltip.hide();
+              button.removeAttribute("data-bs-title");
+              button.removeAttribute("data-bs-toggle");
+              button.removeAttribute("data-bs-placement");
+            }
+            button.setAttribute("title", currentTitle);
+            button.classList.remove('code-copy-button-checked');
+          }, 1000);
+          // clear code selection
+          e.clearSelection();
+        }
+        const getTextToCopy = function(trigger) {
+          const outerScaffold = trigger.parentElement.cloneNode(true);
+          const codeEl = outerScaffold.querySelector('code');
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+        }
+        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+          text: getTextToCopy
+        });
+        clipboard.on('success', onCopySuccess);
+        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+            text: getTextToCopy,
+            container: window.document.getElementById('quarto-embedded-source-code-modal')
+          });
+          clipboardModal.on('success', onCopySuccess);
+        }
+          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+          var mailtoRegex = new RegExp(/^mailto:/);
+            var filterRegex = new RegExp('/' + window.location.host + '/');
+          var isInternal = (href) => {
+              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+          }
+          // Inspect non-navigation links and adorn them if external
+         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+          for (var i=0; i<links.length; i++) {
+            const link = links[i];
+            if (!isInternal(link.href)) {
+              // undo the damage that might have been done by quarto-nav.js in the case of
+              // links that we want to consider external
+              if (link.dataset.originalHref !== undefined) {
+                link.href = link.dataset.originalHref;
+              }
+            }
+          }
+        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+          const config = {
+            allowHTML: true,
+            maxWidth: 500,
+            delay: 100,
+            arrow: false,
+            appendTo: function(el) {
+                return el.closest('section.slide') || el.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'light-border',
+            placement: 'bottom-start',
+          };
+          if (contentFn) {
+            config.content = contentFn;
+          }
+          if (onTriggerFn) {
+            config.onTrigger = onTriggerFn;
+          }
+          if (onUntriggerFn) {
+            config.onUntrigger = onUntriggerFn;
+          }
+            config['offset'] = [0,0];
+            config['maxWidth'] = 700;
+          window.tippy(el, config); 
+        }
+        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+        for (var i=0; i<noterefs.length; i++) {
+          const ref = noterefs[i];
+          tippyHover(ref, function() {
+            // use id or data attribute instead here
+            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+            try { href = new URL(href).hash; } catch {}
+            const id = href.replace(/^#\/?/, "");
+            const note = window.document.getElementById(id);
+            if (note) {
+              return note.innerHTML;
+            } else {
+              return "";
+            }
+          });
+        }
+        const findCites = (el) => {
+          const parentEl = el.parentElement;
+          if (parentEl) {
+            const cites = parentEl.dataset.cites;
+            if (cites) {
+              return {
+                el,
+                cites: cites.split(' ')
+              };
+            } else {
+              return findCites(el.parentElement)
+            }
+          } else {
+            return undefined;
+          }
+        };
+        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+        for (var i=0; i<bibliorefs.length; i++) {
+          const ref = bibliorefs[i];
+          const citeInfo = findCites(ref);
+          if (citeInfo) {
+            tippyHover(citeInfo.el, function() {
+              var popup = window.document.createElement('div');
+              citeInfo.cites.forEach(function(cite) {
+                var citeDiv = window.document.createElement('div');
+                citeDiv.classList.add('hanging-indent');
+                citeDiv.classList.add('csl-entry');
+                var biblioDiv = window.document.getElementById('ref-' + cite);
+                if (biblioDiv) {
+                  citeDiv.innerHTML = biblioDiv.innerHTML;
+                }
+                popup.appendChild(citeDiv);
+              });
+              return popup.innerHTML;
+            });
+          }
+        }
+      });
+      </script>
+    
+
+</body></html>

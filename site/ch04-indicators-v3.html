@@ -1,0 +1,3869 @@
+<!DOCTYPE html>
+<html lang="zh-Hans"><head>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-html/tabby.min.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.10.18">
+
+  <meta name="author" content="孙方 · 山东农业大学经济管理学院">
+  <title>统计学原理 · R 语言交互课件（v3 提升版） – 第四章 综合指标分析</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="site_libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="site_libs/revealjs/dist/reveal.css">
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="site_libs/revealjs/dist/theme/quarto-8879e1741d0e5dc2195ca89cb079d87b.css">
+  <link href="site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="site_libs/revealjs/plugin/reveal-chalkboard/font-awesome/css/all.css" rel="stylesheet">
+  <link href="site_libs/revealjs/plugin/reveal-chalkboard/style.css" rel="stylesheet">
+  <link href="site_libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">第四章 综合指标分析</h1>
+  <p class="subtitle">《统计学原理》R 语言交互课件</p>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+孙方 · 山东农业大学经济管理学院
+</div>
+</div>
+</div>
+
+</section>
+<section class="slide level2">
+
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a aria-label="1"></a><span class="co"># 《统计学原理》R 课件 · 公共配置</span></span>
+<span id="cb1-2"><a aria-label="2"></a><span class="co"># 每个章节 qmd 通过 ```{r, file="_setup.R"} 方式引入</span></span>
+<span id="cb1-3"><a aria-label="3"></a></span>
+<span id="cb1-4"><a aria-label="4"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(</span>
+<span id="cb1-5"><a aria-label="5"></a>  <span class="at">comment =</span> <span class="st">"#&gt;"</span>,</span>
+<span id="cb1-6"><a aria-label="6"></a>  <span class="at">collapse =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb1-7"><a aria-label="7"></a>  <span class="at">out.width =</span> <span class="st">"88%"</span>,</span>
+<span id="cb1-8"><a aria-label="8"></a>  <span class="at">fig.align =</span> <span class="st">"center"</span>,</span>
+<span id="cb1-9"><a aria-label="9"></a>  <span class="at">fig.width =</span> <span class="dv">8</span>,</span>
+<span id="cb1-10"><a aria-label="10"></a>  <span class="at">fig.height =</span> <span class="dv">5</span>,</span>
+<span id="cb1-11"><a aria-label="11"></a>  <span class="at">fig.retina =</span> <span class="dv">2</span>,</span>
+<span id="cb1-12"><a aria-label="12"></a>  <span class="at">dev.args =</span> <span class="fu">list</span>(<span class="at">family =</span> <span class="st">"sans"</span>)</span>
+<span id="cb1-13"><a aria-label="13"></a>)</span>
+<span id="cb1-14"><a aria-label="14"></a></span>
+<span id="cb1-15"><a aria-label="15"></a><span class="co"># 中文友好的 ggplot 主题</span></span>
+<span id="cb1-16"><a aria-label="16"></a><span class="cf">if</span> (<span class="fu">requireNamespace</span>(<span class="st">"ggplot2"</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>)) {</span>
+<span id="cb1-17"><a aria-label="17"></a>  ggplot2<span class="sc">::</span><span class="fu">theme_set</span>(</span>
+<span id="cb1-18"><a aria-label="18"></a>    ggplot2<span class="sc">::</span><span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>) <span class="sc">+</span></span>
+<span id="cb1-19"><a aria-label="19"></a>      ggplot2<span class="sc">::</span><span class="fu">theme</span>(</span>
+<span id="cb1-20"><a aria-label="20"></a>        <span class="at">plot.title =</span> ggplot2<span class="sc">::</span><span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb1-21"><a aria-label="21"></a>        <span class="at">panel.grid.minor =</span> ggplot2<span class="sc">::</span><span class="fu">element_blank</span>()</span>
+<span id="cb1-22"><a aria-label="22"></a>      )</span>
+<span id="cb1-23"><a aria-label="23"></a>  )</span>
+<span id="cb1-24"><a aria-label="24"></a>}</span>
+<span id="cb1-25"><a aria-label="25"></a></span>
+<span id="cb1-26"><a aria-label="26"></a><span class="co"># 讲义用统一调色板</span></span>
+<span id="cb1-27"><a aria-label="27"></a>stat_pal <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"#1a6b54"</span>, <span class="st">"#d97706"</span>, <span class="st">"#2563eb"</span>, <span class="st">"#c2410c"</span>, <span class="st">"#7c3aed"</span>, <span class="st">"#0891b2"</span>)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="第一节-总量指标绝对指标" class="slide level2">
+<h2>第一节 总量指标（绝对指标）</h2>
+<p>本节从总量指标的概念与作用入手，再按反映总体的内容、反映的时间状态和计量单位三个角度介绍总量指标的分类，最后介绍国民经济统计中几个重要的生产总量指标。</p>
+</section>
+<section id="总量指标的概念与作用" class="slide level2 scrollable">
+<h2>总量指标的概念与作用</h2>
+<p><strong>一、概念</strong></p>
+<p>总量指标是指用来表明社会经济现象在一定时间、地点、条件下的<strong>总规模、总水平或工作总量</strong>的指标。</p>
+<p><strong>例如：</strong> 国土面积、人口数、人口增长数、钢产量、总成本等。</p>
+<blockquote>
+<p><strong>注意：</strong> 有时总量指标还可以表现为总量之间的绝对差数（绝对量）。</p>
+</blockquote>
+<p><strong>二、作用</strong></p>
+<ol type="1">
+<li>反映国情、国力和企事业单位人、财、物的状况；</li>
+<li>是国民经济宏观经济管理和企业经济核算的基础性指标，是实行目标管理的工具；</li>
+<li>是计算相对指标和平均指标的基础。</li>
+</ol>
+</section>
+<section id="总量指标的分类一总体单位总量与总体标志总量" class="slide level2">
+<h2>总量指标的分类（一）：总体单位总量与总体标志总量</h2>
+<p><strong>三、（一）按反映总体的内容分</strong>，总量指标按其反映总体内容的不同，可分为两大类：</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>分类</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>总体单位总量</strong></td>
+<td>总体内所有单位的总数</td>
+</tr>
+<tr class="even">
+<td><strong>总体标志总量</strong></td>
+<td>总体中各单位标志值的总和</td>
+</tr>
+</tbody>
+</table>
+<p>总体单位总量反映总体规模的大小，即总体中包含多少个单位；总体标志总量反映总体某一数量标志的总水平，即各单位标志值加总的结果。例如，研究某企业职工情况时，职工人数是总体单位总量，职工工资总额是总体标志总量。</p>
+<p><em>（图示说明：页面的层级框图（树状结构图）直观展示总量指标按反映总体内容分为总体单位总量与总体标志总量两类及其定义。）</em></p>
+<p><strong>总体单位总量</strong>：表明总体中单位数多少的总量指标。它所反映的是总体本身规模的大小。<strong>例如</strong>：全国运输企业这一总体，它所包括的运输企业的个数，就是一个总体单位总量指标。</p>
+<p><strong>总体标志总量</strong>：是总体各单位<strong>数量标志值</strong>之和，是总体单位的某一数量标志值加总而得到的。例如，研究企业生产效益时，若以全体职工为统计总体，则每个工人为总体单位，工人总数是唯一的单位总量，这时企业的总产量、总产值、总成本等多个指标都是标志总量。</p>
+<p><strong>注意：</strong></p>
+</section>
+<section id="总量指标的分类一总体单位总量与总体标志总量续" class="slide level2 scrollable">
+<h2>总量指标的分类（一）：总体单位总量与总体标志总量（续）</h2>
+<ol type="1">
+<li><strong>总体单位总量和总体标志总量不是固定不变的</strong>，它们会随总体的变化而变化。例如”全部企业职工人数”这一指标——当总体为<strong>某市工业企业</strong>时，职工人数是总体标志总量（各单位标志值汇总）；当总体为<strong>某市工业企业职工</strong>时，职工人数则成为总体单位总量。</li>
+<li><strong>一个总体中只有一个单位总量</strong>，但可以<strong>有多个标志总量</strong>，它们由总体单位的数量标志值汇总而来。</li>
+</ol>
+</section>
+<section id="总量指标的分类二时期指标与时点指标" class="slide level2">
+<h2>总量指标的分类（二）：时期指标与时点指标</h2>
+<p><strong>（二）按反映的时间状态分</strong>，总量指标分为时期总量指标和时点总量指标。</p>
+<p><strong>1、概念</strong></p>
+<ul>
+<li><strong>时期指标</strong>：反映社会经济现象在一段时期内发展过程的<strong>累积量</strong>（产品产量、产品产值、商品销售额）；</li>
+<li><strong>时点指标</strong>：反映社会经济现象在某一时刻（瞬时时刻）状况上<strong>所处的状态或所达到的水平</strong>（年末职工人数、某日商品库存量、银行月末储蓄存款余额等）。</li>
+</ul>
+<p><strong>2、二者区别（时期指标与时点指标）</strong></p>
+<p>（1）时期指标属于<strong>流量指标</strong>，时点指标属于<strong>存量指标</strong>；</p>
+<p>（2）时期指标<strong>可累加</strong>，加总后表示更长时期的指标值；时点指标<strong>一般不能加总</strong>，加总后无实际意义；</p>
+<p>（3）时期指标是通过<strong>连续统计</strong>得到的，时点指标是经过<strong>一次观察统计</strong>得到的。</p>
+</section>
+<section id="总量指标的分类三实物量价值量与劳动量" class="slide level2 scrollable">
+<h2>总量指标的分类（三）：实物量、价值量与劳动量</h2>
+<p><strong>（三）按计量单位分</strong>，总量指标按计量单位不同，可分为三类：</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>分类</th>
+<th>含义</th>
+<th>计量单位举例</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>实物量</td>
+<td>以实物单位计量的统计指标</td>
+<td>吨、辆</td>
+</tr>
+<tr class="even">
+<td>价值量</td>
+<td>以货币单位计量的统计指标</td>
+<td>元</td>
+</tr>
+<tr class="odd">
+<td>劳动量</td>
+<td>以劳动单位计量的统计指标</td>
+<td>工时、工日</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>实物量指标</strong>：直接按产品的自然实物单位计量，如钢产量以”吨”计、汽车产量以”辆”计；</li>
+<li><strong>价值量指标</strong>：以货币作为计量单位，具有广泛的综合性和可比性；</li>
+<li><strong>劳动量指标</strong>：以劳动时间作为计量单位，如”工时”“工日”，用于反映劳动消耗量。</li>
+</ul>
+<p><em>（图示说明：本页用层次结构框图展示了总量指标按计量单位分为实物量、价值量、劳动量三类的分类体系，直观呈现概念之间的从属关系。）</em></p>
+<p><strong>总量指标的种类及特点（按计量单位分类）：</strong></p>
+<ol type="1">
+<li><strong>实物指标特点</strong>：直接反映产品的使用价值或现象的具体内容，能具体表明事物的规模和水平；但对<strong>不同类产品或商品缺乏综合性</strong>，不易进行汇总。</li>
+<li><strong>价值量指标特点</strong>：具有最广泛的综合性和概括能力，可以表示现象的总规模和总水平，但它脱离了物质内容。</li>
+<li><strong>劳动量指标特点</strong>：用于确定劳动规模、评价劳动时间利用程度、计算劳动报酬、劳动生产率。</li>
+</ol>
+</section>
+<section id="总量指标的分类三实物量价值量与劳动量续" class="slide level2">
+<h2>总量指标的分类（三）：实物量、价值量与劳动量（续）</h2>
+<p>三种计量单位各有所长——实物指标具体但不便汇总，价值量指标综合性最强但脱离物质内容，劳动量指标侧重劳动消耗的核算。</p>
+</section>
+<section id="国民经济统计中几个重要的生产总量指标" class="slide level2 scrollable">
+<h2>国民经济统计中几个重要的生产总量指标</h2>
+<p><strong>四、（1）社会总产品</strong></p>
+<p><strong>社会总产品</strong>是指社会各个物质生产部门的劳动者在一定的时期内（通常为一年）所生产出来的全部物质资料的总和。</p>
+<p>社会总产品即社会的总商品资本，以及作为生产过程在流通领域继续的那部分商业，如流通中所必要的商品分类、包装、保管、加工和运输等，也称社会总产品。</p>
+<p>它是反映一个国家或地区在一定时期内物质生产总成果的重要指标。</p>
+<p><strong>社会总产品的价值就是社会总产值。</strong></p>
+<p><strong>（2）增加值</strong></p>
+<p><strong>定义</strong>：增加值是指在生产过程中创造的<strong>新增价值</strong>和<strong>固定资产的转移价值</strong>。</p>
+<p><strong>计算方法：</strong></p>
+<ol type="1">
+<li><strong>生产法</strong>：增加值 = 总产出 − 中间投入</li>
+</ol>
+<p><span class="math display">\[\text{增加值} = \text{总产出} - \text{中间投入}\]</span></p>
+<ol start="2" type="1">
+<li><strong>收入法</strong>：增加值为以下四项之和：
+<ul>
+<li>劳动者报酬</li>
+<li>生产税净额</li>
+<li>固定资产折旧</li>
+<li>营业盈余</li>
+</ul></li>
+</ol>
+<p><span class="math display">\[\text{增加值} = \text{劳动者报酬} + \text{生产税净额} + \text{固定资产折旧} + \text{营业盈余}\]</span></p>
+<blockquote>
+<p>教学提示：两种方法从不同角度核算同一指标——生产法从产出角度扣减中间消耗，收入法则从收入分配角度将各生产要素所得加总，理论上二者结果应相等。</p>
+</blockquote>
+<p><strong>（3）国内生产总值（GDP）与社会总产值的关系</strong></p>
+<p>社会总产值是<strong>包括物耗在内</strong>的社会产品的总价值，而 GDP 只是<strong>新增加</strong>的价值。</p>
+</section>
+<section id="国民经济统计中几个重要的生产总量指标续" class="slide level2">
+<h2>国民经济统计中几个重要的生产总量指标（续）</h2>
+<p>两者的统计范围也不同：社会总产值只包括<strong>物质生产部门</strong>，而 GDP 则包括<strong>非物质生产部门在内的国民经济各个部门</strong>。</p>
+<ul>
+<li><strong>物质生产部门</strong>：从事物质资料生产并创造物质财富的国民经济部门的总称，包括：农业、工业、建筑业；直接为生产服务的交通运输业、邮电业、商业等。</li>
+<li><strong>非物质生产部门</strong>：包括服务行业、城市公用事业、金融保险事业；科研、文化、教育、卫生、广播、体育；国家政府机关、军队、宗教团体等。</li>
+</ul>
+</section>
+<section id="第二节-相对指标相对数" class="slide level2">
+<h2>第二节 相对指标（相对数）</h2>
+<p>本节先阐明相对指标的意义、表现形式、作用与种类，再重点讲授计划完成、结构、比例、比较、强度、动态六种相对指标的计算方法，最后归纳它们的系统区别与应用原则。</p>
+</section>
+<section id="相对指标的意义概念与表现形式" class="slide level2">
+<h2>相对指标的意义（概念与表现形式）</h2>
+<p><strong>一、相对指标的意义：（一）概念</strong></p>
+<p>相对指标又称<strong>统计相对数</strong>，是两个有联系的统计指标对比的比值，反映事物间的<strong>数量对比关系</strong>。</p>
+<p><strong>例如</strong>：产品合格率、职工出勤率、人口密度、计划完成百分数等。</p>
+<p>相对指标的表现形式为<strong>有名数</strong>和<strong>无名数</strong>两种：</p>
+<ul>
+<li><strong>有名数</strong>：主要是将相对指标中的分子和分母的指标计量单位同时使用，形成双重单位，即用双重计量单位表示的复名数。例如：人口密度用人/平方公里表现；平均每人分摊的粮食产量用公斤/人表现，等等。</li>
+<li><strong>无名数</strong>：用倍数、系数、成数、% 等表示。</li>
+</ul>
+</section>
+<section id="计量单位的重要性一个悖论式证明" class="slide level2">
+<h2>计量单位的重要性：一个”悖论式证明”</h2>
+<p>本页通过一个”悖论式证明”说明计量单位在指标计算中的重要性，强调单位运算必须遵循运算规则，不能随意混淆相乘。</p>
+<p><strong>错误的证明（求证：1元 = 1分）</strong></p>
+<p><strong>解：</strong> 因为</p>
+<p><span class="math display">\[1\text{元} = 100\text{分} = 10\text{分} \times 10\text{分} = 1\text{角} \times 1\text{角} = 0.1\text{元} \times 0.1\text{元} = 0.01\text{元} = 1\text{分}\]</span></p>
+<p>（画线处 10分×10分 = 1角×1角 是错误所在：单位”分×分”不能直接等于”角”，单位相乘后的量纲已改变。）</p>
+<p>证明完毕（错误！）</p>
+<p><strong>正确的解法</strong></p>
+<p><strong>解：</strong></p>
+<p><span class="math display">\[1\text{元} = 100\text{分} = (10 \times 10)\text{分} = 10 \times 10\text{分} = 10 \times 1\text{角} = 10\text{角} = 1\text{元}\]</span></p>
+<p><strong>教学要点：</strong> 在计算相对指标或进行单位换算时，数值与计量单位必须作为一个整体参与运算；错解把”10分×10分”等同于”10×10分”，忽略了量纲（单位）的乘除变化，从而得出荒谬结论，说明”单位”在综合指标分析中不可或缺。</p>
+</section>
+<section id="相对指标的作用与种类" class="slide level2 scrollable">
+<h2>相对指标的作用与种类</h2>
+<p><strong>（二）作用</strong></p>
+<p>相对指标（相对数）主要有以下三方面作用：</p>
+<ol type="1">
+<li><strong>反映事物之间的数量关系</strong>（如：密度）；</li>
+<li><strong>用于不同对象的比较评价</strong>（如：资金利润率）；</li>
+<li><strong>反映事物发展变化的过程和趋势</strong>（如：GDP增长速度）。</li>
+</ol>
+<p><strong>（三）种类</strong></p>
+<p>相对指标（相对数）按其作用和对比方式的不同，可分为六种：</p>
+<ul>
+<li>计划完成相对数</li>
+<li>结构相对数</li>
+<li>比例相对数</li>
+<li>比较相对数</li>
+<li>强度相对数</li>
+<li>动态相对数</li>
+</ul>
+</section>
+<section id="计划完成程度相对指标一基本公式与计划数为总量指标" class="slide level2">
+<h2>计划完成程度相对指标（一）：基本公式与计划数为总量指标</h2>
+<p><strong>二、相对指标的计算方法：（一）计划完成程度相对指标</strong>——反映实际与计划的比较，为无名数。</p>
+<p><span class="math display">\[\text{计划完成相对数} = \frac{\text{实际完成数}}{\text{计划任务数}} \times 100\%\]</span></p>
+<p><strong>1、应注意计划指标的形式——（1）计划数为总量指标</strong></p>
+<p>当计划数为总量指标（计划任务以总量指标形式给出）时，可直接用实际水平和计划水平对比求得计划完成程度相对指标。它一般适用于考核社会经济现象的规模或水平的计划完成情况：</p>
+<p><span class="math display">\[\text{计划完成程度} = \frac{\text{实际完成数}}{\text{计划任务数}} \times 100\%\]</span></p>
+<p><strong>例题：</strong> 某地上年国内生产总值为 500 亿元，计划当年国内生产总值要达到 600 亿元，当年实际国内生产总值为 620 亿元，该地当年计划完成程度如何？</p>
+<p><strong>解答：</strong></p>
+<p><span class="math display">\[\text{计划完成程度} = \frac{620\text{亿元}}{600\text{亿元}} \approx 103\%\]</span></p>
+<p>计算结果约为 103%，说明该地超额完成了当年的国内生产总值计划。计划完成程度相对指标是实际完成数与计划任务数之比，当计划数为总量指标时，直接用实际总量与计划总量对比即可。计算结果大于 100% 表示超额完成计划（对正向指标而言）。</p>
+<p>对计划完成程度的评价，并不都是越接近或超过 100% 越好，而要根据计划指标的性质和内容确定：</p>
+</section>
+<section id="计划完成程度相对指标一基本公式与计划数为总量指标续" class="slide level2">
+<h2>计划完成程度相对指标（一）：基本公式与计划数为总量指标（续）</h2>
+<ul>
+<li><strong>正指标</strong>（产值、产量、销售额等）：超过 100%，说明计划完成情况较好；</li>
+<li><strong>逆指标</strong>（单位成本、费用总额等）：小于 100% 为超额完成计划。</li>
+</ul>
+</section>
+<section id="计划完成程度相对指标二计划数为相对指标" class="slide level2">
+<h2>计划完成程度相对指标（二）：计划数为相对指标</h2>
+<p><strong>（2）计划数为相对指标</strong></p>
+<p>当计划数用”增长了”“提高了”或”降低了”“减少了”的百分比表示时，不能直接用实际数与计划数相比，而应先将两者还原为与基期对比的相对水平（还原为实际完成水平），再计算计划完成程度。</p>
+<p><strong>计算公式：</strong></p>
+<p><span class="math display">\[\text{计划完成程度相对指标} = \frac{1 \pm \text{实际提高/降低百分数}}{1 \pm \text{计划提高/降低百分数}} \times 100\%\]</span></p>
+<p>（增长用”+“，降低用”−“）</p>
+<p><strong>例题 1：</strong> 某地上年国内生产总值为 500 亿元，计划当年比上年增长 10%，实际增长 12%。问该地计划完成程度如何？</p>
+<p><strong>解：</strong></p>
+<p><span class="math display">\[\text{计划完成相对数} = \frac{1+12\%}{1+10\%} \times 100\% = 101.8\%\]</span></p>
+<p>即该地计划完成程度为 101.8%，超额完成计划。</p>
+<p><strong>例题 2：</strong> 某企业计划2016年A产品单位成本比上年降低6%，实际降低3%，则计划完成情况为：</p>
+<p><span class="math display">\[\text{计划完成程度} = \frac{1-3\%}{1-6\%} \times 100\% = 103.19\%\]</span></p>
+<p>由于成本降低类指标，实际降低幅度（3%）小于计划降低幅度（6%），计划完成程度为103.19%，说明比计划少完成3.19%，即仅完成了计划的96.81%，未完成计划任务。</p>
+</section>
+<section id="计划完成程度相对指标三计划数为平均指标与计划完成情况的评价" class="slide level2">
+<h2>计划完成程度相对指标（三）：计划数为平均指标与计划完成情况的评价</h2>
+<p><strong>（3）计划数为平均指标</strong>：直接采用基本公式。</p>
+<p><strong>例</strong> 某企业计划每人每日平均产量为50件，实际每人每日平均产量为60件，试求该企业产量计划完成程度。</p>
+<p>计划完成程度：</p>
+<p><span class="math display">\[\frac{60}{50} \times 100\% = 120\%\]</span></p>
+<p>即计划完成120%。</p>
+<p><strong>2、应注意的问题</strong></p>
+<p>计划完成情况的评价并非都越高越好，<strong>是否完成计划取决于指标类型</strong>：</p>
+<ul>
+<li><strong>经济生产量指标</strong>——大于100%为超计划完成；</li>
+<li><strong>经济消耗量指标</strong>——小于100%为超计划完成；</li>
+<li><strong>中性指标</strong>——100%左右为完成计划较好。</li>
+</ul>
+<p><strong>思考：哪些指标属于中性指标？</strong> 举例：讲课速度；血液检测结果（白细胞数、血红蛋白体积、血小板数量）等身体健康指标。</p>
+</section>
+<section id="阅读材料中长期计划完成程度的检查水平法与累计法" class="slide level2">
+<h2>阅读材料：中长期计划完成程度的检查（水平法与累计法）</h2>
+<p><strong>【阅读材料】（选读；传统计划统计考点，统计从业与相关考试仍见）</strong> 检查五年计划等<strong>中长期计划</strong>的完成程度时，由于计划任务下达方式不同，分为<strong>水平法</strong>与<strong>累计法</strong>两种：</p>
+<ul>
+<li><strong>水平法</strong>：计划任务只规定<strong>计划末期（最后一年）应达到的水平</strong>。计划完成程度 = 计划末期实际达到水平 ÷ 计划规定末期水平 × 100%。只要在计划期内<strong>连续 12 个月</strong>（可以跨年度）实际完成数达到计划规定的末期水平，即视为完成计划，其后剩余时间为<strong>提前完成计划的时间</strong>。</li>
+<li><strong>累计法</strong>：计划任务规定<strong>整个计划期累计应达到的总量</strong>。计划完成程度 = 实际全期累计完成数 ÷ 计划全期累计数 × 100%。从计划期初累计到某一时刻，实际完成累计数达到计划规定的累计数，即为完成计划，其后剩余时间为提前完成时间。</li>
+</ul>
+<p><strong>例 1（水平法）</strong>：某地区五年计划规定最后一年国民生产总值应达到 520 亿元，实际执行情况：第 1、2、3 年分别为 320、340、380 亿元；第 4 年上、下半年分别为 200、220 亿元；第 5 年四个季度分别为 140、160、170、180 亿元。从第 4 年下半年到第 5 年第 2 季度，这连续 12 个月的实际完成数为</p>
+<p><span class="math display">\[220 + 140 + 160 = 520 \text{（亿元）}\]</span></p>
+</section>
+<section id="阅读材料中长期计划完成程度的检查水平法与累计法续" class="slide level2">
+<h2>阅读材料：中长期计划完成程度的检查（水平法与累计法）（续）</h2>
+<p>恰好达到末期计划水平 520 亿元，至此已完成计划；计划期还剩两个季度，故<strong>提前两个季度</strong>完成了五年计划任务。</p>
+<p><strong>例 2（累计法）</strong>：某地区五年计划规定固定资产投资累计 30 亿元，实际五年分别投入 6、7、8、9、6 亿元。第 1 至第 4 年累计投入</p>
+<p><span class="math display">\[6 + 7 + 8 + 9 = 30 \text{（亿元）}\]</span></p>
+<p>恰在第 4 年末完成计划，即<strong>提前 1 年</strong>完成五年计划规定的投入任务。</p>
+<blockquote>
+<p><strong>教师参考</strong>：若掌握逐月数据，水平法还可把提前期精确到天——对计划期后段 24 个月产量做”滚动 12 个月累加”，找到累加值首次达到计划水平的时间窗口；窗口跨月时，假定<strong>月内产量均匀分布</strong>，按比例折算天数（胡课件 p24–27 例题得”提前 4 个月又 15 天半”，其自注同时提醒：该算法潜藏着”线性递增产能”的假设）。</p>
+</blockquote>
+</section>
+<section id="结构相对指标反映部分与全部的比较" class="slide level2">
+<h2>结构相对指标——反映部分与全部的比较</h2>
+<p><strong>（二）结构相对指标</strong></p>
+<p><strong>定义：</strong> 结构相对数是在对总体分组的基础上，以总体总量作为比较标准，求出各组总量占总体总量的比重，来反映总体内部组成情况的综合指标。用 % 表示，为<strong>无名数</strong>。</p>
+<p><strong>计算公式：</strong></p>
+<p><span class="math display">\[\text{结构相对指标} = \frac{\text{总体中某部分总量}}{\text{总体总量}} \times 100\%\]</span></p>
+<p><strong>例如：</strong></p>
+<ul>
+<li>出勤率 = 出勤人数 / 总人数</li>
+<li>合格率 = 合格数 / 产品总数</li>
+</ul>
+</section>
+<section id="比例相对指标总体内部部分与部分的比较" class="slide level2">
+<h2>比例相对指标——总体内部部分与部分的比较</h2>
+<p><strong>（三）比例相对指标</strong>——结构相对数的变形。</p>
+<p><strong>定义</strong>：比例相对数是总体中不同部分数量对比的相对指标，用以分析总体范围内各个局部、各个分组之间的比例关系和协调平衡状况。常表示为比例式的形式 A∶B∶C，为无名数。</p>
+<p><strong>计算公式</strong>：</p>
+<p><span class="math display">\[\text{比例相对指标} = \frac{\text{总体中某一部分数值}}{\text{总体中另一部分数值}} \times 100\%\]</span></p>
+<p><strong>注意</strong>：比例相对指标的分子与分母有的可以互换，但结构相对指标不能。</p>
+<p><strong>例：全国人口普查主要数据</strong></p>
+<p>历次全国人口普查的主要数据，展示了总量指标（总人口）与相对指标（性别比）在实际统计资料中的应用。性别比是比例相对指标的一种，通常以女性人口为100，反映男女人口数量的对比关系。</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>年份</th>
+<th>总人口（亿）</th>
+<th>性别比</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1953年第一次人口普查</td>
+<td>5.82</td>
+<td>107.6:100</td>
+</tr>
+<tr class="even">
+<td>1964年第二次人口普查</td>
+<td>6.95</td>
+<td>105.5:100</td>
+</tr>
+<tr class="odd">
+<td>1982年第三次人口普查</td>
+<td>10.08</td>
+<td>106.3:100</td>
+</tr>
+<tr class="even">
+<td>1990年第四次人口普查</td>
+<td>11.34</td>
+<td>106.6:100</td>
+</tr>
+<tr class="odd">
+<td>2000年第五次人口普查</td>
+<td>12.95</td>
+<td>106.7:100</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="比例相对指标总体内部部分与部分的比较续" class="slide level2">
+<h2>比例相对指标——总体内部部分与部分的比较（续）</h2>
+<p>从表中可见，我国人口总量这一总量指标持续增长（由5.82亿增至12.95亿）；而性别比作为相对指标，历次普查均高于100，说明男性人口多于女性人口，比例相对数是反映总体内部比例关系的重要指标。</p>
+</section>
+<section id="比较相对指标同类现象不同空间的比较" class="slide level2">
+<h2>比较相对指标——同类现象不同空间的比较</h2>
+<p><strong>（四）比较相对指标</strong></p>
+<p><strong>定义</strong>：比较相对数是将两个同类指标作<strong>静态</strong>对比得出的相对指标，表明同类现象在不同条件下的数量对比关系。通常用 % 或倍数表示，多为无名数。</p>
+<p><strong>计算公式</strong>：</p>
+<p><span class="math display">\[\text{比较相对指标} = \frac{\text{甲单位（或地区）的某指标数值}}{\text{乙单位（或地区）同一指标数值}} \times 100\%\]</span></p>
+<p><strong>例如</strong>：甲地职工平均收入是乙地职工平均收入的 1.3 倍。</p>
+<blockquote>
+<p><strong>注意（v3 新增）：比较相对数的分子分母何时不宜互换。</strong> 一般场合，比较相对数的分子分母可以互换（“甲是乙的 1.3 倍”与”乙是甲的 77%“互补成立）。但当以表现”优秀”的一方作为<strong>典型化评价的基准</strong>时，分子分母不宜互换：例如某年甲、乙两企业生产同种产品，甲企业工人劳动生产率为 19 307 元，乙企业为 27 994 元，以优者（乙）为基准，比较相对数 = 19307 ÷ 27994 × 100% ≈ <strong>69.0%</strong>，结论固定表述为”甲企业劳动生产率比乙企业低 31%“；不宜再换成”乙是甲的 145%“重复陈述同一结论，以免评价口径游移。</p>
+</blockquote>
+</section>
+<section id="结构相对数比例相对数比较相对数的主要区别" class="slide level2">
+<h2>结构相对数、比例相对数、比较相对数的主要区别</h2>
+<p><strong>1、分子和分母的内容不同</strong></p>
+<ul>
+<li><strong>结构相对数</strong>：是同一时间同一总体内部数量与总体总量的对比，分母是总体总量。</li>
+<li><strong>比例相对数</strong>：是同一时间同一总体内，部分数量与部分数量的对比，分母是部分数量。</li>
+<li><strong>比较相对数</strong>：是同一时间不同总体同类指标在空间上的对比，分母是与分子不同空间的同类指标。</li>
+</ul>
+<p><strong>2、说明的问题不同</strong></p>
+<ul>
+<li><strong>结构相对数</strong>：用各组总量占总体总量的比重，来反映总体内部的组成情况。</li>
+<li><strong>比例相对数</strong>：说明总体内各部分间的相互关系。</li>
+<li><strong>比较相对数</strong>：说明某种现象在不同空间下发展的不均衡程度。</li>
+</ul>
+</section>
+<section id="强度相对指标反映现象不同内容的比较" class="slide level2 scrollable">
+<h2>强度相对指标——反映现象不同内容的比较</h2>
+<p><strong>（五）强度相对指标</strong></p>
+<p><strong>定义与特点</strong></p>
+<p>强度相对指标和其它相对指标根本不同的特点，就在于它是<strong>两种性质不同但又有联系的、属于不同总体</strong>的总量指标之间的比。</p>
+<p>主要特点：</p>
+<ol type="1">
+<li><strong>以双重计量单位表示</strong>，是一种复名数；</li>
+<li><strong>分子分母位置可以互换</strong>，有正指标与逆指标之分。</li>
+</ol>
+<p><strong>计算公式</strong></p>
+<p><span class="math display">\[\text{强度相对指标} = \frac{\text{某一总量指标数值}}{\text{另一性质不同又有联系的总量指标数值}}\]</span></p>
+<p><strong>例：</strong> 某地区某年末现有总人口 100 万人，医院床位总数为 24700 张。则该地区：</p>
+<p><strong>（1）正指标</strong>——每千人口拥有的医院床位数：</p>
+<p><span class="math display">\[\text{每千人口拥有的医院床位数}=\frac{24700(\text{张})}{1000(\text{千人})}=24.7(\text{张/千人})\]</span></p>
+<p>数值越大，说明医疗服务水平越高，故为<strong>正指标</strong>。</p>
+<p><strong>（2）逆指标</strong>——每张医院床位负担的人口数：</p>
+<p><span class="math display">\[\text{每张医院床位负担的人口数}=\frac{1000000(\text{人})}{24700(\text{张})}=40.5(\text{人/张})\]</span></p>
+<p>数值越大，说明医疗服务水平越低，故为<strong>逆指标</strong>。</p>
+<blockquote>
+<p>说明：强度相对指标有正指标与逆指标两种表现形式，二者互为倒数关系，从不同角度说明同一现象的强度或普遍程度。</p>
+</blockquote>
+</section>
+<section id="动态相对数反映现象不同时间的比较" class="slide level2">
+<h2>动态相对数——反映现象不同时间的比较</h2>
+<p><strong>（六）动态相对数</strong></p>
+<p>动态相对数又称<strong>发展速度</strong>，是同类事物的报告期水平与基期水平对比所得，反映事物发展变化的速度。通常用 % 表示，为无名数，用来反映现象的数量在<strong>时间</strong>上的变动程度。</p>
+<p><strong>特点</strong>：同一指标不同时期的指标值对比。常把用来作为比较标准的时期称为<strong>“基期”</strong>，而把同基期对比的时期称为<strong>“报告期”</strong>或<strong>“计算期”</strong>。</p>
+<p><strong>计算公式：</strong></p>
+<p><span class="math display">\[\text{动态相对数（发展速度）} = \frac{\text{报告期指标数值}}{\text{基期指标数值}} \times 100\%\]</span></p>
+<p><strong>与增长速度的关系：</strong></p>
+<p><span class="math display">\[\text{增长速度} = \text{发展速度} - 1\]</span></p>
+<p><strong>例如</strong>：某地区粮食总产量 2008 年为 2000 万吨，2009 年为 2080 万吨。粮食总产量 2009 年比 2008 年的</p>
+<ul>
+<li>发展速度 <span class="math inline">\(= \frac{2080}{2000} \times 100\% = 104\%\)</span></li>
+<li>增长速度 <span class="math inline">\(= 104\% - 100\% = 4\%\)</span></li>
+</ul>
+<p>表明该地区粮食总产量在两年间的变化状况。</p>
+</section>
+<section id="六种相对数的系统比较" class="slide level2">
+<h2>六种相对数的系统比较</h2>
+<p>按<strong>比较的时期</strong>与<strong>比较的对象</strong>两个核心维度，可将六种相对数逐层归类：</p>
+<ul>
+<li><strong>第一层：按比较时期划分</strong>——不同时期比较 → <strong>动态相对数</strong>；同一时期比较 → 以下各类。</li>
+<li><strong>第二层：同一时期内，按比较现象划分</strong>——不同现象比较 → <strong>强度相对数</strong>；同类现象比较 → 以下各类。</li>
+<li><strong>第三层：同类现象比较中，按比较总体划分</strong>——不同总体比较 → <strong>比较相对数</strong>；同一总体中 → 以下三类。</li>
+<li><strong>第四层：同一总体中，按部分与部分、部分与总体、实际与计划的比较划分</strong>：</li>
+</ul>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>比较关系</th>
+<th>对应的相对数</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>部分与部分比较</td>
+<td><strong>比例相对数</strong></td>
+</tr>
+<tr class="even">
+<td>部分与总体比较</td>
+<td><strong>结构相对数</strong></td>
+</tr>
+<tr class="odd">
+<td>实际与计划比较</td>
+<td><strong>计划完成相对数</strong></td>
+</tr>
+</tbody>
+</table>
+<p>判断相对指标类型时，抓住逐层收窄的判断链条：先问是否同一时期，再问是否同类现象，再问是否同一总体，最后问比较的是部分与部分、部分与总体还是实际与计划，即可准确定性。</p>
+<p><em>（图示说明：以层级分叉的结构示意图逐层展示六种相对数的分类判据，帮助学生建立系统的分类比较框架。）</em></p>
+</section>
+<section id="相对指标的应用原则" class="slide level2">
+<h2>相对指标的应用原则</h2>
+<p><strong>三、应用原则：1、必须注意统计的可比性</strong></p>
+<p><strong>可比性</strong>指两个对比指标所表明的经济内容，包括总体范围、计算方法、计量单位必须可比。</p>
+<p><strong>例1：</strong> 不能将某人当年剔除了通胀因素后的<strong>实际收入</strong>和往年的<strong>名义收入</strong>直接做对比。（二者经济内容不同——一个是实际口径，一个是名义口径，不可直接相比。）</p>
+<p><strong>例2：</strong> 世界各国产业划分标准不同，我国第一产业不包括采掘工业，而很多国家把采掘工业划入到一产范围中，这样，两者就不能直接对比。（总体范围不同导致指标不可比。）</p>
+<p><strong>教学要点：</strong> 进行相对指标对比分析时，须先检查两个指标的总体范围、计算方法、计量单位是否一致，否则对比结果毫无意义。</p>
+<p><strong>2、相对指标要与总量指标结合运用</strong></p>
+<p>总量指标反映现象总水平，但不能反映现象间的差别程度；相对指标便于反映现象间的差异，但不便于反映绝对数量差别。两者需结合运用，才能对现象有全面的认识。</p>
+<blockquote>
+<p><strong>注意：</strong> 当两个对比的绝对数值较小时，不适宜用计算相对指标来分析。</p>
+</blockquote>
+<p><strong>3、各种相对指标结合运用</strong></p>
+<p>把六种相对指标结合运用，才能从水平、结构、比例、空间、强度、时间六个侧面完整地认识一个总体。结合运用时，还须辨明<strong>“百分比”与”百分点”</strong>这两个易混概念：</p>
+</section>
+<section id="相对指标的应用原则续" class="slide level2">
+<h2>相对指标的应用原则（续）</h2>
+<blockquote>
+<p><strong>注意（v3 新增）：百分点（percentage point）与百分比（percent）之辨。</strong> 比较两个相对数时，是否适宜相除再求一个新相对数，应视情况而定：若相除有实际意义，则相除；若不宜相除，只宜相减求差数，用<strong>百分点</strong>表示——百分点即百分比中相当于 1% 的单位。例如，某地 GDP 增长速度由上年的 4% 提高到今年的 6%，应表述为”提高了 <strong>2 个百分点</strong>”，而不能说”提高了 2%“（若按”提高 2%“理解，只有 4%×(1+2%)≈4.08%）。又如前文例题中计划完成程度 101.8% 比计划水平 100% 高出 1.8 个百分点。报告与新闻中混用二者是常见错误，须分清用<strong>除法</strong>（发展速度型比较）还是用<strong>减法</strong>（水平型比较）。</p>
+</blockquote>
+</section>
+<section id="第三节-平均指标平均数" class="slide level2">
+<h2>第三节 平均指标（平均数）</h2>
+<p>本节先阐明平均指标的意义、特点、作用与种类，再依次讲授算术平均数、调和平均数、几何平均数三种数值平均数与众数、中位数两种位置平均数的计算方法（位置平均数部分并增学<strong>四分位数与五数概括</strong>），最后归纳常用平均数的适用场合、位置平均数与算术平均数的关系以及应用平均指标的原则。</p>
+</section>
+<section id="平均指标的概念" class="slide level2">
+<h2>平均指标的概念</h2>
+<p><strong>一、平均指标的意义和种类：1、概念</strong></p>
+<p>平均指标反映同质总体各单位在一定时间、地点条件下的<strong>一般水平</strong>的综合指标，是总体内各单位参差不齐的标志值的<strong>代表值</strong>，也是对变量分布<strong>集中趋势</strong>的测定。</p>
+<p><strong>教学要点：</strong></p>
+<ul>
+<li>平均指标是一个综合指标，刻画总体的一般水平；</li>
+<li>它对各单位标志值的差异起”代表”作用（代表值）；</li>
+<li>从分布角度看，平均指标测定的是变量分布的集中趋势。</li>
+</ul>
+</section>
+<section id="数据分布的特征与适用的描述统计量" class="slide level2 scrollable">
+<h2>数据分布的特征与适用的描述统计量</h2>
+<p>数据分布的特征可以从三个方面进行测度和描述：</p>
+<ol type="1">
+<li><strong>集中趋势（位置）</strong>：反映数据向其中心靠拢或聚集的程度；</li>
+<li><strong>离中趋势（分散程度）</strong>：数据远离中心的趋势；</li>
+<li><strong>偏态和峰态（形状）</strong>：偏态是数据分布对称性的度量；峰态是数据分布的平峰或尖峰程度。</li>
+</ol>
+<p>这三类特征分别刻画了数据分布的<strong>位置</strong>、<strong>分散程度</strong>和<strong>形状</strong>，是综合指标分析中描述数据分布特征的基本框架。</p>
+<p><em>（图示说明：用三组正态曲线示意图分别演示集中趋势（位置不同）、离中趋势（陡缓不同）和偏态峰态（形状不同），直观说明数据分布三大特征的含义。）</em></p>
+<p>描述数据分布特征需要从三个维度选择相应的统计量：</p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>数据分布特征</th>
+<th>适用描述统计量</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>集中趋势</strong></td>
+<td>众数、中位数、平均数</td>
+</tr>
+<tr class="even">
+<td><strong>离散程度</strong></td>
+<td>异众比率、四分位差、极差、平均差、方差或标准差、离散系数</td>
+</tr>
+<tr class="odd">
+<td><strong>分布形状</strong></td>
+<td>偏态系数、峰态系数</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="数据分布的特征与适用的描述统计量续" class="slide level2">
+<h2>数据分布的特征与适用的描述统计量（续）</h2>
+<ul>
+<li>集中趋势反映数据向中心值靠拢的程度，可用<strong>众数</strong>（出现次数最多的值）、<strong>中位数</strong>（位置居中的值）和<strong>平均数</strong>（算术均值）来度量；</li>
+<li>离散程度反映数据的分散状况，包括<strong>异众比率</strong>（配合众数使用）、<strong>四分位差</strong>（配合中位数使用）、<strong>极差、平均差、方差或标准差</strong>以及用于比较不同量纲数据离散程度的<strong>离散系数</strong>；</li>
+<li>分布形状反映分布是否对称及尖峭程度，用<strong>偏态系数</strong>衡量偏斜方向和程度，用<strong>峰态系数</strong>衡量分布的尖峰或扁平程度。</li>
+</ul>
+<p>选择统计量时应与数据分布特征相匹配，三者结合才能全面刻画一组数据的分布。</p>
+<blockquote>
+<p><strong>v3 更新提示</strong>：表中”异众比率、四分位差”两个离散测度值见第四节新增小节，“偏态系数、峰态系数”见本章第五节（v3 新增）；各测度值对数据类型的适用规则遵循”低层次数据的测度值适用于高层次数据，反之不行”，准入依据见第 1 章”计量尺度 × 统计方法准入表”。</p>
+</blockquote>
+<p><em>（图示说明：以树状结构图直观呈现三大分布特征与各描述统计量的对应关系，帮助学生建立系统的知识框架。）</em></p>
+<p>其中，<strong>集中趋势</strong>是指一组数据向某一中心值靠拢的程度，衡量集中趋势的指标——平均指标。在统计分析中，我们常用平均指标来描述数据的集中趋势，反映一组数据的一般水平或中心位置。</p>
+</section>
+<section id="数据分布的特征与适用的描述统计量续-1" class="slide level2">
+<h2>数据分布的特征与适用的描述统计量（续）</h2>
+<p><em>（图示说明：页面上用箭头与菱形框构成的示意图，直观表明’衡量集中趋势的指标’即’平均指标’。）</em></p>
+</section>
+<section id="平均指标的特点" class="slide level2">
+<h2>平均指标的特点</h2>
+<p><strong>2、特点</strong></p>
+<p><strong>（1）同质性</strong>：分子分母为同一总体，总体内各单位性质相同。也就是说，只有性质相同的单位才能构成计算平均指标的总体。</p>
+<p><strong>（2）抽象性</strong>：总体内各同质单位虽然存在数量差异，但在计算平均数时并不考虑这种差异，即把这种差异平均化了。平均数是对各单位数量差异的抽象概括，它掩盖了总体内部的差异。</p>
+<p><strong>（3）代表性</strong>：尽管各单位的标志值大小不一，但我们可以用<strong>平均指标值</strong>来代表所有标志值。这就是平均指标的代表性特点。</p>
+<p><strong>例子：</strong></p>
+<ul>
+<li><strong>eg.</strong> 姚明上赛季平均每场上场 29 分钟，平均每场得分 13 分。</li>
+<li>康隆农场 2003 年平均从业人员 700 人。</li>
+<li>兴隆铁矿年均产量 400 万吨。</li>
+</ul>
+<p>以上例子说明，虽然每场比赛的得分、每年各时期的人数与产量各不相同，但用一个平均数就能概括地代表总体的一般水平，体现平均指标的代表性作用。</p>
+</section>
+<section id="平均指标的作用" class="slide level2">
+<h2>平均指标的作用</h2>
+<p><strong>3、平均指标的作用</strong></p>
+<p><strong>（1）便于进行对比分析。</strong> 例如：工资总额不可比，而平均工资可比。总量指标受总体规模影响，平均指标消除了规模差异，便于不同总体之间进行比较。</p>
+<p><strong>（2）可以作为判断事物的标准或依据。</strong> 例如：劳动定额，包括时间定额、产量定额。平均指标代表了总体的一般水平，可作为评价和判断的参照标准。</p>
+<p><strong>（3）可以推算其它有关指标数值。</strong> 例如：用部分粮食的平均产量和土地面积推断总产量。即利用平均指标与相关指标的关系进行推算。</p>
+</section>
+<section id="平均指标的种类" class="slide level2">
+<h2>平均指标的种类</h2>
+<p><strong>4、种类</strong></p>
+<p><strong>（1）按时间状况划分</strong>：静态平均数、动态平均数。</p>
+<p><strong>（2）按计算方法划分</strong>：数值平均数、位置平均数。</p>
+<p>其中，常用的<strong>数值平均数</strong>有：算术平均数、调和平均数、几何平均数等；<strong>位置平均数</strong>有：众数、中位数和分位数等几种。</p>
+</section>
+<section id="算术平均数的基本公式与简单算术平均数" class="slide level2">
+<h2>算术平均数的基本公式与简单算术平均数</h2>
+<p><strong>二、算术平均数</strong></p>
+<p><strong>基本公式：</strong></p>
+<p><span class="math display">\[\text{算术平均数} = \frac{\text{总体标志总量}}{\text{总体单位总量}}\]</span></p>
+<p><strong>（一）简单算术平均数</strong></p>
+<p><strong>适用条件：</strong> 当掌握的资料是总体各单位的标志值（变量值）时，采用简单算术平均数计算。</p>
+<p><span class="math display">\[\bar{x} = \frac{x_1 + x_2 + x_3 + \cdots + x_n}{n} = \frac{\sum x_i}{n}\]</span></p>
+<p>其中：<span class="math inline">\(x_i\)</span> 为总体各单位的标志值（变量值），<span class="math inline">\(n\)</span> 为总体单位数。即将各单位标志值直接相加，除以单位个数，得到算术平均数。</p>
+<p><strong>【例3-1】简单算术平均数的应用</strong></p>
+<p><strong>例题：</strong> 假定有某公司 50 名员工的月工资资料（单位：元）如下，计算该公司员工的平均工资。</p>
+</section>
+<section id="算术平均数的基本公式与简单算术平均数续" class="slide level2">
+<h2>算术平均数的基本公式与简单算术平均数（续）</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>800</th>
+<th>800</th>
+<th>800</th>
+<th>800</th>
+<th>800</th>
+<th>1000</th>
+<th>1000</th>
+<th>1000</th>
+<th>1000</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1000</td>
+<td>1000</td>
+<td>1000</td>
+<td>1000</td>
+<td>1000</td>
+<td>1000</td>
+<td>1200</td>
+<td>1200</td>
+<td>1200</td>
+</tr>
+<tr class="even">
+<td>1200</td>
+<td>1200</td>
+<td>1200</td>
+<td>1200</td>
+<td>1200</td>
+<td>1200</td>
+<td>1200</td>
+<td>1200</td>
+<td>1200</td>
+</tr>
+<tr class="odd">
+<td>1200</td>
+<td>1200</td>
+<td>1200</td>
+<td>1200</td>
+<td>1200</td>
+<td>1200</td>
+<td>1200</td>
+<td>1200</td>
+<td>1500</td>
+</tr>
+<tr class="even">
+<td>1500</td>
+<td>1500</td>
+<td>1500</td>
+<td>1500</td>
+<td>1500</td>
+<td>1500</td>
+<td>2000</td>
+<td>2000</td>
+<td>2000</td>
+</tr>
+<tr class="odd">
+<td>2000</td>
+<td>2000</td>
+<td>2500</td>
+<td>2500</td>
+<td>2500</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>解：</strong> 资料给出的是 50 个单位各自的标志值（月工资），可直接用简单算术平均数公式，将全部工资加总得到标志总量，再除以员工人数：</p>
+<p><span class="math display">\[\bar{x} = \frac{\sum_{i=1}^{50} x_i}{50} = \frac{800 + 800 + \cdots + 2500}{50} = \frac{66000}{50} = 1320 \text{（元/人）}\]</span></p>
+</section>
+<section id="算术平均数的基本公式与简单算术平均数续-1" class="slide level2">
+<h2>算术平均数的基本公式与简单算术平均数（续）</h2>
+<p>即该公司员工的平均工资为 1320 元/人。</p>
+</section>
+<section id="加权算术平均数" class="slide level2">
+<h2>加权算术平均数</h2>
+<p><strong>（二）加权算术平均数：1. 计算公式</strong></p>
+<p>当掌握的资料已编成变量数列（分组资料）时，不能把各变量值直接简单相加，而应以各组频数（权数）<span class="math inline">\(f\)</span> 对变量值加权，用公式表示：</p>
+<p><span class="math display">\[\bar{x} = \frac{x_1 f_1 + x_2 f_2 + \cdots + x_n f_n}{f_1 + f_2 + \cdots + f_n} = \frac{\sum x f}{\sum f}\]</span></p>
+<p>若将各组权数改用频率（比重）<span class="math inline">\(\dfrac{f}{\sum f}\)</span> 表示，公式又可写成：</p>
+<p><span class="math display">\[\bar{x} = x_1 \frac{f_1}{\sum f} + x_2 \frac{f_2}{\sum f} + \cdots + x_n \frac{f_n}{\sum f} = \sum \left( x \cdot \frac{f}{\sum f} \right)\]</span></p>
+<p>即加权算术平均数既可按绝对权数（频数）形式 <span class="math inline">\(\dfrac{\sum xf}{\sum f}\)</span> 计算，也可按比重权数（频率）形式 <span class="math inline">\(\sum \left( x \cdot \dfrac{f}{\sum f} \right)\)</span> 计算，两种表达方式等价。</p>
+<p><strong>【例】某公司员工工资情况——加权算术平均数的计算</strong></p>
+<p><strong>表 某公司员工工资情况表</strong></p>
+</section>
+<section id="加权算术平均数续" class="slide level2">
+<h2>加权算术平均数（续）</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: right;">月工资 <span class="math inline">\(x\)</span>（元）</th>
+<th style="text-align: right;">员工数 <span class="math inline">\(f\)</span>（人）</th>
+<th style="text-align: right;">员工比重 <span class="math inline">\(f/\sum f\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(x \cdot f\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(x \cdot (f/\sum f)\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">800</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">0.10</td>
+<td style="text-align: right;">4000</td>
+<td style="text-align: right;">80</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1000</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">0.20</td>
+<td style="text-align: right;">10000</td>
+<td style="text-align: right;">200</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1200</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">0.40</td>
+<td style="text-align: right;">24000</td>
+<td style="text-align: right;">480</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1500</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">0.14</td>
+<td style="text-align: right;">10500</td>
+<td style="text-align: right;">210</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2000</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">0.10</td>
+<td style="text-align: right;">10000</td>
+<td style="text-align: right;">200</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2500</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0.06</td>
+<td style="text-align: right;">7500</td>
+<td style="text-align: right;">150</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">合计</td>
+<td style="text-align: right;">50</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">66000</td>
+<td style="text-align: right;">1320</td>
+</tr>
+</tbody>
+</table>
+<p><strong>方法一：以员工数（频数）<span class="math inline">\(f\)</span> 为权数加权计算</strong></p>
+<p><span class="math display">\[\bar{x} = \frac{\sum x f}{\sum f} = \frac{800 \times 5 + 1000 \times 10 + 1200 \times 20 + 1500 \times 7 + 2000 \times 5 + 2500 \times 3}{5 + 10 + 20 + 7 + 5 + 3} = \frac{66000}{50} = 1320 \text{（元/人）}\]</span></p>
+<p><strong>方法二：以员工比重（频率）<span class="math inline">\(f/\sum f\)</span> 为权数加权计算</strong></p>
+</section>
+<section id="加权算术平均数续-1" class="slide level2 scrollable">
+<h2>加权算术平均数（续）</h2>
+<p>如果利用员工比重的资料来进行加权计算，也可以得到同样的结果：</p>
+<p><span class="math display">\[\bar{x} = \sum \left( x \cdot \frac{f}{\sum f} \right) = 800 \times 0.1 + 1000 \times 0.2 + 1200 \times 0.4 + 1500 \times 0.14 + 2000 \times 0.1 + 2500 \times 0.06 = 1320 \text{（元/人）}\]</span></p>
+<p><strong>结论：</strong> 无论用频数（员工数）还是频率（员工比重）作权数，加权算术平均数的计算结果完全相同，均为 1320 元/人。这说明权数的实质在于比重，两种公式等价。</p>
+<p><strong>2. 影响因素</strong></p>
+<p>加权算术平均数 <span class="math inline">\(\bar{x} = \dfrac{\sum x f}{\sum f}\)</span> 的大小受两个因素的影响：</p>
+<ol type="1">
+<li>各组变量值 <span class="math inline">\(x\)</span> 的大小；</li>
+<li>各组次数 <span class="math inline">\(f\)</span>。</li>
+</ol>
+<p>其中，变量值的次数 <span class="math inline">\(f\)</span> 的多少对平均数的大小起着权衡轻重的作用，故称 <span class="math inline">\(f\)</span> 为<strong>权数</strong>。</p>
+<p>权数除用次数 <span class="math inline">\(f\)</span>（绝对数形式）表示外，还可用<strong>频率（权重）</strong> <span class="math inline">\(\dfrac{f}{\sum f}\)</span>（比重形式）表示。</p>
+</section>
+<section id="思考频数对均值的影响大还是频率对均值的影响大" class="slide level2">
+<h2>思考：频数对均值的影响大，还是频率对均值的影响大？</h2>
+<p>设有三组资料，变量值均为 <span class="math inline">\(X = 4, 5, 6\)</span>，比较其频数与频率分布对均值的影响：</p>
+<p><strong>（1）</strong> <span class="math inline">\(\bar{x} = 5\)</span></p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: right;">X</th>
+<th style="text-align: right;">频数</th>
+<th style="text-align: right;">频率（%）</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">25.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">50.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">25.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">合计</td>
+<td style="text-align: right;">40</td>
+<td style="text-align: right;">100.0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>（2）</strong> <span class="math inline">\(\bar{x} = 5\)</span></p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: right;">X</th>
+<th style="text-align: right;">频数</th>
+<th style="text-align: right;">频率（%）</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">25.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">40</td>
+<td style="text-align: right;">50.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">25.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">合计</td>
+<td style="text-align: right;">80</td>
+<td style="text-align: right;">100.0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>（3）</strong> <span class="math inline">\(\bar{x} = 4.75\)</span></p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: right;">X</th>
+<th style="text-align: right;">频数</th>
+<th style="text-align: right;">频率（%）</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">50.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">25.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">25.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">合计</td>
+<td style="text-align: right;">40</td>
+<td style="text-align: right;">100.0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>分析：</strong> 比较（1）与（2），各组频数同比例扩大（10→20、20→40），但频率分布不变，均值不变，仍为 5；比较（1）与（3），总频数相同（均为 40），但频率分布改变了，均值随之变为 4.75。可见频率分布不变时均值不变，频率分布变了均值就会变。因此，严格地说，权数应指频率。</p>
+</section>
+<section id="由组距式数列计算平均数" class="slide level2">
+<h2>由组距式数列计算平均数</h2>
+<p><strong>3. 由组距式数列计算平均数</strong></p>
+<p>当资料为组距式变量数列时，用各组的<strong>组中值</strong>代替变量值进行加权平均计算，但需假定每组的变量值在组内是均匀分配的。由于这一假定与实际分布往往有出入，这样计算出来的平均数只是一个<strong>近似值</strong>。</p>
+<p><strong>【例】某企业 2000 名职工按月工资分组（组距式数列计算加权算术平均数）</strong></p>
+<p>资料为组距式数列，以各组的<strong>组中值</strong> <span class="math inline">\(x\)</span> 代表各组变量值，以职工人数 <span class="math inline">\(f\)</span> 为权数，列表计算：</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>月工资</th>
+<th style="text-align: right;">组中值 <span class="math inline">\(x\)</span></th>
+<th style="text-align: right;">职工人数 <span class="math inline">\(f\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(x f\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>500 以下</td>
+<td style="text-align: right;">450</td>
+<td style="text-align: right;">208</td>
+<td style="text-align: right;">93600</td>
+</tr>
+<tr class="even">
+<td>500-600</td>
+<td style="text-align: right;">550</td>
+<td style="text-align: right;">314</td>
+<td style="text-align: right;">172700</td>
+</tr>
+<tr class="odd">
+<td>600-700</td>
+<td style="text-align: right;">650</td>
+<td style="text-align: right;">382</td>
+<td style="text-align: right;">248300</td>
+</tr>
+<tr class="even">
+<td>700-800</td>
+<td style="text-align: right;">750</td>
+<td style="text-align: right;">456</td>
+<td style="text-align: right;">342000</td>
+</tr>
+<tr class="odd">
+<td>800-900</td>
+<td style="text-align: right;">850</td>
+<td style="text-align: right;">305</td>
+<td style="text-align: right;">259250</td>
+</tr>
+<tr class="even">
+<td>900-1000</td>
+<td style="text-align: right;">950</td>
+<td style="text-align: right;">237</td>
+<td style="text-align: right;">225150</td>
+</tr>
+<tr class="odd">
+<td>1000-1100</td>
+<td style="text-align: right;">1050</td>
+<td style="text-align: right;">78</td>
+<td style="text-align: right;">81900</td>
+</tr>
+<tr class="even">
+<td>1100 以上</td>
+<td style="text-align: right;">1150</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">23000</td>
+</tr>
+<tr class="odd">
+<td>合计</td>
+<td style="text-align: right;">——</td>
+<td style="text-align: right;">2000</td>
+<td style="text-align: right;">1445900</td>
+</tr>
+</tbody>
+</table>
+<p>按加权算术平均数公式计算平均月工资：</p>
+</section>
+<section id="由组距式数列计算平均数续" class="slide level2">
+<h2>由组距式数列计算平均数（续）</h2>
+<p><span class="math display">\[\bar{x} = \frac{x_1 f_1 + x_2 f_2 + \cdots + x_n f_n}{f_1 + f_2 + \cdots + f_n} = \frac{\sum x f}{\sum f} = \frac{1445900}{2000} = 722.95 \text{（元）}\]</span></p>
+<p>即该企业职工平均月工资约为 722.95 元（由于以组中值代替组内各变量值，此结果为近似值）。</p>
+</section>
+<section id="算术平均数的数学性质" class="slide level2">
+<h2>算术平均数的数学性质</h2>
+<p><strong>（三）算术平均数的数学性质</strong></p>
+<p><strong>性质 1：各变量值与均值的离差之和等于零</strong></p>
+<ul>
+<li>未分组资料：<span class="math inline">\(\sum (x - \bar{x}) = 0\)</span></li>
+<li>分组资料：<span class="math inline">\(\sum (x - \bar{x}) f = 0\)</span></li>
+</ul>
+<p><strong>性质 2：各变量值与均值的离差平方和为最小</strong></p>
+<ul>
+<li>未分组资料：<span class="math inline">\(\sum (x - \bar{x})^2 = \text{最小}\)</span></li>
+<li>分组资料：<span class="math inline">\(\sum (x - \bar{x})^2 f = \text{最小}\)</span></li>
+</ul>
+<p>这两条性质表明算术平均数处于全部变量值的中心位置：正负离差相互抵消（性质 1），且对均值的离差平方和比对任意其他数的离差平方和都小（性质 2），这是算术平均数作为总体代表值的重要理论依据。</p>
+</section>
+<section id="r-实践-组距式数列的加权平均数2000-名职工例" class="slide level2 r-demo">
+<h2>R 实践 · 组距式数列的加权平均数（2000 名职工例）</h2>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a aria-label="1"></a><span class="co"># 某企业 2000 名职工按月工资分组：组中值 x 与职工人数 f</span></span>
+<span id="cb2-2"><a aria-label="2"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">450</span>, <span class="dv">550</span>, <span class="dv">650</span>, <span class="dv">750</span>, <span class="dv">850</span>, <span class="dv">950</span>, <span class="dv">1050</span>, <span class="dv">1150</span>)</span>
+<span id="cb2-3"><a aria-label="3"></a>f <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">208</span>, <span class="dv">314</span>, <span class="dv">382</span>, <span class="dv">456</span>, <span class="dv">305</span>, <span class="dv">237</span>, <span class="dv">78</span>, <span class="dv">20</span>)</span>
+<span id="cb2-4"><a aria-label="4"></a><span class="fu">c</span>(职工总数 <span class="ot">=</span> <span class="fu">sum</span>(f), 工资总额 <span class="ot">=</span> <span class="fu">sum</span>(x <span class="sc">*</span> f),</span>
+<span id="cb2-5"><a aria-label="5"></a>  平均工资 <span class="ot">=</span> <span class="fu">weighted.mean</span>(x, f))          <span class="co"># ≈ 722.95 元</span></span>
+<span id="cb2-6"><a aria-label="6"></a><span class="co">#&gt;   职工总数   工资总额   平均工资 </span></span>
+<span id="cb2-7"><a aria-label="7"></a><span class="co">#&gt;    2000.00 1445900.00     722.95</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a aria-label="1"></a><span class="fu">barplot</span>(f, <span class="at">names.arg =</span> x, <span class="at">col =</span> <span class="st">"#2c7a6b"</span>, <span class="at">border =</span> <span class="st">"white"</span>,</span>
+<span id="cb3-2"><a aria-label="2"></a>        <span class="at">xlab =</span> <span class="st">"月工资组中值（元）"</span>, <span class="at">ylab =</span> <span class="st">"职工人数（人）"</span>,</span>
+<span id="cb3-3"><a aria-label="3"></a>        <span class="at">main =</span> <span class="st">"2000 名职工月工资分布（右偏）"</span>)</span>
+<span id="cb3-4"><a aria-label="4"></a>mean_pos <span class="ot">&lt;-</span> <span class="fu">weighted.mean</span>(<span class="fu">seq_along</span>(x), f)         <span class="co"># 均值在条形坐标中的位置</span></span>
+<span id="cb3-5"><a aria-label="5"></a><span class="fu">abline</span>(<span class="at">v =</span> mean_pos, <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="st">"#d97706"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb3-6"><a aria-label="6"></a><span class="fu">text</span>(mean_pos <span class="sc">+</span> <span class="fl">0.6</span>, <span class="fu">max</span>(f) <span class="sc">*</span> <span class="fl">0.95</span>, <span class="st">"均值 722.95 元"</span>, <span class="at">col =</span> <span class="st">"#d97706"</span>)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+
+</div>
+<img data-src="ch04-indicators-v3_files/figure-revealjs/unnamed-chunk-3-1.png" class="quarto-figure quarto-figure-center r-stretch" style="width:88.0%"><div title="思考">
+<div class="callout callout-note callout-titled callout-style-simple">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>思考</strong></p>
+</div>
+<div class="callout-content">
+<p>分布<strong>右偏</strong>时，少数高工资把均值”拉高”——此时中位数（下一节）往往比均值更能代表”典型工资水平”。</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="调和平均数的概念与计算公式" class="slide level2">
+<h2>调和平均数的概念与计算公式</h2>
+<p><strong>三、调和平均数</strong></p>
+<p><strong>定义：</strong> 调和平均数是各个标志值倒数的算术平均数的倒数，又称为<strong>倒数平均数</strong>。</p>
+<p><strong>应用条件：</strong> 调和平均数主要应用于变量数列中缺少次数（频数）资料、而已知标志总量（各组标志值与其对应总量）的情形，此时可用标志总量作为权数来计算平均数。</p>
+<p><strong>（1）简单调和平均数——适用于未分组数列</strong></p>
+<p><strong>计算公式：</strong></p>
+<p><span class="math display">\[\overline{X}_H = \frac{1}{\dfrac{\dfrac{1}{X_1} + \dfrac{1}{X_2} + \cdots + \dfrac{1}{X_N}}{N}} = \frac{N}{\dfrac{1}{X_1} + \dfrac{1}{X_2} + \cdots + \dfrac{1}{X_N}} = \frac{N}{\sum \dfrac{1}{X}}\]</span></p>
+<p><strong>[例] 某人分别花一元钱买了三种苹果</strong>，三种苹果的价格分别为 2 元/斤、1.8 元/斤、1.5 元/斤。试计算其购买的三种苹果的平均价格。</p>
+<p><strong>解：</strong> 三种苹果各花 1 元，购买金额相同而购买数量不同（分别为 <span class="math inline">\(1/2\)</span> 斤、<span class="math inline">\(1/1.8\)</span> 斤、<span class="math inline">\(1/1.5\)</span> 斤），应用简单调和平均数：</p>
+</section>
+<section id="调和平均数的概念与计算公式续" class="slide level2">
+<h2>调和平均数的概念与计算公式（续）</h2>
+<p><span class="math display">\[\overline{X}_H = \frac{3}{\dfrac{1}{2} + \dfrac{1}{1.8} + \dfrac{1}{1.5}} = \frac{3}{1.722} = 1.74 \text{（元/斤）}\]</span></p>
+<p>即三种苹果的平均价格为 1.74 元/斤。</p>
+<p><strong>（2）加权调和平均数——适用于分组数列</strong></p>
+<p><strong>计算公式：</strong></p>
+<p><span class="math display">\[\overline{X}_H = \frac{1}{\dfrac{\dfrac{1}{X_1} M_1 + \dfrac{1}{X_2} M_2 + \cdots + \dfrac{1}{X_N} M_N}{M_1 + M_2 + \cdots + M_N}} = \frac{M_1 + M_2 + \cdots + M_N}{\dfrac{1}{X_1} M_1 + \dfrac{1}{X_2} M_2 + \cdots + \dfrac{1}{X_N} M_N} = \frac{\sum M}{\sum \dfrac{M}{X}}\]</span></p>
+<p>其中 <span class="math inline">\(X_i\)</span> 为各组标志值，<span class="math inline">\(M_i\)</span> 为各组权数（标志总量），<span class="math inline">\(N\)</span> 为组数。</p>
+</section>
+<section id="调和平均数的概念与计算公式续-1" class="slide level2">
+<h2>调和平均数的概念与计算公式（续）</h2>
+<blockquote>
+<p><strong>注意（v3 新增）：调和平均数的权数 <span class="math inline">\(M\)</span> 是”各组标志值总量”。</strong> 加权调和平均公式中的权数 <span class="math inline">\(M_i = X_i f_i\)</span>，即<strong>第 <span class="math inline">\(i\)</span> 组</strong>的标志值总量（该组标志值 × 该组次数）。它<strong>不是各组变量值出现的次数（频数）</strong>，也<strong>不是整个总体的标志总量</strong>。认清这一点，才能在”已知各组成交额求平均价格”一类问题中，正确地把各组标志值总量放入 <span class="math inline">\(M\)</span>、把价格放入 <span class="math inline">\(X\)</span>。</p>
+</blockquote>
+</section>
+<section id="例题算术平均与调和平均的选用" class="slide level2">
+<h2>例题：算术平均与调和平均的选用</h2>
+<p><strong>【例】求某种商品三种零售价格的平均价格</strong>——用同一组价格资料，对比算术平均与调和平均两种算法。</p>
+<p><strong>（一）算术平均——已知销售量（次数）资料</strong></p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: right;">价格（元）</th>
+<th style="text-align: right;">销售量（斤）</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">3.3</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2.5</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2.0</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">合计</td>
+<td style="text-align: right;">12</td>
+</tr>
+</tbody>
+</table>
+<p><span class="math display">\[\bar{x} = \frac{\sum x_i f_i}{\sum f_i} = \frac{3.3 \times 3 + 2.5 \times 4 + 2.0 \times 5}{3 + 4 + 5} = \frac{29.9}{12} = 2.492 \text{（元）}\]</span></p>
+<p><strong>（二）调和平均——已知销售额（标志总量）资料</strong></p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: right;">价格（元）</th>
+<th style="text-align: right;">销售额（元）</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">3.3</td>
+<td style="text-align: right;">9.9</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2.5</td>
+<td style="text-align: right;">10</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2.0</td>
+<td style="text-align: right;">10</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">合计</td>
+<td style="text-align: right;">30</td>
+</tr>
+</tbody>
+</table>
+<p><span class="math display">\[\bar{x}_H = \frac{\sum m_i}{\sum \dfrac{1}{x_i} m_i} = \frac{9.9 + 10 + 10}{\dfrac{1}{3.3} \times 9.9 + \dfrac{1}{2.5} \times 10 + \dfrac{1}{2.0} \times 10} = \frac{30}{12.03} = 2.492 \text{（元）}\]</span></p>
+</section>
+<section id="例题算术平均与调和平均的选用续" class="slide level2">
+<h2>例题：算术平均与调和平均的选用（续）</h2>
+<p><strong>教学要点：</strong> 当掌握的权数资料是销售量（次数、频数）时，用加权算术平均数；当掌握的权数资料是销售额（标志总量）时，用加权调和平均数。两种方法计算的平均价格一致，说明调和平均数是算术平均数的变形，选用哪种公式取决于所掌握的权数资料形式。</p>
+<p><strong>【例】某蔬菜批发市场三种蔬菜的日成交数据</strong>如表，计算三种蔬菜该日的平均批发价格。</p>
+<p><strong>某日三种蔬菜的批发成交数据</strong></p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 29%">
+<col style="width: 23%">
+<col style="width: 23%">
+<col style="width: 23%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">蔬菜名称</th>
+<th style="text-align: right;">批发价格 <span class="math inline">\(M_i\)</span>（元）</th>
+<th style="text-align: right;">成交额 <span class="math inline">\(M_i f_i\)</span>（元）</th>
+<th style="text-align: right;">成交量（公斤）<span class="math inline">\(f_i\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">甲</td>
+<td style="text-align: right;">1.20</td>
+<td style="text-align: right;">18000</td>
+<td style="text-align: right;">15000</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">乙</td>
+<td style="text-align: right;">0.50</td>
+<td style="text-align: right;">12500</td>
+<td style="text-align: right;">25000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">丙</td>
+<td style="text-align: right;">0.80</td>
+<td style="text-align: right;">6400</td>
+<td style="text-align: right;">8000</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">合计</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">36900</td>
+<td style="text-align: right;">48000</td>
+</tr>
+</tbody>
+</table>
+<p><strong>解：</strong> 已知资料为各组批发价格 <span class="math inline">\(M_i\)</span> 与成交额 <span class="math inline">\(M_i f_i\)</span>（标志总量），缺少成交量（次数）资料，各组成成交量需由 <span class="math inline">\(\dfrac{M_i f_i}{M_i}\)</span> 推算（如甲：<span class="math inline">\(18000 \div 1.20 = 15000\)</span> 公斤），故采用加权调和平均数计算：</p>
+</section>
+<section id="例题算术平均与调和平均的选用续-1" class="slide level2">
+<h2>例题：算术平均与调和平均的选用（续）</h2>
+<p><span class="math display">\[\text{平均批发价格} = \frac{\sum M_i f_i}{\sum \dfrac{M_i f_i}{M_i}} = \frac{\text{成交总额}}{\sum \dfrac{\text{成交额}}{\text{批发价格}}} = \frac{36900}{48000} = 0.769 \text{（元/斤）}\]</span></p>
+<p>即三种蔬菜该日的平均批发价格为 0.769 元/斤。</p>
+<p><strong>总结：算术平均法与调和平均法的选用</strong></p>
+<ul>
+<li>凡是掌握<strong>分母</strong>资料时，用算术平均法；</li>
+<li>凡是掌握<strong>分子</strong>资料时，用调和平均法。</li>
+</ul>
+<p>即：若已知的是基本公式中分母上的资料（如总体单位数、销售量等次数资料），采用加权算术平均数 <span class="math inline">\(\bar{x} = \dfrac{\sum x f}{\sum f}\)</span>；若已知的是分子上的资料（如标志总量、销售额等），则采用加权调和平均数 <span class="math inline">\(\bar{x} = \dfrac{\sum m}{\sum \frac{m}{x}}\)</span>。</p>
+</section>
+<section id="几何平均数的概念与公式" class="slide level2">
+<h2>几何平均数的概念与公式</h2>
+<p><strong>四、几何平均数：1. 概念</strong></p>
+<p>几何平均数是 <span class="math inline">\(n\)</span> 个变量值连乘积的 <span class="math inline">\(n\)</span> 次方根。</p>
+<p><strong>简单几何平均数：</strong></p>
+<p><span class="math display">\[\overline{x}_G = \sqrt[n]{\prod_{i=1}^{n} x_i}\]</span></p>
+<p><strong>加权几何平均数：</strong></p>
+<p><span class="math display">\[\overline{x}_G = \sqrt[\sum f_i]{\prod_{i=1}^{n} x_i^{f_i}}\]</span></p>
+<p><strong>2. 前提条件</strong></p>
+<p><strong>总量等于各分量乘积</strong>。适用于求平均合格率、平均利息率、平均发展速度等场合。</p>
+</section>
+<section id="例题流水生产线的平均合格率" class="slide level2">
+<h2>例题：流水生产线的平均合格率</h2>
+<p><strong>例 1：</strong> 某流水生产线有前后衔接的五道工序，某日各工序产品的不合格率分别为 5%、8%、10%、15%、20%，求整个流水线平均产品合格率。</p>
+<p><strong>解题思路：</strong> 五道工序前后衔接，后一道工序加工的是前一道工序的合格品，整条流水线的总合格率等于各工序合格率的连乘积（总量等于各分量乘积），故应用几何平均法而非算术平均法。</p>
+<p>各工序合格率依次为 95%、92%、90%、85%、80%（即 0.95、0.92、0.90、0.85、0.80），代入简单几何平均数公式：</p>
+<p><span class="math display">\[\bar{x}_G = \sqrt[5]{0.95 \times 0.92 \times 0.90 \times 0.85 \times 0.80} = 88.24\%\]</span></p>
+<p>即整个流水线的平均产品合格率为 88.24%。</p>
+<p><strong>引伸题：各工序独立作业时的平均合格率</strong></p>
+<p>假定该流水线拥有的是五个<strong>独立作业</strong>的工序，每道工序的产量均为 100 件，且该月份五个工序产品的合格率也分别为 95%、92%、90%、85% 和 80%，求该流水线各产品的平均合格率。</p>
+<p><strong>分析：</strong> 此时五道工序相互独立、不再是前后衔接的连乘关系，各工序产量相同（均为 100 件，权数相等），故不能用几何平均法，而应采用加权算术平均法：</p>
+</section>
+<section id="例题流水生产线的平均合格率续" class="slide level2">
+<h2>例题：流水生产线的平均合格率（续）</h2>
+<p><span class="math display">\[\bar{x} = \frac{\sum x f}{\sum f} = \frac{100 \times (0.95 + 0.92 + 0.9 + 0.85 + 0.8)}{100 \times 5}\]</span></p>
+<p>本例说明：同样是求平均合格率，工序前后衔接（总量为各分量之积）时用几何平均法，工序独立、产量相同（总量为各分量之和）时用算术平均法。</p>
+</section>
+<section id="例题复利计息的平均年利率" class="slide level2">
+<h2>例题：复利计息的平均年利率</h2>
+<p><strong>例 2：</strong> 某金融机构以复利方式计息。近 12 年来的年利率有：4 年为 3%、2 年为 5%、2 年为 8%、3 年为 10%、1 年为 15%。求 12 年的平均年利率。</p>
+<p><strong>解：</strong> 复利计息时，12 年的总本利系数等于各年本利系数的连乘积，故应用加权几何平均数（各年利率的权数为年数）：</p>
+<p><span class="math display">\[\sqrt[4+2+2+3+1]{1.03^{4} \times 1.05^{2} \times 1.08^{2} \times 1.10^{3} \times 1.15^{1}} = 106.82\%\]</span></p>
+<p><strong>平均年利率</strong> <span class="math inline">\(= 106.82\% - 1 = 6.82\%\)</span></p>
+<p><strong>引申：单利计息的情形</strong></p>
+<p>假定该例中是按<strong>单利计息</strong>，最初本金为 <span class="math inline">\(V_0\)</span>，求解平均年利率。</p>
+<p>单利计息时利息总量等于各年利息之和，应用加权算术平均法：</p>
+<p><span class="math display">\[\bar{x} = \frac{\sum m}{\sum f} = \frac{\sum x f}{\sum f} = \frac{0.03 \times 4 + 0.05 \times 2 + 0.08 \times 2 + 0.1 \times 3 + 0.15 \times 1}{4 + 2 + 2 + 3 + 1} = 6.9\%\]</span></p>
+<p>可见计息方式不同，平均年利率的计算方法也不同：复利用几何平均法，单利用加权算术平均法。</p>
+</section>
+<section id="几何平均数的对数形式" class="slide level2">
+<h2>几何平均数的对数形式</h2>
+<p><strong>3. 几何平均数的对数等于对数的算术平均</strong></p>
+<p>几何平均数的对数等于各变量值对数的算术平均，因此几何平均数又称为<strong>对数平均数</strong>。</p>
+<p><strong>简单几何平均数：</strong></p>
+<p><span class="math display">\[\log \bar{x}_G = \frac{1}{n} \left( \log x_1 + \log x_2 + \cdots + \log x_n \right)\]</span></p>
+<p><strong>加权几何平均数：</strong></p>
+<p><span class="math display">\[\log \bar{x}_G = \frac{1}{\sum f} \left( f_1 \log x_1 + f_2 \log x_2 + \cdots + f_k \log x_k \right)\]</span></p>
+<p>即先对变量值取对数、按权数加权平均，再取反对数，即可把几何平均数的运算转化为算术平均数的运算，便于开高次方时的实际计算。</p>
+<p>对简单几何平均数 <span class="math inline">\(G = \sqrt[n]{x_1 x_2 \cdots x_n}\)</span> 两边取对数：</p>
+<p><span class="math display">\[\lg X_G = \lg \sqrt[n]{x_1 x_2 \cdots x_n} = \frac{1}{n} \left( \lg x_1 + \lg x_2 + \cdots + \lg x_n \right) = \frac{\sum \lg x}{n}\]</span></p>
+<p><strong>结论：</strong> 可见几何平均数的对数是各个变量值的对数的算术平均数。</p>
+<p><strong>计算方法：</strong> 求出几何平均数的对数后，查反对数表找出真数，即为几何平均数。</p>
+</section>
+<section id="众数的概念与不惟一性" class="slide level2 scrollable">
+<h2>众数的概念与不惟一性</h2>
+<p><strong>五、众数：1. 概念</strong></p>
+<p><strong>众数</strong>是总体中<strong>出现次数最多</strong>的那个标志值，记作 <span class="math inline">\(M_o\)</span>。</p>
+<p>当数列中存在异常标志值（极端值）时，众数（因由次数分布决定、不受极端值影响）能够较准确地代表总体各单位的一般水平。</p>
+<p><strong>众数的不惟一性</strong></p>
+<p>众数具有<strong>不惟一性</strong>，按次数分布情况可分为三种情形：</p>
+<ol type="1">
+<li><strong>无众数</strong>：各数据出现的次数相同（各出现一次），不存在众数。原始数据：10、5、9、12、6、8；</li>
+<li><strong>一个众数</strong>：某一数据出现的次数明显多于其他数据，存在唯一众数。原始数据：6、5、9、8、5、5（其中 5 出现三次，众数为 5）；</li>
+<li><strong>多于一个众数（复众数）</strong>：有两个及以上数据出现的次数并列最多，存在多个众数。原始数据：25、28、28、36、42、42（28 与 42 各出现两次，均为众数）。</li>
+</ol>
+<p>分布平坦均匀时无众数，单峰分布时有一个众数，双峰分布时有多个众数（复众数）。</p>
+<p><em>（图示说明：右侧三幅小示意图分别描绘平坦分布（无众数）、单峰分布（一个众数）与双峰分布（复众数），直观展示众数的不惟一性。）</em></p>
+</section>
+<section id="r-实践-调和平均数与几何平均数教材两例重算" class="slide level2 r-demo">
+<h2>R 实践 · 调和平均数与几何平均数：教材两例重算</h2>
+<p>掌握的是<strong>每份花了多少钱</strong>时用调和平均；总量是连乘出来的（合格率衔接、复利）时用几何平均。</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a aria-label="1"></a><span class="co"># 各花 1 元买三种苹果，价格 2、1.8、1.5 元/斤</span></span>
+<span id="cb4-2"><a aria-label="2"></a>price <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="fl">1.8</span>, <span class="fl">1.5</span>)</span>
+<span id="cb4-3"><a aria-label="3"></a>harm <span class="ot">&lt;-</span> <span class="fu">length</span>(price) <span class="sc">/</span> <span class="fu">sum</span>(<span class="dv">1</span> <span class="sc">/</span> price)</span>
+<span id="cb4-4"><a aria-label="4"></a></span>
+<span id="cb4-5"><a aria-label="5"></a><span class="co"># 五道前后衔接工序的合格率：几何平均</span></span>
+<span id="cb4-6"><a aria-label="6"></a>pass <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.95</span>, <span class="fl">0.92</span>, <span class="fl">0.90</span>, <span class="fl">0.85</span>, <span class="fl">0.80</span>)</span>
+<span id="cb4-7"><a aria-label="7"></a>geom <span class="ot">&lt;-</span> <span class="fu">prod</span>(pass) <span class="sc">^</span> (<span class="dv">1</span> <span class="sc">/</span> <span class="fu">length</span>(pass))</span>
+<span id="cb4-8"><a aria-label="8"></a></span>
+<span id="cb4-9"><a aria-label="9"></a><span class="co"># 同样五个合格率，若是五道独立工序、产量相同：算术平均</span></span>
+<span id="cb4-10"><a aria-label="10"></a><span class="fu">c</span>(苹果平均价格 <span class="ot">=</span> <span class="fu">round</span>(harm, <span class="dv">2</span>),</span>
+<span id="cb4-11"><a aria-label="11"></a>  衔接工序平均合格率 <span class="ot">=</span> <span class="fu">round</span>(geom, <span class="dv">4</span>),</span>
+<span id="cb4-12"><a aria-label="12"></a>  独立工序平均合格率 <span class="ot">=</span> <span class="fu">round</span>(<span class="fu">mean</span>(pass), <span class="dv">4</span>))</span>
+<span id="cb4-13"><a aria-label="13"></a><span class="co">#&gt;       苹果平均价格 衔接工序平均合格率 独立工序平均合格率 </span></span>
+<span id="cb4-14"><a aria-label="14"></a><span class="co">#&gt;             1.7400             0.8824             0.8840</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a aria-label="1"></a><span class="co"># 复利：4 年 3%、2 年 5%、2 年 8%、3 年 10%、1 年 15%</span></span>
+<span id="cb5-2"><a aria-label="2"></a>growth <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">1.03</span>, <span class="fl">1.05</span>, <span class="fl">1.08</span>, <span class="fl">1.10</span>, <span class="fl">1.15</span>)</span>
+<span id="cb5-3"><a aria-label="3"></a>years <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">1</span>)</span>
+<span id="cb5-4"><a aria-label="4"></a>avg_growth <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fu">sum</span>(years <span class="sc">*</span> <span class="fu">log</span>(growth)) <span class="sc">/</span> <span class="fu">sum</span>(years))</span>
+<span id="cb5-5"><a aria-label="5"></a><span class="fu">c</span>(平均发展速度 <span class="ot">=</span> <span class="fu">round</span>(avg_growth, <span class="dv">4</span>),</span>
+<span id="cb5-6"><a aria-label="6"></a>  平均年利率 <span class="ot">=</span> <span class="fu">round</span>(avg_growth <span class="sc">-</span> <span class="dv">1</span>, <span class="dv">4</span>))</span>
+<span id="cb5-7"><a aria-label="7"></a><span class="co">#&gt; 平均发展速度   平均年利率 </span></span>
+<span id="cb5-8"><a aria-label="8"></a><span class="co">#&gt;       1.0685       0.0685</span></span>
+<span id="cb5-9"><a aria-label="9"></a><span class="co"># 精确值为 106.85% − 1 = 6.85%；教材按中间步骤舍入写成 6.82%</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div title="选哪一种">
+<div class="callout callout-tip callout-titled callout-style-simple">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>选哪一种</strong></p>
+</div>
+<div class="callout-content">
+<p>衔接工序把合格率<strong>连乘</strong>，用几何平均（约 88.24%）。独立工序是把合格件数<strong>相加</strong>，用算术平均。苹果例三种花销相同，调和平均约 <strong>1.74 元/斤</strong>，和“总花费 ÷ 总斤数”是同一件事。</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="众数的计算" class="slide level2">
+<h2>众数的计算</h2>
+<p><strong>2. 众数的计算</strong></p>
+<p><strong>（1）分类数据的众数</strong></p>
+<p><strong>不同品牌饮料的频数分布</strong></p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>饮料品牌</th>
+<th style="text-align: right;">频数</th>
+<th style="text-align: right;">比例</th>
+<th style="text-align: right;">百分比（%）</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>可口可乐</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">0.30</td>
+<td style="text-align: right;">30</td>
+</tr>
+<tr class="even">
+<td>旭日升冰茶</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">0.22</td>
+<td style="text-align: right;">22</td>
+</tr>
+<tr class="odd">
+<td>百事可乐</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">0.18</td>
+<td style="text-align: right;">18</td>
+</tr>
+<tr class="even">
+<td>汇源果汁</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">0.12</td>
+<td style="text-align: right;">12</td>
+</tr>
+<tr class="odd">
+<td>露露</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">0.18</td>
+<td style="text-align: right;">18</td>
+</tr>
+<tr class="even">
+<td>合计</td>
+<td style="text-align: right;">50</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">100</td>
+</tr>
+</tbody>
+</table>
+<p><strong>解：</strong> 这里的变量为”饮料品牌”，这是个分类变量，不同类型的饮料就是变量值。</p>
+<p>所调查的 50 人中，购买可口可乐的人数最多，为 15 人，占总被调查人数的 30%，因此众数为”可口可乐”这一品牌，即</p>
+<p><span class="math display">\[M_o = \text{可口可乐}\]</span></p>
+<p><strong>（2）顺序数据的众数</strong></p>
+<p><strong>甲城市家庭对住房状况评价的频数分布</strong></p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>回答类别</th>
+<th style="text-align: right;">甲城市户数（户）</th>
+<th style="text-align: right;">百分比（%）</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>非常不满意</td>
+<td style="text-align: right;">24</td>
+<td style="text-align: right;">8</td>
+</tr>
+<tr class="even">
+<td>不满意</td>
+<td style="text-align: right;">108</td>
+<td style="text-align: right;">36</td>
+</tr>
+<tr class="odd">
+<td>一般</td>
+<td style="text-align: right;">93</td>
+<td style="text-align: right;">31</td>
+</tr>
+<tr class="even">
+<td>满意</td>
+<td style="text-align: right;">45</td>
+<td style="text-align: right;">15</td>
+</tr>
+<tr class="odd">
+<td>非常满意</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: right;">10</td>
+</tr>
+<tr class="even">
+<td>合计</td>
+<td style="text-align: right;">300</td>
+<td style="text-align: right;">100.0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>解：</strong> 这里的数据为顺序数据，变量为”回答类别”。</p>
+<p>甲城市中对住房表示不满意的户数最多，为 108 户，因此众数为”不满意”这一类别，即</p>
+</section>
+<section id="众数的计算续" class="slide level2">
+<h2>众数的计算（续）</h2>
+<p><span class="math display">\[M_o = \text{不满意}\]</span></p>
+<p><strong>（3）单项式数列确定众数</strong>：只需找出出现次数最多的标志值（变量值），即为众数。</p>
+<p><strong>（4）组距数列确定众数</strong>：以频数之差计算的比例分割众数组组距。</p>
+<p><strong>上限公式：</strong></p>
+<p><span class="math display">\[M_o = U - \frac{d_2}{d_1 + d_2} \times i\]</span></p>
+<p><strong>下限公式：</strong></p>
+<p><span class="math display">\[M_o = L + \frac{d_1}{d_1 + d_2} \times i\]</span></p>
+<p><strong>式中：</strong></p>
+<ul>
+<li><span class="math inline">\(L\)</span> —— 众数组下限；</li>
+<li><span class="math inline">\(d_1\)</span> —— 众数组次数与上一组次数之差；</li>
+<li><span class="math inline">\(d_2\)</span> —— 众数组次数与下一组次数之差；</li>
+<li><span class="math inline">\(i\)</span> —— 众数组的组距；</li>
+<li><span class="math inline">\(U\)</span> —— 众数组上限。</li>
+</ul>
+</section>
+<section id="例题组距数列的众数月收入分布" class="slide level2">
+<h2>例题：组距数列的众数（月收入分布）</h2>
+<p><strong>频数分布表：</strong></p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>分组</th>
+<th style="text-align: right;">&lt;500</th>
+<th style="text-align: right;">&lt;800</th>
+<th style="text-align: right;">&lt;1100</th>
+<th style="text-align: right;">&lt;1400</th>
+<th style="text-align: right;">&lt;1700</th>
+<th style="text-align: right;">&lt;2000</th>
+<th style="text-align: right;">&lt;2300</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>频数</td>
+<td style="text-align: right;">40</td>
+<td style="text-align: right;">90</td>
+<td style="text-align: right;">110</td>
+<td style="text-align: right;">105</td>
+<td style="text-align: right;">70</td>
+<td style="text-align: right;">50</td>
+<td style="text-align: right;">35</td>
+</tr>
+</tbody>
+</table>
+<p>频数最多的组为众数组（&lt;800～&lt;1100 组，频数 110），众数组次数与上一组次数之差 <span class="math inline">\(d_1 = 110 - 90 = 20\)</span>，与下一组次数之差 <span class="math inline">\(d_2 = 110 - 105 = 5\)</span>。</p>
+<p><strong>下限公式计算步骤：</strong></p>
+<p>① 求比例：</p>
+<p><span class="math display">\[\frac{d_1}{d_1 + d_2} = \frac{20}{20 + 5} = 0.8\]</span></p>
+<p>② 分割众数组的组距：</p>
+<p><span class="math display">\[0.8 \times (1100 - 800) = 240 \text{（元）}\]</span></p>
+<p>③ 加下限，即：</p>
+<p><span class="math display">\[M_o = 800 + 240 = 1040 \text{（元）}\]</span></p>
+<p>即所求众数为 1040 元。</p>
+<p><strong>众数几何位置的图示</strong></p>
+<p>将上例的频数分布绘制为直方图：横轴为月收入（元），刻度 500、800、1100、1400、1700、2000；纵轴为频数 <span class="math inline">\(f\)</span>（人数），刻度 50、100、150。</p>
+</section>
+<section id="例题组距数列的众数月收入分布续" class="slide level2">
+<h2>例题：组距数列的众数（月收入分布）（续）</h2>
+<p>在众数组（800～1100）与相邻两组的直方条顶部，分别以 <span class="math inline">\(d_1\)</span>、<span class="math inline">\(d_2\)</span> 标出众数组次数与前后两组次数之差，并作交叉对角线，两线交点在横轴上的投影即为众数位置 <strong>1040 元</strong>，与按下限公式 <span class="math inline">\(M_o = L + \dfrac{d_1}{d_1 + d_2} \times i = 800 + \dfrac{20}{20 + 5} \times 300 = 1040\)</span>（元）计算的结果一致。</p>
+<p>图示直观说明：众数在众数组内的位置由 <span class="math inline">\(d_1\)</span> 与 <span class="math inline">\(d_2\)</span> 的比例决定，众数组次数比前一组多得越多（<span class="math inline">\(d_1\)</span> 越大），众数越靠近上限；比后一组多得越多（<span class="math inline">\(d_2\)</span> 越大），众数越靠近下限。</p>
+<p><em>（图示说明：以直方图相邻直条顶端的交叉对角线和 d₁、d₂ 标注，直观演示众数按频数差比例在众数组内插值定位的几何原理，与下限公式计算结果 1040 元相互印证。）</em></p>
+</section>
+<section id="例题50-名工人日加工零件数的众数" class="slide level2">
+<h2>例题：50 名工人日加工零件数的众数</h2>
+<p><strong>表 某车间 50 名工人日加工零件数分组表</strong></p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>按零件数分组</th>
+<th style="text-align: right;">频数（人）</th>
+<th style="text-align: right;">累积频数</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>105~110</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td>110~115</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">8</td>
+</tr>
+<tr class="odd">
+<td>115~120</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr class="even">
+<td>120~125</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">30</td>
+</tr>
+<tr class="odd">
+<td>125~130</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">40</td>
+</tr>
+<tr class="even">
+<td>130~135</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">46</td>
+</tr>
+<tr class="odd">
+<td>135~140</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">50</td>
+</tr>
+<tr class="even">
+<td>合计</td>
+<td style="text-align: right;">50</td>
+<td style="text-align: right;">—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>解：</strong> 频数最多的组为 120~125（频数 14），即众数组，其下限 <span class="math inline">\(L = 120\)</span>，组距 <span class="math inline">\(i = 5\)</span>；众数组次数与前一组次数之差 <span class="math inline">\(d_1 = 14 - 8\)</span>，与后一组次数之差 <span class="math inline">\(d_2 = 14 - 10\)</span>。按组距数列众数下限公式插值：</p>
+<p><span class="math display">\[M_o = L + \frac{d_1}{d_1 + d_2} \times i = 120 + \frac{14 - 8}{(14 - 8) + (14 - 10)} \times 5 = 123 \text{（个）}\]</span></p>
+<p>即 50 名工人日加工零件数的众数约为 123 个。</p>
+</section>
+<section id="中位数的概念与特点" class="slide level2">
+<h2>中位数的概念与特点</h2>
+<p><strong>六、中位数：1. 概念</strong></p>
+<p>在同一总体中，将各总体单位的某一数量标志值按大小顺序排列，处于<strong>中间位置</strong>的标志值称为<strong>中位数</strong>，记作 <span class="math inline">\(M_e\)</span>。</p>
+<p>中位数将全部标志值分成两部分：中位数以前和中位数以后的标志值各占 50%，即一半单位的标志值小于等于 <span class="math inline">\(M_e\)</span>，另一半单位的标志值大于等于 <span class="math inline">\(M_e\)</span>。</p>
+<p><em>（图示说明：页面下方的示意图以 Me 为界、两侧各标 50% 的横条，直观展示中位数把按大小排列的标志值序列等分为两半的位置特征。）</em></p>
+<p><strong>2. 中位数的特点</strong></p>
+<p>（1）不受极端值的影响。</p>
+<p>（2）主要用于顺序数据，也可用于数值型数据，但不能用于分类数据。</p>
+<p>（3）各变量值与中位数的离差绝对值之和最小，即</p>
+<p><span class="math display">\[\sum_{i=1}^{n} \left| x_i - M_e \right| = \min\]</span></p>
+</section>
+<section id="顺序数据与原始数据的中位数" class="slide level2">
+<h2>顺序数据与原始数据的中位数</h2>
+<p><strong>3. 中位数的计算：（1）顺序数据的中位数</strong></p>
+<p>中位数位置公式：</p>
+<p><span class="math display">\[\text{中位数位置} = \frac{n + 1}{2}\]</span></p>
+<p>再由累计频数确定中位数所在的组别。</p>
+<p><strong>甲城市家庭对住房状况评价的频数分布</strong></p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>回答类别</th>
+<th style="text-align: right;">甲城市户数（户）</th>
+<th style="text-align: right;">累计频数</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>非常不满意</td>
+<td style="text-align: right;">24</td>
+<td style="text-align: right;">24</td>
+</tr>
+<tr class="even">
+<td>不满意</td>
+<td style="text-align: right;">108</td>
+<td style="text-align: right;">132</td>
+</tr>
+<tr class="odd">
+<td>一般</td>
+<td style="text-align: right;">93</td>
+<td style="text-align: right;">225</td>
+</tr>
+<tr class="even">
+<td>满意</td>
+<td style="text-align: right;">45</td>
+<td style="text-align: right;">270</td>
+</tr>
+<tr class="odd">
+<td>非常满意</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: right;">300</td>
+</tr>
+<tr class="even">
+<td>合计</td>
+<td style="text-align: right;">300</td>
+<td style="text-align: right;">—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>解：</strong> 中位数的位置为</p>
+<p><span class="math display">\[\frac{300 + 1}{2} = 150.5\]</span></p>
+<p>从累计频数看，中位数在”一般”这一组别中（累计频数 132 &lt; 150.5 ≤ 225）。</p>
+<p>中位数为 <span class="math inline">\(M_e =\)</span> 一般。</p>
+<p><strong>（2）原始数据的中位数</strong></p>
+<p>中位数位置公式同上。</p>
+<p><strong>【例】9 个家庭的人均月收入数据</strong></p>
+<ul>
+<li>原始数据：1500、750、780、1080、850、960、2000、1250、1630</li>
+<li>排序：750、780、850、960、1080、1250、1500、1630、2000</li>
+</ul>
+</section>
+<section id="顺序数据与原始数据的中位数续" class="slide level2">
+<h2>顺序数据与原始数据的中位数（续）</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>位置</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>数据</td>
+<td>750</td>
+<td>780</td>
+<td>850</td>
+<td>960</td>
+<td>1080</td>
+<td>1250</td>
+<td>1500</td>
+<td>1630</td>
+<td>2000</td>
+</tr>
+</tbody>
+</table>
+<p><strong>解：</strong> 中位数位置为</p>
+<p><span class="math display">\[\text{位置} = \frac{n + 1}{2} = \frac{9 + 1}{2} = 5\]</span></p>
+<p>即中位数是排序后第 5 个位置上的数据：</p>
+<p><span class="math display">\[M_e = 1080\]</span></p>
+<p><strong>【例】10 个家庭的人均月收入数据（<span class="math inline">\(n\)</span> 为偶数时的中位数）</strong></p>
+<ul>
+<li>排序：660、750、780、850、960、1080、1250、1500、1630、2000</li>
+<li>位置：1、2、3、4、5、6、7、8、9、10</li>
+</ul>
+<p><strong>解：</strong> 中位数位置为</p>
+<p><span class="math display">\[\text{位置} = \frac{n + 1}{2} = \frac{10 + 1}{2} = 5.5\]</span></p>
+<p><span class="math inline">\(n = 10\)</span> 为偶数，中位数位于第 5、6 两个数据之间，取这两个数据的算术平均：</p>
+<p><span class="math display">\[\text{中位数} = \frac{960 + 1080}{2} = 1020\]</span></p>
+<p>即 <span class="math inline">\(M_e = 1020\)</span>。</p>
+</section>
+<section id="单项数列求中位数" class="slide level2">
+<h2>单项数列求中位数</h2>
+<p><strong>（3）单项数列求中位数</strong></p>
+<p>用</p>
+<p><span class="math display">\[\frac{\sum f + 1}{2}\]</span></p>
+<p>确定中位数的位次，再根据位次用向上累计或向下累计次数的方法，将累计次数刚超过中位数位次的组确定为中位数组，该组的标志值即为中位数。</p>
+<p><strong>【例】单项数列求中位数</strong></p>
+<p><strong>表 4.4 单项数列求中位数计算表</strong></p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: right;">年龄（岁）</th>
+<th style="text-align: right;">学生人数</th>
+<th style="text-align: right;">较小制累计次数</th>
+<th style="text-align: right;">较大制累计次数</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">17</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">50</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">45</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">19</td>
+<td style="text-align: right;">26</td>
+<td style="text-align: right;">39</td>
+<td style="text-align: right;">37</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">48</td>
+<td style="text-align: right;">11</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">50</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">合计</td>
+<td style="text-align: right;">50</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>【解】</strong> 年龄中位数的位置为</p>
+<p><span class="math display">\[\frac{\sum f + 1}{2} = \frac{50 + 1}{2} = 25.5\]</span></p>
+<p>即位于第 25 与第 26 位学生之间。由较小制累计次数看，第 25、26 位学生均落入累计次数刚超过 25.5 的第三组（19 岁组，较小制累计 39；较大制累计 37 亦覆盖该位次），故中位数为第三组的变量值：</p>
+<p><span class="math display">\[M_e = 19 \text{（岁）}\]</span></p>
+</section>
+<section id="组距数列求中位数" class="slide level2">
+<h2>组距数列求中位数</h2>
+<p><strong>（4）组距数列求中位数</strong></p>
+<p>假定次数在组内呈均匀分布，用插值法分割中位数组。</p>
+<p><strong>1）确定中位数所在组</strong></p>
+<p>中位数位次的计算公式：</p>
+<p><span class="math display">\[\frac{\sum f}{2}\]</span></p>
+<p>（当 <span class="math inline">\(\sum f\)</span> 很大时，式中的 1 常忽略不计。）</p>
+<p><strong>2）求中位数公式</strong></p>
+<p>下限公式：</p>
+<p><span class="math display">\[M_e = L + \frac{\dfrac{\sum f}{2} - S_{m-1}}{f_m} \times i\]</span></p>
+<p>上限公式：</p>
+<p><span class="math display">\[M_e = U - \frac{\dfrac{\sum f}{2} - S_{m+1}}{f_m} \times i\]</span></p>
+<p><strong>式中：</strong> <span class="math inline">\(L\)</span>、<span class="math inline">\(U\)</span> 为中位数所在组的下、上限；<span class="math inline">\(f_m\)</span> 为中位数所在组次数；<span class="math inline">\(S_{m-1}\)</span> 为中位数组以前各组的累计次数；<span class="math inline">\(S_{m+1}\)</span> 为中位数组以后各组的累计次数；<span class="math inline">\(i\)</span> 为中位数组的组距。</p>
+<p><strong>【例】组距数列中位数的计算（下限公式）</strong></p>
+<p>标志值由小到大排列：</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>分组</th>
+<th style="text-align: right;">&lt;500</th>
+<th style="text-align: right;">&lt;800</th>
+<th style="text-align: right;">&lt;1100</th>
+<th style="text-align: right;">&lt;1400</th>
+<th style="text-align: right;">&lt;1700</th>
+<th style="text-align: right;">&lt;2000</th>
+<th style="text-align: right;">&lt;2300</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>频数</td>
+<td style="text-align: right;">40</td>
+<td style="text-align: right;">90</td>
+<td style="text-align: right;">110</td>
+<td style="text-align: right;">105</td>
+<td style="text-align: right;">70</td>
+<td style="text-align: right;">50</td>
+<td style="text-align: right;">35</td>
+</tr>
+<tr class="even">
+<td>累计频数</td>
+<td style="text-align: right;">40</td>
+<td style="text-align: right;">130</td>
+<td style="text-align: right;">240</td>
+<td style="text-align: right;">345</td>
+<td style="text-align: right;">415</td>
+<td style="text-align: right;">465</td>
+<td style="text-align: right;">500</td>
+</tr>
+</tbody>
+</table>
+<p><strong>第一步：确定中位数位置</strong></p>
+</section>
+<section id="组距数列求中位数续" class="slide level2">
+<h2>组距数列求中位数（续）</h2>
+<p><span class="math display">\[\text{中位数位置} = \frac{500}{2} = 250\]</span></p>
+<p>由累计频数可知，中位数落在第四组（&lt;1100～&lt;1400，即 1100～1400）内，该组频数 <span class="math inline">\(f_m = 105\)</span>，中位数组以前各组的累计次数 <span class="math inline">\(S_{m-1} = 240\)</span>。</p>
+<p><strong>第二步：下限公式计算</strong></p>
+<p>① 求比例：</p>
+<p><span class="math display">\[\frac{250 - 240}{105} = 0.095\]</span></p>
+<p>② 分割中位数组的组距：</p>
+<p><span class="math display">\[(1400 - 1100) \times 0.095 = 28.5\]</span></p>
+<p>③ 加下限，即：</p>
+<p><span class="math display">\[M_e = 1100 + 28.5 = 1128.5 \text{（元）}\]</span></p>
+<p><strong>中位数的图解法——累计次数折线图</strong></p>
+<p>将上例月收入分组的向上累计人数绘成累计折线图：横轴为月收入（元），刻度 500、800、1100、1400、1700、2000；纵轴为累计人数（<span class="math inline">\(\sum f\)</span>），各组的累计人数依次为 40、130、240、345、415、465、500（<span class="math inline">\(\sum f = 500\)</span>）。</p>
+<p>图解步骤：总次数 <span class="math inline">\(\sum f = 500\)</span>，中位数位置 <span class="math inline">\(\sum f / 2 = 250\)</span>；在图中作水平线 <span class="math inline">\(\sum f/2 = 250\)</span> 与向上累计折线相交，再由交点向横轴作垂线，垂足的横坐标读数即为中位数：</p>
+<p><span class="math display">\[M_e = 1128.5 \text{（元）}\]</span></p>
+<p>图解结果与下限公式插值计算的结果一致。</p>
+</section>
+<section id="组距数列求中位数续-1" class="slide level2">
+<h2>组距数列求中位数（续）</h2>
+<p><em>（图示说明：以月收入分组为横轴、向上累计人数为纵轴的累计折线图，配合 Σf/2=250 的水平线与折线交点，直观演示用图解法确定中位数 1128.5 元，与公式插值结果互相印证。）</em></p>
+</section>
+<section id="例题50-名工人日加工零件数的中位数下限公式与上限公式" class="slide level2">
+<h2>例题：50 名工人日加工零件数的中位数（下限公式与上限公式）</h2>
+<p><strong>【例】</strong> 根据下表数据，计算 50 名工人日加工零件数的中位数。</p>
+<p><strong>表 某车间 50 名工人日加工零件数分组表</strong></p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>按零件数分组</th>
+<th style="text-align: right;">频数（人）</th>
+<th style="text-align: right;">累积频数</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>105~110</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td>110~115</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">8</td>
+</tr>
+<tr class="odd">
+<td>115~120</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr class="even">
+<td>120~125</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">30</td>
+</tr>
+<tr class="odd">
+<td>125~130</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">40</td>
+</tr>
+<tr class="even">
+<td>130~135</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">46</td>
+</tr>
+<tr class="odd">
+<td>135~140</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">50</td>
+</tr>
+<tr class="even">
+<td>合计</td>
+<td style="text-align: right;">50</td>
+<td style="text-align: right;">—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>解一（下限公式）：</strong> 中位数位置为 <span class="math inline">\(n/2 = 50/2 = 25\)</span>；由累积频数可知，中位数落在首次累计超过 25 的组 120~125（该组频数 <span class="math inline">\(f_m = 14\)</span>，以前各组累积频数 <span class="math inline">\(S_{m-1} = 16\)</span>，下限 <span class="math inline">\(L = 120\)</span>，组距 <span class="math inline">\(i = 5\)</span>）。按下限公式：</p>
+<p><span class="math display">\[M_e = L + \frac{\dfrac{n}{2} - S_{m-1}}{f_m} \times i = 120 + \frac{\dfrac{50}{2} - 16}{14} \times 5 = 123.21 \text{（个）}\]</span></p>
+</section>
+<section id="例题50-名工人日加工零件数的中位数下限公式与上限公式续" class="slide level2">
+<h2>例题：50 名工人日加工零件数的中位数（下限公式与上限公式）（续）</h2>
+<p><strong>解二（上限公式）：</strong> 中位数组为 120~125（上限 <span class="math inline">\(U = 125\)</span>，频数 <span class="math inline">\(f_m = 14\)</span>，以后各组累积频数 <span class="math inline">\(S_{m+1} = 10 + 6 + 4 = 20\)</span>，组距 <span class="math inline">\(i = 5\)</span>）。按上限公式：</p>
+<p><span class="math display">\[M_e = U - \frac{\dfrac{n}{2} - S_{m+1}}{f_m} \times i = 125 - \frac{\dfrac{50}{2} - 20}{14} \times 5 = 123.21 \text{（个）}\]</span></p>
+<p>即 50 名工人日加工零件数的中位数约为 123.21 个，下限公式与上限公式的计算结果一致。</p>
+</section>
+<section id="四分位数与五数概括v3-新增" class="slide level2">
+<h2>四分位数与五数概括（v3 新增）</h2>
+<p><strong>七、四分位数（Quartile）</strong>：中位数把排序后的数据等分为两半，四分位数则把数据<strong>等分为四份</strong>。<strong>四分位数</strong>是排序后处于 25% 和 75% 位置上的值，其中处于 25% 位置上的称为<strong>下四分位数（四分之一位数）</strong>，记作 <span class="math inline">\(Q_1\)</span>；处于 75% 位置上的称为<strong>上四分位数（四分之三位数）</strong>，记作 <span class="math inline">\(Q_3\)</span>。四分位数与中位数一样属于<strong>位置平均数</strong>，其特点是<strong>不受极端值的影响</strong>。</p>
+<p><strong>1. 未分组资料的四分位数（位置法）</strong></p>
+<p>第一步，将各标志值由小到大排序；第二步，确定 1/4 与 3/4 分割点位置：</p>
+<p><span class="math display">\[p_1 = \frac{n+1}{4}, \qquad p_3 = \frac{3(n+1)}{4}\]</span></p>
+<p>第三步，确定 <span class="math inline">\(Q_1\)</span> 与 <span class="math inline">\(Q_3\)</span>：<strong>位置为整数</strong>时，取该位置上的标志值；<strong>位置带有小数</strong>时，按小数部分在相邻两个标志值之间<strong>线性插值</strong>（当小数部分恰为 0.5 时，即退化为相邻两值的简单平均，与中位数 <span class="math inline">\(n\)</span> 为偶数时的处理一致）。</p>
+<p><strong>【例】11 名工人日产量的四分位数。</strong> 11 名工人生产同种产品的日产量（件）排序后为：</p>
+</section>
+<section id="四分位数与五数概括v3-新增续" class="slide level2">
+<h2>四分位数与五数概括（v3 新增）（续）</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>位置</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+<th>11</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>日产量</td>
+<td>2</td>
+<td>5</td>
+<td>6</td>
+<td>7</td>
+<td>8</td>
+<td>9</td>
+<td>10</td>
+<td>12</td>
+<td>15</td>
+<td>16</td>
+<td>20</td>
+</tr>
+</tbody>
+</table>
+<p><span class="math inline">\(p_1 = (11+1)/4 = 3\)</span>，<span class="math inline">\(p_3 = 3(11+1)/4 = 9\)</span>，均为整数，故 <span class="math inline">\(Q_1\)</span>＝第 3 位＝<strong>6 件</strong>，<span class="math inline">\(Q_3\)</span>＝第 9 位＝<strong>15 件</strong>。</p>
+<p><strong>【例】12 名工人日产量的四分位数（位置非整数的情形）。</strong> 在上例数据中再增加 1 名日产量 22 件的工人，排序后：</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>位置</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+<th>11</th>
+<th>12</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>日产量</td>
+<td>2</td>
+<td>5</td>
+<td>6</td>
+<td>7</td>
+<td>8</td>
+<td>9</td>
+<td>10</td>
+<td>12</td>
+<td>15</td>
+<td>16</td>
+<td>20</td>
+<td>22</td>
+</tr>
+</tbody>
+</table>
+<p><span class="math inline">\(p_1 = (12+1)/4 = 3.25\)</span>，<span class="math inline">\(p_3 = 3(12+1)/4 = 9.75\)</span>，均非整数，按小数部分在相邻两值间插值：</p>
+</section>
+<section id="四分位数与五数概括v3-新增续-1" class="slide level2">
+<h2>四分位数与五数概括（v3 新增）（续）</h2>
+<p><span class="math display">\[Q_1 = 6 + 0.25 \times (7-6) = 6.25 \text{（件）}, \qquad Q_3 = 15 + 0.75 \times (16-15) = 15.75 \text{（件）}\]</span></p>
+<blockquote>
+<p><strong>口径说明</strong>：也有教材对非整数位置一律取相邻两值的<strong>简单平均</strong>（本例得 <span class="math inline">\(Q_1 = 6.5\)</span>、<span class="math inline">\(Q_3 = 15.5\)</span>；胡华平课件 p90 即按此口径，且该页分割点分子误印为 11+1，应为 12+1；其 p89 亦把位置值 <span class="math inline">\((n+1)/4=3\)</span> 误述为”样本量”）。本讲义统一采用<strong>插值口径</strong>，与中位数偶数情形的处理及软件分位数算法思想一致。两种口径差异通常不大，但作业与考试应遵循课程统一口径。</p>
+</blockquote>
+<p><strong>2. 单项式数列的四分位数</strong></p>
+<p>与单项式数列求中位数同理：先计算（较小制）累计频数，再按 <span class="math inline">\(p_1 = \dfrac{\sum f}{4}\)</span>、<span class="math inline">\(p_3 = \dfrac{3\sum f}{4}\)</span> 确定分割位置，累计频数<strong>首次达到或超过</strong>分割位置的组即 <span class="math inline">\(Q_1\)</span>（或 <span class="math inline">\(Q_3\)</span>）所在组，该组标志值即所求四分位数。</p>
+<p><strong>【例】甲城市住房满意度评价的四分位数。</strong> 沿用前文甲城市 300 户住房评价频数分布（较小制累计频数依次为 24、132、225、270、300）：</p>
+<p><span class="math display">\[p_1 = 300/4 = 75, \qquad p_3 = 3 \times 300/4 = 225\]</span></p>
+</section>
+<section id="四分位数与五数概括v3-新增续-2" class="slide level2">
+<h2>四分位数与五数概括（v3 新增）（续）</h2>
+<p>累计频数首次 ≥75 的是第二组（不满意，累计 132），故 <span class="math inline">\(Q_1 =\)</span> 不满意；首次 ≥225 的是第三组（一般，累计恰为 225），故 <span class="math inline">\(Q_3 =\)</span> 一般。</p>
+<p><strong>3. 组距式数列的四分位数（下限插值公式）</strong></p>
+<p>与组距数列求中位数同理：先按较小制累计确定 <span class="math inline">\(Q_1\)</span>、<span class="math inline">\(Q_3\)</span> 所在组，再假定组内均匀分布、按比例插值。下限公式为：</p>
+<p><span class="math display">\[Q_1 = L_1 + \frac{\dfrac{\sum f}{4} - S_1}{f_1} \times i, \qquad Q_3 = L_3 + \frac{\dfrac{3\sum f}{4} - S_3}{f_3} \times i\]</span></p>
+<p>式中：<span class="math inline">\(L_1\)</span>、<span class="math inline">\(L_3\)</span> 为 <span class="math inline">\(Q_1\)</span>、<span class="math inline">\(Q_3\)</span> 所在组的下限；<span class="math inline">\(f_1\)</span>、<span class="math inline">\(f_3\)</span> 为所在组的频数；<span class="math inline">\(S_1\)</span>、<span class="math inline">\(S_3\)</span> 为所在组<strong>以前各组</strong>的累计频数；<span class="math inline">\(i\)</span> 为所在组组距。</p>
+<p><strong>【例】某班 164 名学生体重的四分位数。</strong> 频数分布（较小制累计）如下：</p>
+</section>
+<section id="四分位数与五数概括v3-新增续-3" class="slide level2">
+<h2>四分位数与五数概括（v3 新增）（续）</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 8%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>分组（Kg）</th>
+<th style="text-align: right;">60 以下</th>
+<th style="text-align: right;">60–70</th>
+<th style="text-align: right;">70–80</th>
+<th style="text-align: right;">80–90</th>
+<th style="text-align: right;">90–100</th>
+<th style="text-align: right;">100–110</th>
+<th style="text-align: right;">110 以上</th>
+<th style="text-align: right;">合计</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>频数</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">19</td>
+<td style="text-align: right;">50</td>
+<td style="text-align: right;">36</td>
+<td style="text-align: right;">27</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">164</td>
+</tr>
+<tr class="even">
+<td>累计频数</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">29</td>
+<td style="text-align: right;">79</td>
+<td style="text-align: right;">115</td>
+<td style="text-align: right;">142</td>
+<td style="text-align: right;">156</td>
+<td style="text-align: right;">164</td>
+<td style="text-align: right;">—</td>
+</tr>
+</tbody>
+</table>
+<p><span class="math inline">\(p_1 = 164/4 = 41\)</span>，落入”70–80”组（累计 79 首次 ≥41）：</p>
+<p><span class="math display">\[Q_1 = 70 + \frac{41 - 29}{50} \times 10 = 72.4 \text{（Kg）}\]</span></p>
+<p><span class="math inline">\(p_3 = 3 \times 164/4 = 123\)</span>，落入”90–100”组（累计 142 首次 ≥123）：</p>
+<p><span class="math display">\[Q_3 = 90 + \frac{123 - 115}{27} \times 10 \approx 92.96 \text{（Kg）}\]</span></p>
+<blockquote>
+<p><strong>注意：较大制累计时分位数分割位置要对调！</strong> 若采用较大制（自最高组向下）累计，<span class="math inline">\(Q_1\)</span> 应改用 <span class="math inline">\(3\sum f/4\)</span>、<span class="math inline">\(Q_3\)</span> 改用 <span class="math inline">\(\sum f/4\)</span> 作为分割位置——因为较大制累计的是”不低于该组”的频数，位置计数方向相反。初学者建议统一使用较小制累计，避免对调出错。</p>
+</blockquote>
+<p><strong>4. 五数概括与箱线图</strong></p>
+</section>
+<section id="四分位数与五数概括v3-新增续-4" class="slide level2">
+<h2>四分位数与五数概括（v3 新增）（续）</h2>
+<p>把<strong>最小值、<span class="math inline">\(Q_1\)</span>、中位数、<span class="math inline">\(Q_3\)</span>、最大值</strong>五个数放在一起，就构成<strong>五数概括（five-number summary）</strong>——以极少的计算量同时给出数据的中心、两端范围与中段分布，是探索性数据分析中最常用的概括工具。在五数概括基础上绘制的<strong>箱线图（box plot）</strong>：箱子两端为 <span class="math inline">\(Q_1\)</span> 与 <span class="math inline">\(Q_3\)</span>（箱高即四分位差），箱中横线为中位数，箱外延伸”须”至最小值与最大值（或至 1.5 倍四分位差范围内的最远点，范围外的点标记为离群点）。并排的多只箱线图可直观比较不同批数据的中心与离散状况（箱线图的完整绘制规范见第 3 章数据图示部分，v3 新增）。</p>
+<p><strong>5. 主线数据集：某电脑销售公司 120 天日销售量（v3 新增，贯穿第三至五节）</strong></p>
+<p>从本小节起到本章末，我们用同一组数据贯穿学习四分位数、四分位差、极差、平均差、标准差、变异系数、标准分数与偏态峰态。某电脑销售公司连续 4 个月（120 天，<span class="math inline">\(n = 120\)</span>）的电脑日销售量（台）记录如下（按记录顺序，R 控制台打印格式）：</p>
+</section>
+<section id="四分位数与五数概括v3-新增续-5" class="slide level2">
+<h2>四分位数与五数概括（v3 新增）（续）</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb6-1"><a aria-label="1"></a>  [1] 234 143 187 161 150 228 153 166 154 174 156 203 159 198 160 152</span>
+<span id="cb6-2"><a aria-label="2"></a> [17] 161 162 163 196 164 226 165 165 187 141 214 149 178 223 218 179</span>
+<span id="cb6-3"><a aria-label="3"></a> [33] 215 180 175 196 155 167 168 211 168 170 180 171 233 172 210 172</span>
+<span id="cb6-4"><a aria-label="4"></a> [49] 172 194 173 196 174 165 175 233 175 190 207 176 183 225 178 234</span>
+<span id="cb6-5"><a aria-label="5"></a> [65] 153 179 144 179 188 172 181 182 182 177 184 185 186 186 178 187</span>
+<span id="cb6-6"><a aria-label="6"></a> [81] 237 187 205 188 177 189 209 189 190 175 191 173 194 189 195 195</span>
+<span id="cb6-7"><a aria-label="7"></a> [97] 163 196 176 196 160 197 197 174 198 200 201 202 158 203 188 206</span>
+<span id="cb6-8"><a aria-label="8"></a>[113] 171 208 192 210 168 211 172 213</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<p>“A 同学”把这 120 个原始数据整理成如下组距式分组（<span class="math inline">\(f\)</span> 为落在各组的天数）：</p>
+</section>
+<section id="四分位数与五数概括v3-新增续-6" class="slide level2">
+<h2>四分位数与五数概括（v3 新增）（续）</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 6%">
+<col style="width: 8%">
+<col style="width: 8%">
+<col style="width: 8%">
+<col style="width: 8%">
+<col style="width: 8%">
+<col style="width: 8%">
+<col style="width: 8%">
+<col style="width: 8%">
+<col style="width: 8%">
+<col style="width: 8%">
+<col style="width: 8%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>组别</th>
+<th style="text-align: right;">[140,150)</th>
+<th style="text-align: right;">[150,160)</th>
+<th style="text-align: right;">[160,170)</th>
+<th style="text-align: right;">[170,180)</th>
+<th style="text-align: right;">[180,190)</th>
+<th style="text-align: right;">[190,200)</th>
+<th style="text-align: right;">[200,210)</th>
+<th style="text-align: right;">[210,220)</th>
+<th style="text-align: right;">[220,230)</th>
+<th style="text-align: right;">[230,240]</th>
+<th style="text-align: right;">合计</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>组中值</td>
+<td style="text-align: right;">145</td>
+<td style="text-align: right;">155</td>
+<td style="text-align: right;">165</td>
+<td style="text-align: right;">175</td>
+<td style="text-align: right;">185</td>
+<td style="text-align: right;">195</td>
+<td style="text-align: right;">205</td>
+<td style="text-align: right;">215</td>
+<td style="text-align: right;">225</td>
+<td style="text-align: right;">235</td>
+<td style="text-align: right;">—</td>
+</tr>
+<tr class="even">
+<td>频数 <span class="math inline">\(f\)</span></td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">27</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">17</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">120</td>
+</tr>
+</tbody>
+</table>
+<p>后文凡由这组数据计算的指标，均并列给出<strong>“原始数据”与”组距分组（组中值）“两种口径</strong>的结果，用以观察”以组中值近似组内变量值”带来的误差方向与幅度。</p>
+<p><strong>【例】120 天销售量的四分位数与五数概括（原始数据）。</strong> 排序后第 30、31 位的值分别为 170、171，第 90、91 位的值均为 197，第 60、61 位的值均为 182。由 <span class="math inline">\(p_1 = (120+1)/4 = 30.25\)</span>、<span class="math inline">\(p_3 = 3(120+1)/4 = 90.75\)</span>、中位数位置 <span class="math inline">\((120+1)/2 = 60.5\)</span>：</p>
+</section>
+<section id="四分位数与五数概括v3-新增续-7" class="slide level2">
+<h2>四分位数与五数概括（v3 新增）（续）</h2>
+<p><span class="math display">\[Q_1 = 170 + 0.25 \times (171 - 170) = 170.25 \text{（台）}\]</span></p>
+<p><span class="math display">\[Q_3 = 197 + 0.75 \times (197 - 197) = 197 \text{（台）}, \qquad M_e = \frac{182 + 182}{2} = 182 \text{（台）}\]</span></p>
+<p>于是<strong>五数概括</strong>为：</p>
+<p><span class="math display">\[\text{最小值 }141 \;&lt;\; Q_1 = 170.25 \;&lt;\; M_e = 182 \;&lt;\; Q_3 = 197 \;&lt;\; \text{最大值 }237 \text{（台）}\]</span></p>
+<p>读法：120 天中有四分之一的日子销量不超过 170.25 台，一半的日子不超过 182 台，四分之三的日子不超过 197 台；中间 50% 的日子销量落在 170.25～197 台之间。</p>
+</section>
+<section id="四分位数与五数概括v3-新增续-8" class="slide level2">
+<h2>四分位数与五数概括（v3 新增）（续）</h2>
+<blockquote>
+<p><strong>软件口径提示</strong>：统计软件对分位数有多种定义。R 的 <code>quantile()</code>（默认 type 7）、<code>fivenum()</code> 与 Excel 的 <code>QUARTILE.INC</code> 按”位置 = 1+(n−1)p”计算，对本例得 <span class="math inline">\(Q_1 = 170.75\)</span>、四分位差 26.25（胡课件 p159 即印作此值）；教材手算用 <span class="math inline">\((n+1)/4\)</span> 位置插值得 <span class="math inline">\(Q_1 = 170.25\)</span>、四分位差 26.75。两者相差 0.5 台属<strong>定义差异</strong>而非计算错误——读软件输出时务必核对其分位数口径。</p>
+</blockquote>
+<p><strong>【例】按组距分组口径的四分位数。</strong> <span class="math inline">\(\sum f/4 = 30\)</span>，累计频数依次为 4、13、29、56、76、93、…，首次 ≥30 的是第 4 组 [170,180)（该组 <span class="math inline">\(f = 27\)</span>，以前累计 <span class="math inline">\(S = 29\)</span>，下限 170，组距 10）：</p>
+<p><span class="math display">\[Q_1 = 170 + \frac{30 - 29}{27} \times 10 = 170.37 \text{（台）}\]</span></p>
+<p><span class="math inline">\(3\sum f/4 = 90\)</span>，首次 ≥90 的是第 6 组 [190,200)（该组 <span class="math inline">\(f = 17\)</span>，以前累计 <span class="math inline">\(S = 76\)</span>，下限 190，组距 10）：</p>
+<p><span class="math display">\[Q_3 = 190 + \frac{90 - 76}{17} \times 10 = 198.24 \text{（台）}\]</span></p>
+</section>
+<section id="四分位数与五数概括v3-新增续-9" class="slide level2">
+<h2>四分位数与五数概括（v3 新增）（续）</h2>
+<p>分组中位数：<span class="math inline">\(\sum f/2 = 60\)</span>，第 5 组 [180,190)（<span class="math inline">\(f = 20\)</span>，以前累计 56）：<span class="math inline">\(M_e = 180 + \frac{60-56}{20} \times 10 = 182\)</span> 台，与原始数据完全一致；而 <span class="math inline">\(Q_1\)</span>、<span class="math inline">\(Q_3\)</span> 的分组近似值（170.37、198.24）与原始数据（170.25、197）略有出入，这正是组中值近似的代价。</p>
+<blockquote>
+<p><strong>R 一行（手算/软件双轨声明）</strong>：本课程统一口径为”<strong>考试手算，软件用于验证与探索</strong>”。五数概括在 R 中一行可得：</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a aria-label="1"></a><span class="fu">summary</span>(sales)    <span class="co"># 最小值、Q1、中位数、Q3、最大值（另附均值）</span></span>
+<span id="cb7-2"><a aria-label="2"></a><span class="fu">fivenum</span>(sales)    <span class="co"># 五数概括（图基口径）</span></span>
+<span id="cb7-3"><a aria-label="3"></a><span class="fu">IQR</span>(sales)        <span class="co"># 四分位差 Q3 − Q1（软件口径，注意与手算的异同）</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<p>完整实践见《新增实践-v3实践.md》实践 1。</p>
+</blockquote>
+</section>
+<section id="实践-1五数概括四分位数口径与箱线图" class="slide level2 r-demo">
+<h2>实践 1：五数概括、四分位数口径与箱线图</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a aria-label="1"></a><span class="co"># ---- 数据：120 天电脑日销售量（台），与讲义主线数据集一致 ----</span></span>
+<span id="cb8-2"><a aria-label="2"></a>sales <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">234</span>,<span class="dv">143</span>,<span class="dv">187</span>,<span class="dv">161</span>,<span class="dv">150</span>,<span class="dv">228</span>,<span class="dv">153</span>,<span class="dv">166</span>,<span class="dv">154</span>,<span class="dv">174</span>,<span class="dv">156</span>,<span class="dv">203</span>,<span class="dv">159</span>,<span class="dv">198</span>,<span class="dv">160</span>,<span class="dv">152</span>,</span>
+<span id="cb8-3"><a aria-label="3"></a>           <span class="dv">161</span>,<span class="dv">162</span>,<span class="dv">163</span>,<span class="dv">196</span>,<span class="dv">164</span>,<span class="dv">226</span>,<span class="dv">165</span>,<span class="dv">165</span>,<span class="dv">187</span>,<span class="dv">141</span>,<span class="dv">214</span>,<span class="dv">149</span>,<span class="dv">178</span>,<span class="dv">223</span>,<span class="dv">218</span>,<span class="dv">179</span>,</span>
+<span id="cb8-4"><a aria-label="4"></a>           <span class="dv">215</span>,<span class="dv">180</span>,<span class="dv">175</span>,<span class="dv">196</span>,<span class="dv">155</span>,<span class="dv">167</span>,<span class="dv">168</span>,<span class="dv">211</span>,<span class="dv">168</span>,<span class="dv">170</span>,<span class="dv">180</span>,<span class="dv">171</span>,<span class="dv">233</span>,<span class="dv">172</span>,<span class="dv">210</span>,<span class="dv">172</span>,</span>
+<span id="cb8-5"><a aria-label="5"></a>           <span class="dv">172</span>,<span class="dv">194</span>,<span class="dv">173</span>,<span class="dv">196</span>,<span class="dv">174</span>,<span class="dv">165</span>,<span class="dv">175</span>,<span class="dv">233</span>,<span class="dv">175</span>,<span class="dv">190</span>,<span class="dv">207</span>,<span class="dv">176</span>,<span class="dv">183</span>,<span class="dv">225</span>,<span class="dv">178</span>,<span class="dv">234</span>,</span>
+<span id="cb8-6"><a aria-label="6"></a>           <span class="dv">153</span>,<span class="dv">179</span>,<span class="dv">144</span>,<span class="dv">179</span>,<span class="dv">188</span>,<span class="dv">172</span>,<span class="dv">181</span>,<span class="dv">182</span>,<span class="dv">182</span>,<span class="dv">177</span>,<span class="dv">184</span>,<span class="dv">185</span>,<span class="dv">186</span>,<span class="dv">186</span>,<span class="dv">178</span>,<span class="dv">187</span>,</span>
+<span id="cb8-7"><a aria-label="7"></a>           <span class="dv">237</span>,<span class="dv">187</span>,<span class="dv">205</span>,<span class="dv">188</span>,<span class="dv">177</span>,<span class="dv">189</span>,<span class="dv">209</span>,<span class="dv">189</span>,<span class="dv">190</span>,<span class="dv">175</span>,<span class="dv">191</span>,<span class="dv">173</span>,<span class="dv">194</span>,<span class="dv">189</span>,<span class="dv">195</span>,<span class="dv">195</span>,</span>
+<span id="cb8-8"><a aria-label="8"></a>           <span class="dv">163</span>,<span class="dv">196</span>,<span class="dv">176</span>,<span class="dv">196</span>,<span class="dv">160</span>,<span class="dv">197</span>,<span class="dv">197</span>,<span class="dv">174</span>,<span class="dv">198</span>,<span class="dv">200</span>,<span class="dv">201</span>,<span class="dv">202</span>,<span class="dv">158</span>,<span class="dv">203</span>,<span class="dv">188</span>,<span class="dv">206</span>,</span>
+<span id="cb8-9"><a aria-label="9"></a>           <span class="dv">171</span>,<span class="dv">208</span>,<span class="dv">192</span>,<span class="dv">210</span>,<span class="dv">168</span>,<span class="dv">211</span>,<span class="dv">172</span>,<span class="dv">213</span>)</span>
+<span id="cb8-10"><a aria-label="10"></a></span>
+<span id="cb8-11"><a aria-label="11"></a><span class="fu">length</span>(sales)          <span class="co"># 120</span></span>
+<span id="cb8-12"><a aria-label="12"></a><span class="fu">summary</span>(sales)         <span class="co"># Min 141 / 1st Qu 170.75 / Median 182 / Mean 184.57 / 3rd Qu 197 / Max 237</span></span>
+<span id="cb8-13"><a aria-label="13"></a><span class="fu">fivenum</span>(sales)         <span class="co"># 141 170.75 182 197 237（图基口径五数）</span></span>
+<span id="cb8-14"><a aria-label="14"></a><span class="fu">IQR</span>(sales)             <span class="co"># 26.25（软件口径 Q3 - Q1）</span></span>
+<span id="cb8-15"><a aria-label="15"></a></span>
+<span id="cb8-16"><a aria-label="16"></a><span class="co"># ---- 教材手算口径 vs 软件默认口径 ----</span></span>
+<span id="cb8-17"><a aria-label="17"></a><span class="co"># 教材：位置 p1 = (n+1)/4 = 30.25，在排序后第 30、31 位之间插值</span></span>
+<span id="cb8-18"><a aria-label="18"></a>s <span class="ot">&lt;-</span> <span class="fu">sort</span>(sales)</span>
+<span id="cb8-19"><a aria-label="19"></a>p1 <span class="ot">&lt;-</span> (<span class="fu">length</span>(sales) <span class="sc">+</span> <span class="dv">1</span>) <span class="sc">/</span> <span class="dv">4</span>          <span class="co"># 30.25</span></span>
+<span id="cb8-20"><a aria-label="20"></a>i   <span class="ot">&lt;-</span> <span class="fu">floor</span>(p1)</span>
+<span id="cb8-21"><a aria-label="21"></a>q1_textbook <span class="ot">&lt;-</span> s[i] <span class="sc">+</span> (p1 <span class="sc">-</span> i) <span class="sc">*</span> (s[i <span class="sc">+</span> <span class="dv">1</span>] <span class="sc">-</span> s[i])</span>
+<span id="cb8-22"><a aria-label="22"></a>q1_textbook                           <span class="co"># 170.25（讲义手算结果）</span></span>
+<span id="cb8-23"><a aria-label="23"></a><span class="fu">quantile</span>(sales, <span class="fl">0.25</span>)                 <span class="co"># 170.75（R 默认 type 7：位置 = 1 + (n-1)p）</span></span>
+<span id="cb8-24"><a aria-label="24"></a></span>
+<span id="cb8-25"><a aria-label="25"></a><span class="co"># ---- 箱线图：五数概括的图形化 ----</span></span>
+<span id="cb8-26"><a aria-label="26"></a><span class="fu">boxplot</span>(sales, <span class="at">horizontal =</span> <span class="cn">TRUE</span>, <span class="at">main =</span> <span class="st">"120-day computer sales"</span>,</span>
+<span id="cb8-27"><a aria-label="27"></a>        <span class="at">xlab =</span> <span class="st">"units per day"</span>)</span>
+<span id="cb8-28"><a aria-label="28"></a><span class="fu">boxplot.stats</span>(sales)<span class="sc">$</span>out              <span class="co"># 1.5 x IQR 规则下的离群点（本例为空）</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<div title="callout：手算与软件的四分位数口径">
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>callout：手算与软件的四分位数口径</strong></p>
+</div>
+<div class="callout-content">
+<p>手算按教材口径得 Q1 = 170.25、四分位差 26.75；R 默认口径（<code>quantile()</code> 的 type 7、<code>fivenum()</code>、Excel <code>QUARTILE.INC</code>）得 Q1 = 170.75、IQR = 26.25。差异来自分割位置的定义（(n+1)/4 对 1+(n−1)p），<strong>不是算错</strong>——读软件输出先辨口径。箱线图的”箱”即五数概括的中间三个数（Q1、中位数、Q3），“须”延伸至 1.5×IQR 范围内的最远点，范围外的点标记为离群点。</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="常用的几种平均数小结" class="slide level2">
+<h2>常用的几种平均数小结</h2>
+<p>从概念、计算公式、特点（优缺点）三方面，对常用的几种平均数小结如下：</p>
+</section>
+<section id="常用的几种平均数小结续" class="slide level2">
+<h2>常用的几种平均数小结（续）</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>平均数</th>
+<th>概念</th>
+<th>计算公式</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1. 算术平均数 <span class="math inline">\(\bar{x}\)</span></td>
+<td>标志总量与总体单位总数的比值</td>
+<td>简单：<span class="math inline">\(\bar{x} = \dfrac{\sum x_i}{n}\)</span>；加权：<span class="math inline">\(\bar{x} = \dfrac{\sum x_i f_i}{\sum f_i}\)</span></td>
+<td>优点：① 容易理解，便于计算；② 灵敏度高；③ 稳定性好；④ <span class="math inline">\(\sum (x - \bar{x}) = 0\)</span> 和 <span class="math inline">\(\sum (x - \bar{x})^2 = \text{最小}\)</span>；缺点：① 易受极值影响；② 在偏斜分布和 U 形分布中，不具有代表性</td>
+</tr>
+<tr class="even">
+<td>2. 调和平均数 <span class="math inline">\(\bar{x}_H\)</span></td>
+<td>标志值倒数的平均数的倒数</td>
+<td>简单：<span class="math inline">\(\bar{x}_H = \dfrac{n}{\sum 1/x_i}\)</span>；加权：<span class="math inline">\(\bar{x}_H = \dfrac{\sum m_i}{\sum (1/x_i)\, m_i}\)</span></td>
+<td>优点：① 灵敏度高；② 在某种不能计算的条件下，可以代替算术平均数 <span class="math inline">\(\bar{x}\)</span>；缺点：① 不易理解；② 易受极值影响；③ 有”0”值时不能计算</td>
+</tr>
+<tr class="odd">
+<td>3. 几何平均数 <span class="math inline">\(\bar{x}_G\)</span></td>
+<td>几个变量值连乘积的几次根</td>
+<td>简单：<span class="math inline">\(\bar{x}_G = \sqrt[n]{\prod x_i}\)</span>；加权：<span class="math inline">\(\bar{x}_G = \sqrt[\sum f_i]{\prod x_i^{f_i}}\)</span></td>
+<td>优点：① 灵敏度高；② 受极值影响小于 <span class="math inline">\(\bar{x}\)</span> 和 <span class="math inline">\(\bar{x}_H\)</span>；③ 适宜于各比率之积为总比率的变量求平均；缺点：① 有”0”或负值时不能计算；② 偶数项数列只能用正根</td>
+</tr>
+<tr class="even">
+<td>4. 众数（<span class="math inline">\(M_o\)</span>）</td>
+<td>分配数列中出现次数最多的标志值（位置平均数）</td>
+<td>上限公式：<span class="math inline">\(M_o = U - \dfrac{d_2}{d_1+d_2} \times i\)</span>；下限公式：<span class="math inline">\(M_o = L + \dfrac{d_1}{d_1+d_2} \times i\)</span></td>
+<td>优点：① 容易理解；② 不受极值影响；缺点：① 灵敏度和计算功能差；② 稳定性差；③ 具有不唯一性</td>
+</tr>
+<tr class="odd">
+<td>5. 中位数（<span class="math inline">\(M_e\)</span>）</td>
+<td>标志值由小到大顺序排列中居中间位置的标志值（位置平均数）</td>
+<td>上限公式：<span class="math inline">\(M_e = U - \dfrac{\sum f/2 - S_{m+1}}{f_m} \times i\)</span>；下限公式：<span class="math inline">\(M_e = L + \dfrac{\sum f/2 - S_{m-1}}{f_m} \times i\)</span></td>
+<td>优点：① 容易理解；② 不受极值影响；③ 适宜于开口组资料和不能用数字测定的事物；缺点：① 灵敏度和计算功能差；② 分类数无 <span class="math inline">\(M_e\)</span></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="数据类型与适用的集中趋势指标" class="slide level2">
+<h2>数据类型与适用的集中趋势指标</h2>
+<p>不同的数据类型所适用的集中趋势描述指标不同。数据的测量层次由低到高为：分类数据、顺序数据、定距数据、定比数据；测量层次越高，可用的集中趋势指标越多。</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>适用的描述指标</th>
+<th>分类数据</th>
+<th>顺序数据</th>
+<th>定距数据</th>
+<th>定比数据</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>行 1</td>
+<td>众数</td>
+<td>中位数</td>
+<td>算术均值</td>
+<td>算术均值</td>
+</tr>
+<tr class="even">
+<td>行 2</td>
+<td>—</td>
+<td>众数</td>
+<td>中位数</td>
+<td>调和平均数</td>
+</tr>
+<tr class="odd">
+<td>行 3</td>
+<td>—</td>
+<td>—</td>
+<td>众数</td>
+<td>几何平均数</td>
+</tr>
+<tr class="even">
+<td>行 4</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>中位数</td>
+</tr>
+<tr class="odd">
+<td>行 5</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>众数</td>
+</tr>
+</tbody>
+</table>
+<p><strong>教学解读</strong>：分类数据只能使用众数；顺序数据可使用中位数与众数；定距数据可使用算术均值、中位数、众数；定比数据的适用指标最全，可使用算术均值、调和平均数、几何平均数、中位数、众数。高层次数据可以使用低层次数据所适用的指标，反之不行。此外，众数适用于所有类型，是适用面最广的集中趋势描述指标。（数据测量层次与可用指标之间这种”准入门禁”关系的依据，见第 1 章”计量尺度 × 统计方法准入表”。）</p>
+</section>
+<section id="位置平均数与算术平均数的关系" class="slide level2">
+<h2>位置平均数与算术平均数的关系</h2>
+<p><strong>八、位置平均数与算术平均数的关系：1. 判别总体分布特征</strong></p>
+<p>算术平均数 <span class="math inline">\(\bar{x}\)</span>、中位数 <span class="math inline">\(M_e\)</span>、众数 <span class="math inline">\(M_o\)</span> 三者之间的相对位置关系，可以用来判别总体分布的形态特征：</p>
+<p><strong>（1）对称分布</strong>：分布曲线左右对称，峰居中，三个平均数重合于一点，</p>
+<p><span class="math display">\[\bar{x} = M_e = M_o\]</span></p>
+<p><strong>（2）正偏态分布（右偏）</strong>：曲线右端拖出长尾，极端大值把算术平均数拉向右侧，三者的大小关系为</p>
+<p><span class="math display">\[\bar{x} &gt; M_e &gt; M_o\]</span></p>
+<p><strong>（3）负偏态分布（左偏）</strong>：曲线左端拖出长尾，极端小值把算术平均数拉向左侧，三者的大小关系为</p>
+<p><span class="math display">\[\bar{x} &lt; M_e &lt; M_o\]</span></p>
+<p><strong>小结</strong>：只要比较 <span class="math inline">\(\bar{x}\)</span>、<span class="math inline">\(M_e\)</span>、<span class="math inline">\(M_o\)</span> 的大小，即可判别总体分布是对称、右偏还是左偏：三者相等为对称分布；<span class="math inline">\(\bar{x}\)</span> 最大为右偏（正偏态）；<span class="math inline">\(\bar{x}\)</span> 最小为左偏（负偏态）。</p>
+<p><strong>2. 互相推算</strong></p>
+<p>英国统计学家皮尔生（Pearson）的经验公式为：<strong>算术平均数和众数的距离等于算术平均数与中位数的距离的三倍</strong>。</p>
+<p><strong>适用条件：在偏斜不大时</strong>，即</p>
+<p><span class="math display">\[\bar{x} - M_o = 3(\bar{x} - M_e)\]</span></p>
+<p>其中 <span class="math inline">\(\bar{x}\)</span> 为算术平均数，<span class="math inline">\(M_o\)</span> 为众数，<span class="math inline">\(M_e\)</span> 为中位数。</p>
+<p>由该关系式可得三个互推变形：</p>
+</section>
+<section id="位置平均数与算术平均数的关系续" class="slide level2">
+<h2>位置平均数与算术平均数的关系（续）</h2>
+<p><span class="math display">\[M_o = 3M_e - 2\bar{x}, \qquad M_e = \frac{M_o + 2\bar{x}}{3}, \qquad \bar{x} = \frac{3M_e - M_o}{2}\]</span></p>
+<p>利用这个关系式，可以从已知的两个平均指标推算另一个平均指标：例如已知 <span class="math inline">\(\bar{x}\)</span> 与 <span class="math inline">\(M_e\)</span> 可求 <span class="math inline">\(M_o\)</span>，已知 <span class="math inline">\(M_o\)</span> 与 <span class="math inline">\(M_e\)</span> 可反推 <span class="math inline">\(\bar{x}\)</span> 等（如本章主线数据：<span class="math inline">\(M_e = 182\)</span> 台、<span class="math inline">\(\bar{x} = 184.57\)</span> 台，估 <span class="math inline">\(M_o \approx 3 \times 182 - 2 \times 184.57 = 176.9\)</span> 台）。</p>
+<p><strong>例题：利用皮尔生经验公式推算平均数并判定偏斜方向</strong></p>
+<p><strong>题目</strong>：某车间生产的一批零件中，直径大于 402 厘米的占一半，众数为 400 厘米，试估计其平均数，并判定其偏斜方向。</p>
+<p><strong>解</strong>：已知直径大于 402 厘米的零件占一半，说明恰有一半的标志值位于 402 之上，故中位数 <span class="math inline">\(M_e = 402\)</span>；又已知众数 <span class="math inline">\(M_o = 400\)</span>。</p>
+<p>由皮尔生经验公式</p>
+<p><span class="math display">\[\bar{x} - M_o = 3(\bar{x} - M_e)\]</span></p>
+<p>代入已知数值：</p>
+<p><span class="math display">\[\bar{x} - 400 = 3(\bar{x} - 402)\]</span></p>
+<p>整理得 <span class="math inline">\(2\bar{x} = 806\)</span>，解得</p>
+<p><span class="math display">\[\bar{x} = 403 \text{（厘米）}\]</span></p>
+</section>
+<section id="位置平均数与算术平均数的关系续-1" class="slide level2">
+<h2>位置平均数与算术平均数的关系（续）</h2>
+<p><strong>偏斜方向判定</strong>：因为 <span class="math inline">\(M_o &lt; M_e &lt; \bar{x}\)</span>（即 <span class="math inline">\(400 &lt; 402 &lt; 403\)</span>），算术平均数最大、受右侧极端值拉动，所以该零件的直径分布为右偏（正偏）。</p>
+</section>
+<section id="应用平均指标的原则" class="slide level2 scrollable">
+<h2>应用平均指标的原则</h2>
+<p><strong>九、应用平均指标的原则</strong></p>
+<p>应用平均指标分析问题时，应遵循以下四条原则：</p>
+<ol type="1">
+<li><strong>必须是同质的量，方可平均</strong>——平均数只能在同质总体中计算，这是应用平均指标的基本前提；</li>
+<li><strong>总平均数与组平均数结合分析</strong>——总平均数受总体内部结构影响，需结合组平均数才能正确评价；</li>
+<li><strong>平均数与典型值和分配数列结合分析</strong>——平均数抽象掉了个体差异，需结合典型值和分配数列反映总体分布全貌；</li>
+<li><strong>集中趋势与离散趋势结合分析</strong>——平均指标说明集中趋势，还须结合标志变异指标（离散趋势）衡量其代表性。</li>
+</ol>
+</section>
+<section id="r-实践-均值中位数众数同台对比" class="slide level2 r-demo">
+<h2>R 实践 · 均值、中位数、众数同台对比</h2>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a aria-label="1"></a>inc9  <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">750</span>, <span class="dv">780</span>, <span class="dv">850</span>, <span class="dv">960</span>, <span class="dv">1080</span>, <span class="dv">1250</span>, <span class="dv">1500</span>, <span class="dv">1630</span>, <span class="dv">2000</span>)</span>
+<span id="cb9-2"><a aria-label="2"></a>inc10 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">660</span>, <span class="dv">750</span>, <span class="dv">780</span>, <span class="dv">850</span>, <span class="dv">960</span>, <span class="dv">1080</span>, <span class="dv">1250</span>, <span class="dv">1500</span>, <span class="dv">1630</span>, <span class="dv">2000</span>)</span>
+<span id="cb9-3"><a aria-label="3"></a><span class="fu">c</span>(九户_中位数 <span class="ot">=</span> <span class="fu">median</span>(inc9),   <span class="co"># 奇数个：正中间 (n+1)/2 = 5 → 1080</span></span>
+<span id="cb9-4"><a aria-label="4"></a>  十户_中位数 <span class="ot">=</span> <span class="fu">median</span>(inc10),  <span class="co"># 偶数个：中间两数平均 (960+1080)/2 = 1020</span></span>
+<span id="cb9-5"><a aria-label="5"></a>  九户_均值   <span class="ot">=</span> <span class="fu">round</span>(<span class="fu">mean</span>(inc9)),</span>
+<span id="cb9-6"><a aria-label="6"></a>  十户_均值   <span class="ot">=</span> <span class="fu">round</span>(<span class="fu">mean</span>(inc10)))</span>
+<span id="cb9-7"><a aria-label="7"></a><span class="co">#&gt; 九户_中位数 十户_中位数   九户_均值   十户_均值 </span></span>
+<span id="cb9-8"><a aria-label="8"></a><span class="co">#&gt;        1080        1020        1200        1146</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a aria-label="1"></a><span class="co"># 加入一个极端值，看均值与中位数谁更"稳"</span></span>
+<span id="cb10-2"><a aria-label="2"></a>inc_outlier <span class="ot">&lt;-</span> <span class="fu">c</span>(inc9, <span class="dv">20000</span>)</span>
+<span id="cb10-3"><a aria-label="3"></a><span class="fu">barplot</span>(<span class="fu">c</span>(均值_普通 <span class="ot">=</span> <span class="fu">mean</span>(inc9), 均值_含极端 <span class="ot">=</span> <span class="fu">mean</span>(inc_outlier),</span>
+<span id="cb10-4"><a aria-label="4"></a>          中位数_普通 <span class="ot">=</span> <span class="fu">median</span>(inc9), 中位数_含极端 <span class="ot">=</span> <span class="fu">median</span>(inc_outlier)),</span>
+<span id="cb10-5"><a aria-label="5"></a>        <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"#1a6b54"</span>, <span class="st">"#c2410c"</span>, <span class="st">"#1a6b54"</span>, <span class="st">"#2563eb"</span>),</span>
+<span id="cb10-6"><a aria-label="6"></a>        <span class="at">border =</span> <span class="st">"white"</span>, <span class="at">ylab =</span> <span class="st">"元"</span>,</span>
+<span id="cb10-7"><a aria-label="7"></a>        <span class="at">main =</span> <span class="st">"极端值的影响：均值被拉高，中位数岿然不动"</span>)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+
+</div>
+<img data-src="ch04-indicators-v3_files/figure-revealjs/unnamed-chunk-7-1.png" class="quarto-figure quarto-figure-center r-stretch" style="width:88.0%"></section>
+<section id="第四节-标志变异指标" class="slide level2">
+<h2>第四节 标志变异指标</h2>
+<p>平均指标刻画总体分布的集中趋势，标志变异指标（变异指标）则刻画总体各单位标志值之间的差异程度，并以此衡量平均数的代表性。本节先说明变异指标的意义与作用，再依次介绍异众比率、全距、四分位差、平均差、方差与标准差、变异系数等标志变异指标以及标准分数的计算方法（其中异众比率、四分位差与标准分数为 v3 新增），最后进行系统小结。</p>
+</section>
+<section id="变异指标的意义与作用" class="slide level2">
+<h2>变异指标的意义与作用</h2>
+<p><strong>一、变异指标的意义：1. 概念</strong></p>
+<p>变异指标是<strong>反映总体各单位标志值差异程度和平均数代表性的指标</strong>。它表明总体各单位标志值的变动范围和离散程度。</p>
+<p><strong>2. 作用</strong></p>
+<p><strong>（1）衡量平均数代表性的尺度。</strong></p>
+<p>总体各单位标志变异程度大，变异指标就大，平均数的代表性就小；反之，标志变异程度小，则平均数的代表性就大。也就是说，变异指标数值的大小与平均数代表性的高低成反比关系，它是衡量平均数代表性高低的尺度。</p>
+<p><strong>引例：变异程度与平均数代表性</strong></p>
+<p>例如两个生产小组工人日产量资料如下（单位：件）：</p>
+<ul>
+<li>甲组：10、15、30、40、55</li>
+<li>乙组：25、28、30、33、34</li>
+</ul>
+<p>两组的平均日产量相同（均为 30 件），但甲组标志值分散、乙组标志值集中，乙组平均数的代表性明显好于甲组。这说明可以用变异指标衡量平均数的代表性。</p>
+<p><strong>（2）可以反映社会经济活动过程的均衡性和协调性</strong></p>
+<p>例如甲、乙两企业各季度完成全年计划产量的比重如下：</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>季度</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>全年</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>甲企业</td>
+<td>15%</td>
+<td>20%</td>
+<td>30%</td>
+<td>35%</td>
+<td>100%</td>
+</tr>
+<tr class="even">
+<td>乙企业</td>
+<td>24%</td>
+<td>24%</td>
+<td>25%</td>
+<td>27%</td>
+<td>100%</td>
+</tr>
+</tbody>
+</table>
+<p>两企业都 100% 地完成了全季计划产量，但乙企业的生产是均衡的，而甲企业却前松后紧，这是不经济的。可见变异指标可以反映生产过程的均衡性和协调性。</p>
+</section>
+<section id="变异指标的意义与作用续" class="slide level2">
+<h2>变异指标的意义与作用（续）</h2>
+<p><strong>（3）研究总体标志值分布偏离正态的情况</strong></p>
+<p>分布越集中，曲线越陡峭；分布越分散，曲线越平坦。借助变异指标可以研究总体标志值的分布偏离正态的情况。</p>
+</section>
+<section id="异众比率分类数据的离散测度值v3-新增" class="slide level2">
+<h2>异众比率——分类数据的离散测度值（v3 新增）</h2>
+<p><strong>二、变异指标的种类与计算方法：（一）异众比率（variation ratio）</strong></p>
+<p><strong>1. 概念</strong></p>
+<p><strong>异众比率</strong>（记作 <span class="math inline">\(V_r\)</span>）是<strong>非众数组的频数占总频数的比例</strong>，又称离散系数（异众比率口径），计算公式为：</p>
+<p><span class="math display">\[V_r = \frac{\sum f - f_m}{\sum f} = 1 - \frac{f_m}{\sum f}\]</span></p>
+<p>式中 <span class="math inline">\(f_m\)</span> 为众数组的频数，<span class="math inline">\(\sum f\)</span> 为总频数。</p>
+<p>异众比率的含义与特点：</p>
+<ul>
+<li>它是<strong>分类数据离散程度的测度值</strong>，与众数配套使用，用于<strong>衡量众数的代表性</strong>；</li>
+<li>异众比率越大，非众数组占比越高，用众数代表总体的代表性越差；异众比率越小，众数的代表性越好；</li>
+<li>它只利用众数组频数与总频数两个数字，计算简便，且<strong>不受数据层次限制</strong>（分类、顺序、数值型数据均可计算）。</li>
+</ul>
+<p><strong>2. 例题：饮料品牌的异众比率</strong></p>
+<p>沿用第三节”不同品牌饮料的频数分布”资料：50 名购买者中，可口可乐 15 人、旭日升冰茶 11 人、百事可乐 9 人、汇源果汁 6 人、露露 9 人，众数为可口可乐，<span class="math inline">\(f_m = 15\)</span>，<span class="math inline">\(\sum f = 50\)</span>：</p>
+<p><span class="math display">\[V_r = 1 - \frac{15}{50} = 0.7 = 70\%\]</span></p>
+<p>即购买”可口可乐”以外品牌的人数占 70%，异众比率相当大——用”可口可乐”代表消费者购买行为的一般状况，<strong>代表性不是很好</strong>。</p>
+</section>
+<section id="全距极差" class="slide level2">
+<h2>全距（极差）</h2>
+<p><strong>（二）全距</strong></p>
+<p><strong>1. 概念</strong></p>
+<p>全距（R），又称为极差，是<strong>一组数据的最大值与最小值之差</strong>。</p>
+<p>其特点为：</p>
+<ul>
+<li>离散程度的最简单测度值；</li>
+<li>易受极端值影响；</li>
+<li>未考虑数据的分布。</li>
+</ul>
+<p>页面下方的两幅点图对比说明了这一局限：两组数据的取值都落在 7～10 之间（数轴刻度均为 7、8、9、10），全距相同，但一组数据均匀分布、另一组数据集中堆在一端，实际离散状况并不相同——全距无法反映这种差别。</p>
+<p><em>（图示说明：两幅标有 7、8、9、10 刻度的点图对比展示全距相同但分布不同的两组数据，直观说明全距”未考虑数据分布”的局限性。）</em></p>
+<p><strong>2. 计算公式</strong></p>
+<p>全距（R）＝最大标志值－最小标志值</p>
+<p><span class="math display">\[R = \max(x_i) - \min(x_i)\]</span></p>
+<p><strong>3. 例：120 天销售量的全距（主线数据）</strong></p>
+<p>原始数据中最小值 141 台、最大值 237 台，故</p>
+<p><span class="math display">\[R = 237 - 141 = 96 \text{（台）}\]</span></p>
+<p>即 120 天中日销量最多相差 96 台。由于极差只取决于两端点，组距分组（组中值）不改变这一结果的经济含义，两种口径一致。</p>
+</section>
+<section id="四分位差中位数的配套离散测度值v3-新增" class="slide level2">
+<h2>四分位差——中位数的配套离散测度值（v3 新增）</h2>
+<p><strong>（三）四分位差（quartile deviation）</strong></p>
+<p><strong>1. 概念</strong></p>
+<p><strong>四分位差</strong>（记作 <span class="math inline">\(Q_d\)</span>）是上四分位数与下四分位数之差，又称<strong>内距</strong>或<strong>四分间距</strong>：</p>
+<p><span class="math display">\[Q_d = Q_3 - Q_1\]</span></p>
+<p>四分位差的特点：</p>
+<ul>
+<li>反映<strong>中间 50% 数据的离散程度</strong>（<span class="math inline">\(Q_1\)</span> 到 <span class="math inline">\(Q_3\)</span> 恰好覆盖居中的一半数据）；</li>
+<li><strong>不受极端值影响</strong>（两端各 25% 的数据无论如何极端，都不改变 <span class="math inline">\(Q_1\)</span>、<span class="math inline">\(Q_3\)</span>）；</li>
+<li>与中位数配套使用，用于<strong>衡量中位数的代表性</strong>：四分位差越小，中间一半数据越集中，中位数的代表性越好。</li>
+</ul>
+<p><strong>2. 顺序数据例题：住房满意度的四分位差</strong></p>
+<p>对甲城市住房满意度这类顺序数据，将五个等级编码为 1（非常不满意）～5（非常满意）。前文已算得 <span class="math inline">\(Q_1 =\)</span> 不满意（编码 2）、<span class="math inline">\(Q_3 =\)</span> 一般（编码 3），则</p>
+<p><span class="math display">\[Q_d = Q_3 - Q_1 = 3 - 2 = 1 \text{（个等级）}\]</span></p>
+<p>即中间一半家庭的评价跨度只有 1 个等级，评价相当集中。</p>
+<p><strong>3. 数值型数据例题：120 天销售量的四分位差（原始 vs 分组）</strong></p>
+<p>按原始数据：<span class="math inline">\(Q_d = Q_3 - Q_1 = 197 - 170.25 = 26.75\)</span> 台； 按组距分组：<span class="math inline">\(Q_d = 198.24 - 170.37 = 27.87\)</span> 台。</p>
+</section>
+<section id="平均差" class="slide level2">
+<h2>平均差</h2>
+<p><strong>（四）平均差</strong></p>
+<p><strong>1. 概念</strong></p>
+<p>平均差（<span class="math inline">\(M_d\)</span>）是<strong>各变量值与其均值离差绝对值的算术平均数</strong>。</p>
+<p><strong>2. 计算公式</strong></p>
+<p><strong>未分组数据（简单式）：</strong></p>
+<p><span class="math display">\[M_d = \frac{\sum_{i=1}^{n}\left|x_i - \bar{x}\right|}{n}\]</span></p>
+<p><strong>组距分组数据（加权式）：</strong></p>
+<p><span class="math display">\[M_d = \frac{\sum_{i=1}^{n}\left|x_i - \bar{x}\right| f_i}{\sum_{i=1}^{n} f_i}\]</span></p>
+<p><strong>3. 特点</strong></p>
+<ul>
+<li>优点：能全面反映一组数据的离散程度；</li>
+<li>缺点：数学性质较差，不符合代数运算法则，实际中应用较少。</li>
+</ul>
+<p><strong>加权式例题</strong></p>
+<p><strong>表 3-6 某公司员工工资平均差计算表</strong></p>
+<p>某公司员工月工资分组资料及计算过程如下。由各组工资与人数加权可得平均月工资：</p>
+<p><span class="math display">\[\bar{x} = \frac{\sum x_i f_i}{\sum f_i} = \frac{66000}{50} = 1320 \text{（元）}\]</span></p>
+<p>再逐组计算离差 <span class="math inline">\(x_i-\bar{x}\)</span>、离差绝对值 <span class="math inline">\(\left|x_i-\bar{x}\right|\)</span> 及加权离差绝对值 <span class="math inline">\(\left|x_i-\bar{x}\right|f_i\)</span>：</p>
+</section>
+<section id="平均差续" class="slide level2">
+<h2>平均差（续）</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>月工资 <span class="math inline">\(x\)</span>（元）</th>
+<th>员工数 <span class="math inline">\(f\)</span>（人）</th>
+<th><span class="math inline">\(x-\bar{x}\)</span></th>
+<th><span class="math inline">\(\left\vert x-\bar{x}\right\vert\)</span></th>
+<th><span class="math inline">\(\left\vert x-\bar{x}\right\vert f\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>800</td>
+<td>5</td>
+<td>-520</td>
+<td>520</td>
+<td>2600</td>
+</tr>
+<tr class="even">
+<td>1000</td>
+<td>10</td>
+<td>-320</td>
+<td>320</td>
+<td>3200</td>
+</tr>
+<tr class="odd">
+<td>1200</td>
+<td>20</td>
+<td>-120</td>
+<td>120</td>
+<td>2400</td>
+</tr>
+<tr class="even">
+<td>1500</td>
+<td>7</td>
+<td>180</td>
+<td>180</td>
+<td>1260</td>
+</tr>
+<tr class="odd">
+<td>2000</td>
+<td>5</td>
+<td>680</td>
+<td>680</td>
+<td>3400</td>
+</tr>
+<tr class="even">
+<td>2500</td>
+<td>3</td>
+<td>1180</td>
+<td>1180</td>
+<td>3540</td>
+</tr>
+<tr class="odd">
+<td>合计</td>
+<td>50</td>
+<td>—</td>
+<td>—</td>
+<td>16400</td>
+</tr>
+</tbody>
+</table>
+<p><strong>代入加权式平均差公式：</strong></p>
+<p><span class="math display">\[A.D = \frac{\sum_{i=1}^{n}\left|x_i-\bar{x}\right|f_i}{\sum_{i=1}^{n}f_i} = \frac{16400}{50} = 328 \text{（元）}\]</span></p>
+<p>即该公司员工月工资的平均差为 328 元，它表明各员工月工资与平均工资 1320 元的平均离差程度为 328 元。</p>
+</section>
+<section id="平均差续-1" class="slide level2">
+<h2>平均差（续）</h2>
+<blockquote>
+<p><strong>主线数据对照（120 天销量，原始 vs 分组）</strong>：按原始数据，<span class="math inline">\(\bar{x} = 184.57\)</span> 台，<span class="math inline">\(\sum\left|x_i - \bar{x}\right| = 2091.4\)</span>，平均差 <span class="math inline">\(M_d = 2091.4/120 = 17.43\)</span> 台；按 A 同学组距分组（组中值），<span class="math inline">\(\sum\left|M_i - \bar{x}\right| f_i = 2040\)</span>，平均差 <span class="math inline">\(= 2040/120 = 17\)</span> 台——分组近似使平均差<strong>低估</strong> 0.43 台，因为组中值”抹平”了组内差异。</p>
+</blockquote>
+</section>
+<section id="方差和标准差的概念与计算公式" class="slide level2">
+<h2>方差和标准差的概念与计算公式</h2>
+<p><strong>（五）方差和标准差：1. 概念</strong></p>
+<p><strong>方差</strong>：方差是各个数据与平均数之差的平方和的平均数。</p>
+<p><strong>标准差</strong>：标准差是总体各单位标志值与其算术平均数离差方和的平均数的算术平方根。</p>
+<p>即先求各标志值对算术平均数的离差，将离差平方后求平均得方差，再开平方即得标准差，因而标准差与变量值具有相同的计量单位。</p>
+<p><strong>2. 计算公式</strong></p>
+<p><strong>（1）未分组资料</strong>——对未分组的原始资料，采用简单式计算。方差为：</p>
+<p><span class="math display">\[\sigma^2 = \frac{\sum(X-\bar{X})^2}{n}\]</span></p>
+<p>标准差为：</p>
+<p><span class="math display">\[\sigma = \sqrt{\frac{\sum(X-\bar{X})^2}{n}}\]</span></p>
+<p>其中：<span class="math inline">\(X\)</span> 为各标志值，<span class="math inline">\(\bar{X}\)</span> 为算术平均数，<span class="math inline">\(n\)</span> 为总体单位数（项数）。</p>
+<p><strong>（2）分组资料</strong>——对已分组的变量数列资料，采用加权式计算。方差为：</p>
+<p><span class="math display">\[\sigma^2 = \frac{\sum(X-\bar{X})^2 f}{\sum f}\]</span></p>
+<p>标准差为：</p>
+<p><span class="math display">\[\sigma = \sqrt{\frac{\sum(X-\bar{X})^2 f}{\sum f}}\]</span></p>
+<p>其中：<span class="math inline">\(X\)</span> 为各组标志值（或组中值），<span class="math inline">\(f\)</span> 为各组次数（权数），<span class="math inline">\(\sum f\)</span> 为总次数。</p>
+<p><strong>特点要点</strong></p>
+</section>
+<section id="方差和标准差的概念与计算公式续" class="slide level2">
+<h2>方差和标准差的概念与计算公式（续）</h2>
+<ul>
+<li>方差和标准差是<strong>数据离散程度的最常用测度值</strong>；</li>
+<li>它<strong>反映了各变量值与均值的平均差异</strong>——标准差越大，各变量值偏离均值越远，数据越分散；标准差越小，数据越集中于均值周围；</li>
+<li>按所依据数据的范围不同，二者又有总体与样本之分：<strong>根据总体数据计算的，称为总体方差或标准差；根据样本数据计算的，称为样本方差或标准差</strong>。</li>
+</ul>
+</section>
+<section id="方差和标准差的概念与计算公式续-1" class="slide level2">
+<h2>方差和标准差的概念与计算公式（续）</h2>
+<blockquote>
+<p><strong>重要说明框（v3 新增）：总体式（n）与样本式（n−1）的双轨——本章通往软件与后续章节的桥梁。</strong></p>
+<p>本讲义把一组数据<strong>视为所研究的总体</strong>，故方差与标准差以<strong>总体式</strong>为主：<span class="math inline">\(\sigma^2 = \dfrac{\sum(X-\bar{X})^2}{n}\)</span>（分组资料除以 <span class="math inline">\(\sum f\)</span>）。若把这组数据视为<strong>从更大总体中抽出的样本</strong>，则用<strong>样本方差</strong>：</p>
+<p><span class="math display">\[S^2 = \frac{\sum(X-\bar{X})^2}{n-1}, \qquad S = \sqrt{\frac{\sum(X-\bar{X})^2}{n-1}}\]</span></p>
+<p>分母由 <span class="math inline">\(n\)</span> 改为 <span class="math inline">\(n-1\)</span>（自由度修正，使 <span class="math inline">\(S^2\)</span> 成为总体方差的无偏估计）。参数与统计量的记号对照 <span class="math inline">\(\sigma^2 \leftrightarrow S^2\)</span>、<span class="math inline">\(\sigma \leftrightarrow S\)</span>、<span class="math inline">\(\mu \leftrightarrow \bar{X}\)</span>、<span class="math inline">\(N \leftrightarrow n\)</span>，见第 1 章”参数与统计量记号对照表”。</p>
+<p><strong>三点说明</strong>：① 本章手算以总体式为准；② 统计软件与后续抽样推断章<strong>默认样本式（n−1）</strong>——R 的 <code>var()</code>/<code>sd()</code>、Excel 的 <code>STDEV.S</code> 均按 n−1 计算（Excel 的总体式函数为 <code>STDEV.P</code>）；③ 现代教材（如胡华平课件 4.4 节、贾俊平《统计学》）的方差标准差例题多直接采用 n−1 口径。</p>
+<p><strong>数量感受（120 天销量）</strong>：<span class="math inline">\(\sum(X-\bar{X})^2 = 55935.47\)</span>，总体式 <span class="math inline">\(\sigma^2 = 466.13\)</span>、<span class="math inline">\(\sigma = 21.59\)</span> 台；样本式 <span class="math inline">\(S^2 = 470.05\)</span>、<span class="math inline">\(S = 21.68\)</span> 台。<span class="math inline">\(n\)</span> 较大时两口径差异很小（此处不足 0.5%），但 <span class="math inline">\(n\)</span> 小时差异显著——读软件输出务必先辨明口径。</p>
+</blockquote>
+</section>
+<section id="例题某公司员工工资的标准差" class="slide level2">
+<h2>例题：某公司员工工资的标准差</h2>
+<p><strong>表 3—7 某公司员工工资标准差计算表</strong></p>
+<p>沿用某公司员工月工资分组资料（同表 3-6），平均工资为：</p>
+<p><span class="math display">\[\bar{x} = \frac{\sum x f}{\sum f} = \frac{66000}{50} = 1320 \text{（元）}\]</span></p>
+<p>逐组计算 <span class="math inline">\(xf\)</span>、<span class="math inline">\((x-\bar{x})^2 f\)</span> 与 <span class="math inline">\(x^2 f\)</span>：</p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>月工资 <span class="math inline">\(x\)</span>（元）</th>
+<th>员工数 <span class="math inline">\(f\)</span>（人）</th>
+<th><span class="math inline">\(x\cdot f\)</span></th>
+<th><span class="math inline">\((x-\bar{x})^2 f\)</span></th>
+<th><span class="math inline">\(x^2 f\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>800</td>
+<td>5</td>
+<td>4000</td>
+<td>1352000</td>
+<td>3200000</td>
+</tr>
+<tr class="even">
+<td>1000</td>
+<td>10</td>
+<td>10000</td>
+<td>1024000</td>
+<td>10000000</td>
+</tr>
+<tr class="odd">
+<td>1200</td>
+<td>20</td>
+<td>24000</td>
+<td>288000</td>
+<td>28800000</td>
+</tr>
+<tr class="even">
+<td>1500</td>
+<td>7</td>
+<td>10500</td>
+<td>226800</td>
+<td>15750000</td>
+</tr>
+<tr class="odd">
+<td>2000</td>
+<td>5</td>
+<td>10000</td>
+<td>2312000</td>
+<td>20000000</td>
+</tr>
+<tr class="even">
+<td>2500</td>
+<td>3</td>
+<td>7500</td>
+<td>4177200</td>
+<td>18750000</td>
+</tr>
+<tr class="odd">
+<td>合计</td>
+<td>50</td>
+<td>66000</td>
+<td>9380000</td>
+<td>96500000</td>
+</tr>
+</tbody>
+</table>
+<p><strong>方差（加权式）：</strong></p>
+</section>
+<section id="例题某公司员工工资的标准差续" class="slide level2">
+<h2>例题：某公司员工工资的标准差（续）</h2>
+<p><span class="math display">\[\sigma^2 = \frac{\sum_{i=1}^{n}(x_i-\bar{x})^2 f_i}{\sum_{i=1}^{n} f_i} = \frac{9380000}{50} = 187600\]</span></p>
+<p><strong>标准差：</strong></p>
+<p><span class="math display">\[\sigma = \sqrt{\frac{\sum_{i=1}^{n}(x_i-\bar{x})^2 f_i}{\sum_{i=1}^{n} f_i}} = \sqrt{\frac{9380000}{50}} \approx 433.13 \text{（元）}\]</span></p>
+<p>即该公司员工月工资的标准差约为 433.13 元，它反映各员工工资与平均工资 1320 元的平均离散程度。</p>
+</section>
+<section id="方差和标准差的简易计算公式" class="slide level2">
+<h2>方差和标准差的简易计算公式</h2>
+<p><strong>（3）简易计算公式</strong></p>
+<p><strong>简单式（未分组资料）：</strong></p>
+<p><span class="math display">\[\sigma^2 = \frac{\sum X_i^2}{n} - \left(\frac{\sum X_i}{n}\right)^2, \qquad \sigma = \sqrt{\frac{\sum X_i^2}{n} - \left(\frac{\sum X_i}{n}\right)^2}\]</span></p>
+<p><strong>加权式（分组资料）：</strong></p>
+<p><span class="math display">\[\sigma^2 = \frac{\sum X_i^2 f_i}{\sum f_i} - \left(\frac{\sum X_i f_i}{\sum f_i}\right)^2, \qquad \sigma = \sqrt{\frac{\sum X_i^2 f_i}{\sum f_i} - \left(\frac{\sum X_i f_i}{\sum f_i}\right)^2}\]</span></p>
+<p><strong>推导（以第一个公式为例）</strong></p>
+</section>
+<section id="方差和标准差的简易计算公式续" class="slide level2">
+<h2>方差和标准差的简易计算公式（续）</h2>
+<p><span class="math display">\[\sigma = \sqrt{\frac{\sum\left(x-\bar{x}\right)^2}{n}} = \sqrt{\frac{\sum\left(x^2 - 2x\bar{x} + \bar{x}^2\right)}{n}} = \sqrt{\frac{\sum x^2 - 2\bar{x}\sum x + n\bar{x}^2}{n}} = \sqrt{\frac{\sum x^2}{n} - 2\bar{x}\frac{\sum x}{n} + \bar{x}^2}\]</span></p>
+<p>由于 <span class="math inline">\(\dfrac{\sum x}{n} = \bar{x}\)</span>，故</p>
+<p><span class="math display">\[\sigma = \sqrt{\frac{\sum x^2}{n} - \left(\frac{\sum x}{n}\right)^2} = \sqrt{\overline{x^2} - \bar{x}^2}\]</span></p>
+<p>即标准差等于”变量值平方的平均数减去平均数的平方”再开平方。利用该式无需先逐项计算离差，直接由原始数据（或分组数据）的平方和即可算得标准差，计算更为简便。</p>
+</section>
+<section id="变异系数标准差系数" class="slide level2 scrollable">
+<h2>变异系数（标准差系数）</h2>
+<p><strong>（六）变异系数</strong></p>
+<p>常用的标志变异系数是<strong>标准差系数</strong>，即</p>
+<p><span class="math display">\[V_\sigma = \frac{\sigma}{\overline{X}}\]</span></p>
+<p>其中 <span class="math inline">\(\sigma\)</span> 为标准差，<span class="math inline">\(\overline{X}\)</span> 为平均数。标准差系数是标准差与平均数之商，是无量纲的相对指标。</p>
+<p><strong>判别意义</strong>：变异系数指标越大，总体各单位离散的相对程度越大，其总体平均数的代表性就越差；反之，变异系数越小，总体平均数的代表性越好。因此，当两组数据的平均水平不同或计量单位不同时，应使用变异系数比较其离散程度。</p>
+<p>关于变异系数，需掌握以下三点说明：</p>
+<ol type="1">
+<li><strong>对数据相对离散程度的测度</strong>——变异系数衡量的是数据相对离散程度，是一种相对指标；</li>
+<li><strong>消除了数据水平高低和计量单位的影响</strong>——由于它是标准差与平均数之比，比值形式使它不受数据水平高低和计量单位差异的限制；</li>
+<li><strong>用于对不同组别数据离散程度的比较</strong>——当各组数据的计量单位不同或平均水平相差悬殊时，应使用变异系数比较其离散程度。</li>
+</ol>
+</section>
+<section id="变异系数标准差系数续" class="slide level2">
+<h2>变异系数（标准差系数）（续）</h2>
+<p><strong>其他变异系数与主线数据对照（v3 新增）</strong>：按分子的不同，变异系数还有<strong>全距变异系数</strong> <span class="math inline">\(V_R = R/\bar{x}\)</span> 与<strong>平均差变异系数</strong> <span class="math inline">\(V_{AD} = M_d/\bar{x}\)</span>（胡课件 p176 将后者分子误印为 R，引用时已按定义校正）。对 120 天销量数据（样本式口径）：<span class="math inline">\(V_R = 96/184.57 = 52.0\%\)</span>；<span class="math inline">\(V_{AD} = 17.43/184.57 = 9.4\%\)</span>；标准差系数 <span class="math inline">\(V_S = 21.68/184.57 = 11.7\%\)</span>——全距系数明显偏大，再次提示极差受极端值影响；标准差系数约 11.7%，说明日销量的相对波动不算大。</p>
+</section>
+<section id="例题8-家企业产品销售额与销售利润离散程度的比较" class="slide level2">
+<h2>例题：8 家企业产品销售额与销售利润离散程度的比较</h2>
+<p><strong>题目</strong>：某管理局抽查了所属的 8 家企业，其产品销售数据如下表。试比较产品销售额与销售利润的离散程度。</p>
+<p><strong>某管理局所属 8 家企业的产品销售数据</strong></p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: center;">企业编号</th>
+<th style="text-align: center;">产品销售额（万元）<span class="math inline">\(x_1\)</span></th>
+<th style="text-align: center;">销售利润（万元）<span class="math inline">\(x_2\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">170</td>
+<td style="text-align: center;">8.1</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">220</td>
+<td style="text-align: center;">12.5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">390</td>
+<td style="text-align: center;">18.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">430</td>
+<td style="text-align: center;">22.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">480</td>
+<td style="text-align: center;">26.5</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">6</td>
+<td style="text-align: center;">650</td>
+<td style="text-align: center;">40.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">7</td>
+<td style="text-align: center;">950</td>
+<td style="text-align: center;">64.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">8</td>
+<td style="text-align: center;">1000</td>
+<td style="text-align: center;">69.0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>第一步：分别计算平均数与标准差</strong></p>
+<p>销售额与销售利润两个变量的平均水平不同，需要分别计算其平均数与标准差：</p>
+<ul>
+<li><strong>产品销售额（<span class="math inline">\(x_1\)</span>）</strong>：平均数 <span class="math inline">\(\bar{x}_1 = 536.25\)</span>（万元），标准差 <span class="math inline">\(\sigma_1 = 289.22\)</span>（万元）；</li>
+<li><strong>销售利润（<span class="math inline">\(x_2\)</span>）</strong>：平均数 <span class="math inline">\(\bar{x}_2 = 32.5215\)</span>（万元），标准差 <span class="math inline">\(\sigma_2 = 23.09\)</span>（万元）。</li>
+</ul>
+</section>
+<section id="例题8-家企业产品销售额与销售利润离散程度的比较续" class="slide level2">
+<h2>例题：8 家企业产品销售额与销售利润离散程度的比较（续）</h2>
+<p>虽然两个变量的计量单位相同（均为万元），但两者的平均水平相差悬殊（536.25 万元对 32.5215 万元），直接比较标准差 <span class="math inline">\(\sigma_1 = 289.22\)</span> 与 <span class="math inline">\(\sigma_2 = 23.09\)</span> 并不能得出正确结论，需要进一步计算变异系数（标准差系数）进行比较。</p>
+<p><strong>第二步：计算变异系数（标准差系数）</strong></p>
+<p>由于两个变量的平均水平相差悬殊，不能直接用标准差比较，应分别计算标准差系数（变异系数）：</p>
+<p><span class="math display">\[V_\sigma = \frac{\sigma}{\bar{x}}\]</span></p>
+<p><span class="math display">\[v_1 = \frac{\sigma_1}{\bar{x}_1} = \frac{289.22}{536.25} = 0.539\]</span></p>
+<p><span class="math display">\[v_2 = \frac{\sigma_2}{\bar{x}_2} = \frac{23.09}{32.5215} = 0.710\]</span></p>
+<p>再比较 <span class="math inline">\(V_{\sigma 1}\)</span> 与 <span class="math inline">\(V_{\sigma 2}\)</span>：变异系数大者，离散程度高。</p>
+<p><strong>结论</strong>：计算结果表明，<span class="math inline">\(v_1 &lt; v_2\)</span>，说明产品销售额的离散程度小于销售利润的离散程度。虽然 <span class="math inline">\(\sigma_1 = 289.22\)</span> 万元远大于 <span class="math inline">\(\sigma_2 = 23.09\)</span> 万元，但由于两个变量的平均水平不同，不能直接用标准差比较；换算为变异系数后 <span class="math inline">\(v_1 &lt; v_2\)</span>，结论恰恰相反，这正是需要使用变异系数比较不同水平数据离散程度的原因。</p>
+</section>
+<section id="标准分数相对位置的无量纲测度v3-新增" class="slide level2">
+<h2>标准分数——相对位置的无量纲测度（v3 新增）</h2>
+<p><strong>（七）标准分数（standard score）</strong></p>
+<p><strong>1. 概念与公式</strong></p>
+<p><strong>标准分数</strong>（也称标准化值）是变量值与其均值的离差除以标准差之商，记作 <span class="math inline">\(z_i\)</span>：</p>
+<p><span class="math display">\[z_i = \frac{x_i - \bar{x}}{S}\]</span></p>
+<p>标准分数是对<strong>某一个值在一组数据中相对位置</strong>的度量：<span class="math inline">\(z_i = 2\)</span> 表示该值高于均值 2 个标准差，<span class="math inline">\(z_i = -1.5\)</span> 表示低于均值 1.5 个标准差。其特点有三：</p>
+<ul>
+<li><strong>无量纲</strong>：分子分母单位相同，相除后单位消去，故可用于不同量纲、不同水平数据间的位置比较；</li>
+<li><strong>标准化变换不改变分布形状</strong>：<span class="math inline">\(z\)</span> 只是对原始数据的线性变换（平移＋缩放），数据在组内的<strong>位置次序</strong>与<strong>分布形状</strong>都不变，变换后恰有均值 0、标准差 1（故也称标准化）；</li>
+<li><strong>可用于离群点判别</strong>：正态分布下几乎全部数据落在 <span class="math inline">\(|z| \le 3\)</span> 之内，故经验上把 <strong><span class="math inline">\(|z_i| &gt; 3\)</span> 的观测粗略判为离群点（outlier）</strong>。</li>
+</ul>
+<p><strong>2. 例题：120 天销售量的标准分数</strong></p>
+<p>由 <span class="math inline">\(\bar{x} = 184.57\)</span> 台、<span class="math inline">\(S = 21.68\)</span> 台（样本式）：</p>
+</section>
+<section id="标准分数相对位置的无量纲测度v3-新增续" class="slide level2">
+<h2>标准分数——相对位置的无量纲测度（v3 新增）（续）</h2>
+<ul>
+<li>销量最少的一天（141 台）：<span class="math inline">\(z = \dfrac{141 - 184.57}{21.68} = -2.01\)</span>，即比平均水平低 2.01 个标准差；</li>
+<li>销量最多的一天（237 台）：<span class="math inline">\(z = \dfrac{237 - 184.57}{21.68} = +2.42\)</span>，即比平均水平高 2.42 个标准差。</li>
+</ul>
+<p>全部 120 个 <span class="math inline">\(z\)</span> 分数中绝对值最大者仅 2.42 &lt; 3，故按上述经验规则，<strong>120 天中没有明显的离群点</strong>。标准分数将在第 5 章正态分布的应用（3σ 法则、标准化查表）中反复使用。</p>
+</section>
+<section id="实践-2标准分数与离群点判别scale" class="slide level2 r-demo">
+<h2>实践 2：标准分数与离群点判别（scale()）</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a aria-label="1"></a>z <span class="ot">&lt;-</span> <span class="fu">scale</span>(sales)        <span class="co"># z = (x - mean(x)) / sd(x)，sd 为样本式（n-1）</span></span>
+<span id="cb11-2"><a aria-label="2"></a><span class="fu">head</span>(z, <span class="dv">3</span>)               <span class="co"># 前 3 天销量的 z 分数</span></span>
+<span id="cb11-3"><a aria-label="3"></a><span class="fu">colMeans</span>(z)              <span class="co"># 均值 0（浮点误差量级 1e-17）</span></span>
+<span id="cb11-4"><a aria-label="4"></a><span class="fu">apply</span>(z, <span class="dv">2</span>, sd)          <span class="co"># 标准差 1（线性变换的性质）</span></span>
+<span id="cb11-5"><a aria-label="5"></a><span class="fu">range</span>(z)                 <span class="co"># z 分数范围：约 -2.01 到 2.42</span></span>
+<span id="cb11-6"><a aria-label="6"></a><span class="fu">max</span>(<span class="fu">abs</span>(z))              <span class="co"># 2.42 &lt; 3：按经验规则无离群点</span></span>
+<span id="cb11-7"><a aria-label="7"></a><span class="fu">which</span>(<span class="fu">abs</span>(z) <span class="sc">&gt;</span> <span class="dv">3</span>)        <span class="co"># 空集：不存在 |z| &gt; 3 的观测</span></span>
+<span id="cb11-8"><a aria-label="8"></a></span>
+<span id="cb11-9"><a aria-label="9"></a><span class="co"># ---- 手工验证两个极值日 ----</span></span>
+<span id="cb11-10"><a aria-label="10"></a>z_min <span class="ot">&lt;-</span> (<span class="dv">141</span> <span class="sc">-</span> <span class="fu">mean</span>(sales)) <span class="sc">/</span> <span class="fu">sd</span>(sales)   <span class="co"># -2.01（销量最少的一天）</span></span>
+<span id="cb11-11"><a aria-label="11"></a>z_max <span class="ot">&lt;-</span> (<span class="dv">237</span> <span class="sc">-</span> <span class="fu">mean</span>(sales)) <span class="sc">/</span> <span class="fu">sd</span>(sales)   <span class="co"># +2.42（销量最多的一天）</span></span>
+<span id="cb11-12"><a aria-label="12"></a><span class="fu">c</span>(<span class="at">z_min =</span> <span class="fu">round</span>(z_min, <span class="dv">2</span>), <span class="at">z_max =</span> <span class="fu">round</span>(z_max, <span class="dv">2</span>))</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<div title="callout：无量纲化与 n−1 口径">
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>callout：无量纲化与 n−1 口径</strong></p>
+</div>
+<div class="callout-content">
+<p>z 分数消去计量单位，回答”该观测高于平均水平几个标准差”。标准化是线性变换（平移＋缩放），不改变数据的位置次序与分布形状，只把刻度变为均值 0、标准差 1。注意 <code>scale()</code> 用的是<strong>样本标准差（n−1）</strong>，与讲义第四节”总体式（n）与样本式（n−1）双轨说明框”对应：R 的 <code>var()</code>/<code>sd()</code> 相当于 Excel 的 <code>STDEV.S</code>，而非 <code>STDEV.P</code>。</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="常用的几种标志变异指标小结" class="slide level2">
+<h2>常用的几种标志变异指标小结</h2>
+<p>从概念、计算、特点三方面，对常用的几种标志变异指标小结如下：</p>
+</section>
+<section id="常用的几种标志变异指标小结续" class="slide level2">
+<h2>常用的几种标志变异指标小结（续）</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>指标</th>
+<th>概念</th>
+<th>计算</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1．异众比率（<span class="math inline">\(V_r\)</span>）</td>
+<td>非众数组频数占总频数的比例（v3 新增）</td>
+<td><span class="math inline">\(V_r = 1 - \dfrac{f_m}{\sum f}\)</span></td>
+<td>优点：唯一适用于分类数据的离散测度值，衡量众数代表性；缺点：只利用众数组信息，对数值型数据信息量低</td>
+</tr>
+<tr class="even">
+<td>2．极差（R）</td>
+<td>数列中最大值与最小值之差</td>
+<td><span class="math inline">\(R =\)</span> 最大值 <span class="math inline">\(-\)</span> 最小值</td>
+<td>优点：容易理解，计算方便；缺点：不能反映全部数据分布状况</td>
+</tr>
+<tr class="odd">
+<td>3．四分位差（<span class="math inline">\(Q_d\)</span>）</td>
+<td>上、下四分位数之差（内距）（v3 新增）</td>
+<td><span class="math inline">\(Q_d = Q_3 - Q_1\)</span></td>
+<td>优点：不受极端值影响，反映中间 50% 数据的离散，衡量中位数代表性；缺点：未用到全部数据信息</td>
+</tr>
+<tr class="even">
+<td>4．平均差（A.D）</td>
+<td>各标志值与均值离差绝对值的算术平均</td>
+<td>简单：<span class="math inline">\(A.D = \dfrac{\sum\left\vert X_i - \bar{X}\right\vert}{n}\)</span>；加权：<span class="math inline">\(A.D = \dfrac{\sum\left\vert X_i - \bar{X}\right\vert f_i}{\sum f_i}\)</span></td>
+<td>优点：反映全部数据分布状况；缺点：取绝对值</td>
+</tr>
+<tr class="odd">
+<td>5．方差（<span class="math inline">\(\sigma^2\)</span>）和标准差（<span class="math inline">\(\sigma\)</span>）</td>
+<td>各标志值与均值离差平方的平均；标准差是方差的平方根（取正根）</td>
+<td>简单：<span class="math inline">\(\sigma^2 = \dfrac{\sum\left(X_i-\bar{X}\right)^2}{n}\)</span>；加权：<span class="math inline">\(\sigma^2 = \dfrac{\sum\left(X_i-\bar{X}\right)^2 f_i}{\sum f_i}\)</span>；标准差 <span class="math inline">\(\sigma = \sqrt{\sigma^2}\)</span></td>
+<td>优点：反映全部数据分布状况，数字上合理；缺点：受计量单位和平均水平影响，不便于比较</td>
+</tr>
+<tr class="even">
+<td>6．标准差系数（<span class="math inline">\(V_\sigma\)</span>）</td>
+<td>标准差与均值之商，是无量纲的系数</td>
+<td><span class="math inline">\(V_\sigma = \dfrac{\sigma}{\bar{X}}\)</span></td>
+<td>优点：适宜不同数据集的比较；缺点：对数据结构变化反应不灵敏</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="常用的几种标志变异指标小结续-1" class="slide level2">
+<h2>常用的几种标志变异指标小结（续）</h2>
+<p>异众比率只利用众数组信息；极差只利用最大值与最小值两个端点数据，信息量少；四分位差聚焦中间 50% 但舍弃两端信息；平均差虽反映全部数据的分布状况，但由于对离差取绝对值，不便于进一步的代数运算，由此引出方差与标准差。<strong>就数据层次而言：分类数据用异众比率（配众数），顺序数据用四分位差（配中位数），数值型数据用极差、平均差、方差标准差（配均值），跨数据集比较用标准差系数。</strong></p>
+<p><strong>总结</strong>：方差（<span class="math inline">\(\sigma^2\)</span>）和标准差（<span class="math inline">\(\sigma\)</span>）是应用最广的标志变异指标。但当数据集的计量单位不同或平均水平相差悬殊时，应改用标准差系数进行比较。</p>
+<blockquote>
+<p><strong>R 一行（第四节，手算/软件双轨）</strong>：方差、标准差与标准分数一行验算（注意 R 默认样本式 n−1）：</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a aria-label="1"></a><span class="fu">var</span>(sales); <span class="fu">sd</span>(sales)    <span class="co"># 样本方差 470.05、样本标准差 21.68（分母 n-1）</span></span>
+<span id="cb12-2"><a aria-label="2"></a><span class="fu">scale</span>(sales)             <span class="co"># 标准分数 z = (x - mean)/sd，变换后均值 0、标准差 1</span></span>
+<span id="cb12-3"><a aria-label="3"></a><span class="fu">max</span>(<span class="fu">abs</span>(<span class="fu">scale</span>(sales)))   <span class="co"># 最大 |z| = 2.42 &lt; 3，无经验离群点</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<p>完整实践见《新增实践-v3实践.md》实践 2。</p>
+</blockquote>
+</section>
+<section id="r-实践-标准差与变异系数谁的离散程度更大" class="slide level2 r-demo">
+<h2>R 实践 · 标准差与变异系数：谁的离散程度更大？</h2>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a aria-label="1"></a>sales <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">170</span>, <span class="dv">220</span>, <span class="dv">390</span>, <span class="dv">430</span>, <span class="dv">480</span>, <span class="dv">650</span>, <span class="dv">950</span>, <span class="dv">1000</span>)   <span class="co"># 销售额（万元）</span></span>
+<span id="cb13-2"><a aria-label="2"></a>profit <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">8.1</span>, <span class="fl">12.5</span>, <span class="fl">18.0</span>, <span class="fl">22.0</span>, <span class="fl">26.5</span>, <span class="fl">40.0</span>, <span class="fl">64.0</span>, <span class="fl">69.0</span>)  <span class="co"># 销售利润（万元）</span></span>
+<span id="cb13-3"><a aria-label="3"></a></span>
+<span id="cb13-4"><a aria-label="4"></a><span class="co"># 直接比标准差没有意义——两者量纲/水平不同，须用变异系数 V = σ / x̄</span></span>
+<span id="cb13-5"><a aria-label="5"></a><span class="fu">data.frame</span>(</span>
+<span id="cb13-6"><a aria-label="6"></a>  指标 <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"销售额"</span>, <span class="st">"销售利润"</span>),</span>
+<span id="cb13-7"><a aria-label="7"></a>  均值 <span class="ot">=</span> <span class="fu">round</span>(<span class="fu">c</span>(<span class="fu">mean</span>(sales), <span class="fu">mean</span>(profit)), <span class="dv">1</span>),</span>
+<span id="cb13-8"><a aria-label="8"></a>  标准差 <span class="ot">=</span> <span class="fu">round</span>(<span class="fu">c</span>(<span class="fu">sd</span>(sales), <span class="fu">sd</span>(profit)), <span class="dv">1</span>),</span>
+<span id="cb13-9"><a aria-label="9"></a>  变异系数 <span class="ot">=</span> <span class="fu">round</span>(<span class="fu">c</span>(<span class="fu">sd</span>(sales) <span class="sc">/</span> <span class="fu">mean</span>(sales),</span>
+<span id="cb13-10"><a aria-label="10"></a>                    <span class="fu">sd</span>(profit) <span class="sc">/</span> <span class="fu">mean</span>(profit)), <span class="dv">3</span>)</span>
+<span id="cb13-11"><a aria-label="11"></a>)</span>
+<span id="cb13-12"><a aria-label="12"></a><span class="co">#&gt;       指标  均值 标准差 变异系数</span></span>
+<span id="cb13-13"><a aria-label="13"></a><span class="co">#&gt; 1   销售额 536.2  309.2    0.577</span></span>
+<span id="cb13-14"><a aria-label="14"></a><span class="co">#&gt; 2 销售利润  32.5   23.1    0.710</span></span>
+<span id="cb13-15"><a aria-label="15"></a><span class="co"># 结论：利润的变异系数更大 → 销售利润的离散程度相对更高</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a aria-label="1"></a><span class="co"># 相对离散对比：以各自均值为 1</span></span>
+<span id="cb14-2"><a aria-label="2"></a><span class="fu">plot</span>(<span class="fu">rep</span>(<span class="dv">1</span>, <span class="dv">8</span>), sales <span class="sc">/</span> <span class="fu">mean</span>(sales), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="fl">0.2</span>, <span class="fl">1.9</span>), <span class="at">pch =</span> <span class="dv">19</span>,</span>
+<span id="cb14-3"><a aria-label="3"></a>     <span class="at">col =</span> <span class="st">"#1a6b54"</span>, <span class="at">xaxt =</span> <span class="st">"n"</span>, <span class="at">xlab =</span> <span class="st">""</span>, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">2.5</span>),</span>
+<span id="cb14-4"><a aria-label="4"></a>     <span class="at">ylab =</span> <span class="st">"相对自家均值的倍数"</span>, <span class="at">main =</span> <span class="st">"相对离散程度：利润更分散"</span>)</span>
+<span id="cb14-5"><a aria-label="5"></a><span class="fu">points</span>(<span class="fu">rep</span>(<span class="dv">2</span>, <span class="dv">8</span>), profit <span class="sc">/</span> <span class="fu">mean</span>(profit), <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">col =</span> <span class="st">"#d97706"</span>)</span>
+<span id="cb14-6"><a aria-label="6"></a><span class="fu">axis</span>(<span class="dv">1</span>, <span class="at">at =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="fu">c</span>(<span class="st">"销售额"</span>, <span class="st">"销售利润"</span>))</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+
+</div>
+<img data-src="ch04-indicators-v3_files/figure-revealjs/unnamed-chunk-9-1.png" class="quarto-figure quarto-figure-center r-stretch" style="width:88.0%"></section>
+<section id="第五节-分布形态的度量v3-新增" class="slide level2">
+<h2>第五节 分布形态的度量（v3 新增）</h2>
+</section>
+<section id="偏态分布不对称的方向与程度" class="slide level2">
+<h2>偏态：分布不对称的方向与程度</h2>
+<p><strong>一、偏态系数的概念与判读</strong></p>
+<p><strong>偏态（skewness）</strong>是对数据分布偏斜程度的测度，用<strong>偏态系数 SK</strong> 度量，判读规则为：</p>
+<ul>
+<li><span class="math inline">\(SK = 0\)</span>：<strong>对称分布</strong>；</li>
+<li><span class="math inline">\(SK &gt; 0\)</span>：<strong>右偏分布</strong>（正偏态）——右端拖长尾，均值被少数极大值拉向右侧；</li>
+<li><span class="math inline">\(SK &lt; 0\)</span>：<strong>左偏分布</strong>（负偏态）——左端拖长尾，均值被少数极小值拉向左侧。</li>
+</ul>
+<p>偏斜程度的经验阈值：<span class="math inline">\(|SK| &gt; 1\)</span> 为<strong>高度偏态分布</strong>；<span class="math inline">\(0.5 &lt; |SK| \le 1\)</span> 为<strong>中等偏态分布</strong>；<span class="math inline">\(|SK|\)</span> 越接近 0，偏斜程度越低。</p>
+<p><strong>二、偏态系数的计算公式</strong></p>
+<p><strong>未分组（原始）数据：</strong></p>
+<p><span class="math display">\[SK = \frac{n}{(n-1)(n-2)} \sum_{i=1}^{n} \left( \frac{x_i - \bar{x}}{S} \right)^3\]</span></p>
+<p><strong>分组数据：</strong></p>
+<p><span class="math display">\[SK = \frac{\sum_{i=1}^{k} (M_i - \bar{x})^3 f_i}{(\sum f) \cdot S^3}\]</span></p>
+<p>式中 <span class="math inline">\(M_i\)</span> 为各组组中值，<span class="math inline">\(f_i\)</span> 为各组频数，<span class="math inline">\(S\)</span> 为标准差（样本式）。两式核心都是”离差立方和除以标准差的三次方”——立方保留符号并放大极端值的影响：对称分布正负项抵消，SK = 0；右偏分布正贡献占优，SK &gt; 0。</p>
+<p><strong>三、例题：120 天销售量的偏态系数（原始 vs 分组）</strong></p>
+</section>
+<section id="偏态分布不对称的方向与程度续" class="slide level2">
+<h2>偏态：分布不对称的方向与程度（续）</h2>
+<p><strong>分组口径</strong>：沿用 A 同学分组表，<span class="math inline">\(\bar{x} = 185\)</span> 台，分组样本标准差 <span class="math inline">\(S = 21.5765 \approx 21.58\)</span> 台（<span class="math inline">\(S^3 \approx 10044.9\)</span>）。各组 <span class="math inline">\((M_i - \bar{x})^3 f_i\)</span> 依次为：−256000、−243000、−128000、−27000、0、＋17000、＋80000、＋216000、＋256000、＋625000，合计</p>
+<p><span class="math display">\[\sum_{i=1}^{k} (M_i - \bar{x})^3 f_i = 540000\]</span></p>
+<p>代入分组公式：</p>
+<p><span class="math display">\[SK = \frac{540000}{120 \times 10044.9} \approx 0.448\]</span></p>
+<p><strong>原始数据口径</strong>：按未分组公式重算，得 <span class="math inline">\(SK \approx 0.41\)</span>。</p>
+</section>
+<section id="偏态分布不对称的方向与程度续-1" class="slide level2">
+<h2>偏态：分布不对称的方向与程度（续）</h2>
+<p><strong>判读</strong>：两种口径均 SK &gt; 0 且 |SK| &lt; 0.5，120 天销量分布<strong>右偏、偏斜程度较低</strong>——多数日子销量低于平均水平，少数高峰日把均值拉高。这与”均值 &gt; 中位数”（184.57 &gt; 182）的判断完全一致；再用皮尔生经验公式反估 <span class="math inline">\(M_o \approx 3M_e - 2\bar{x} = 3 \times 182 - 2 \times 184.57 \approx 176.9\)</span> 台（原始数据实际出现 172 与 196 两个并列众数，估得的经验众数介于两者之间），同样满足 <span class="math inline">\(M_o &lt; M_e &lt; \bar{x}\)</span> 的右偏次序。</p>
+<blockquote>
+<p><strong>事实核查注</strong>：胡课件 p184 印作 SK = 0.4002，但其过程数字（540000、10044.87）实为下一页分组例题的数值（串行误植）；按其所示公式对本组原始数据重算应为 <span class="math inline">\(SK \approx 0.41\)</span>，分组口径为 0.448。本讲义按重算结果标注，判读结论（右偏、轻度偏斜）不变。</p>
+</blockquote>
+</section>
+<section id="峰态分布的尖峭与平坦程度" class="slide level2">
+<h2>峰态：分布的尖峭与平坦程度</h2>
+<p><strong>一、峰态系数的概念与判读</strong></p>
+<p><strong>峰态（kurtosis）</strong>是分布尖峭程度的度量，用<strong>峰态系数 KT</strong> 度量。本讲义采用<strong>矩比式</strong>口径（四阶矩与标准差四次方之比）：</p>
+<p><span class="math display">\[KT = \frac{\sum_{i=1}^{k} (M_i - \bar{x})^4 f_i}{(\sum f) \cdot S^4} \qquad \left( \text{未分组：} KT = \frac{1}{n} \sum_{i=1}^{n} \left( \frac{x_i - \bar{x}}{S} \right)^4 \right)\]</span></p>
+<p>判读以<strong>正态分布为基准</strong>：</p>
+<ul>
+<li><span class="math inline">\(KT = 3\)</span>：正态分布形态；</li>
+<li><span class="math inline">\(KT &gt; 3\)</span>：<strong>尖峰（尖顶）分布</strong>——数据比正态更集中于均值附近，尾部更厚；</li>
+<li><span class="math inline">\(KT &lt; 3\)</span>：<strong>平峰（平顶）分布</strong>——数据比正态更扁平、更分散。</li>
+</ul>
+<p>（注：部分软件输出的是”超额峰度”，即矩比式 KT 减 3，正态分布基准为 0；读软件输出时先辨明口径。）</p>
+<p><strong>二、例题：120 天销售量的峰态系数（原始 vs 分组）</strong></p>
+</section>
+<section id="峰态分布的尖峭与平坦程度续" class="slide level2">
+<h2>峰态：分布的尖峭与平坦程度（续）</h2>
+<p><strong>分组口径</strong>：各组 <span class="math inline">\((M_i - \bar{x})^4 f_i\)</span> 依次为：10240000、7290000、2560000、270000、0、170000、1600000、6480000、10240000、31250000，合计 <span class="math inline">\(\sum(M_i - \bar{x})^4 f_i = 70100000\)</span>；分组 <span class="math inline">\(S^4 = 21.5765^4 \approx 216733\)</span>。代入：</p>
+<p><span class="math display">\[KT = \frac{70100000}{120 \times 216733} \approx 2.70\]</span></p>
+<p><strong>原始数据口径</strong>：同一公式重算，<span class="math inline">\(KT \approx 2.69\)</span>。</p>
+<p>两种口径均<strong>小于 3</strong>：120 天销量分布比正态略<strong>扁平</strong>，尖峭程度不高，与直方图所见”单峰、右拖尾、峰不高”的形态一致。</p>
+<blockquote>
+<p><strong>事实核查注</strong>：胡课件 p188 印出的峰度公式为”超额峰度”修正式（含 <span class="math inline">\(-3(n-1)^2/[(n-2)(n-3)]\)</span> 项），但其例题结果 2.7353/2.6953 实按上述矩比式计算（不减 3、不作小样本修正），且其原始数据结果（2.7353）用的是总体式 <span class="math inline">\(\sigma\)</span>、分组结果用的是样本式 <span class="math inline">\(S\)</span>，两例分母口径不一致。本讲义统一按矩比式＋样本式 <span class="math inline">\(S\)</span> 口径重算：原始 KT ≈ 2.69、分组 KT ≈ 2.70，均为平峰。</p>
+</blockquote>
+<p><strong>三、形态度量小结：主线数据的”原始 vs 分组”总对照</strong></p>
+</section>
+<section id="峰态分布的尖峭与平坦程度续-1" class="slide level2">
+<h2>峰态：分布的尖峭与平坦程度（续）</h2>
+<p>把 120 天销量数据两种口径的全部结果并列，可量化”组中值近似”的误差方向与幅度：</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>指标</th>
+<th style="text-align: right;">原始数据（n=120）</th>
+<th style="text-align: right;">组距分组（组中值）</th>
+<th style="text-align: center;">近似误差方向</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>均值</td>
+<td style="text-align: right;">184.57</td>
+<td style="text-align: right;">185.00</td>
+<td style="text-align: center;">高估 0.43</td>
+</tr>
+<tr class="even">
+<td>中位数</td>
+<td style="text-align: right;">182</td>
+<td style="text-align: right;">182</td>
+<td style="text-align: center;">无误差（本例巧合）</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(Q_1\)</span></td>
+<td style="text-align: right;">170.25</td>
+<td style="text-align: right;">170.37</td>
+<td style="text-align: center;">高估 0.12</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(Q_3\)</span></td>
+<td style="text-align: right;">197</td>
+<td style="text-align: right;">198.24</td>
+<td style="text-align: center;">高估 1.24</td>
+</tr>
+<tr class="odd">
+<td>全距</td>
+<td style="text-align: right;">96</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: center;">两端点不受分组影响</td>
+</tr>
+<tr class="even">
+<td>平均差</td>
+<td style="text-align: right;">17.43</td>
+<td style="text-align: right;">17.00</td>
+<td style="text-align: center;">低估 0.43</td>
+</tr>
+<tr class="odd">
+<td>样本标准差</td>
+<td style="text-align: right;">21.68</td>
+<td style="text-align: right;">21.58</td>
+<td style="text-align: center;">低估 0.10</td>
+</tr>
+<tr class="even">
+<td>偏态系数 SK</td>
+<td style="text-align: right;">0.41</td>
+<td style="text-align: right;">0.448</td>
+<td style="text-align: center;">右偏程度略放大</td>
+</tr>
+<tr class="odd">
+<td>峰态系数 KT</td>
+<td style="text-align: right;">2.69</td>
+<td style="text-align: right;">2.70</td>
+<td style="text-align: center;">基本一致</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>R 一行（第五节，手算/软件双轨）</strong>：偏度、峰度一次输出：</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a aria-label="1"></a>psych<span class="sc">::</span><span class="fu">describe</span>(sales)   <span class="co"># psych 已安装时：一行输出均值、标准差、偏度 skew、峰度 kurtosis 等</span></span>
+<span id="cb15-2"><a aria-label="2"></a><span class="co"># psych 未安装时，可按讲义公式自写两行函数计算，见《新增实践\ch04-v3实践.md》实践 3</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+</blockquote>
+</section>
+<section id="实践-3偏度与峰度psychdescribe未装则自写公式" class="slide level2 r-demo">
+<h2>实践 3：偏度与峰度（psych::describe，未装则自写公式）</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a aria-label="1"></a><span class="co"># ---- 方案 A：psych 包已安装时，一行输出形态度量 ----</span></span>
+<span id="cb16-2"><a aria-label="2"></a><span class="cf">if</span> (<span class="fu">requireNamespace</span>(<span class="st">"psych"</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>)) {</span>
+<span id="cb16-3"><a aria-label="3"></a>  psych<span class="sc">::</span><span class="fu">describe</span>(sales)   <span class="co"># 含 mean、sd、skew、kurtosis 等（psych 有自己的修正口径）</span></span>
+<span id="cb16-4"><a aria-label="4"></a>} <span class="cf">else</span> {</span>
+<span id="cb16-5"><a aria-label="5"></a>  <span class="fu">message</span>(<span class="st">"psych 未安装，改用方案 B 自写公式（与讲义手算口径一致）"</span>)</span>
+<span id="cb16-6"><a aria-label="6"></a>}</span>
+<span id="cb16-7"><a aria-label="7"></a></span>
+<span id="cb16-8"><a aria-label="8"></a><span class="co"># ---- 方案 B：自写公式（与讲义第五节口径一致） ----</span></span>
+<span id="cb16-9"><a aria-label="9"></a>n <span class="ot">&lt;-</span> <span class="fu">length</span>(sales)</span>
+<span id="cb16-10"><a aria-label="10"></a>m <span class="ot">&lt;-</span> <span class="fu">mean</span>(sales)</span>
+<span id="cb16-11"><a aria-label="11"></a>s <span class="ot">&lt;-</span> <span class="fu">sd</span>(sales)                                        <span class="co"># 样本式标准差（n-1）</span></span>
+<span id="cb16-12"><a aria-label="12"></a></span>
+<span id="cb16-13"><a aria-label="13"></a><span class="co"># 偏态系数：未分组修正式 n/((n-1)(n-2)) * sum((x-m)^3) / s^3</span></span>
+<span id="cb16-14"><a aria-label="14"></a>sk_raw <span class="ot">&lt;-</span> n <span class="sc">/</span> ((n <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> (n <span class="sc">-</span> <span class="dv">2</span>)) <span class="sc">*</span> <span class="fu">sum</span>((sales <span class="sc">-</span> m)<span class="sc">^</span><span class="dv">3</span>) <span class="sc">/</span> s<span class="sc">^</span><span class="dv">3</span></span>
+<span id="cb16-15"><a aria-label="15"></a>sk_raw                                                <span class="co"># 约 0.41：右偏、偏斜程度较低</span></span>
+<span id="cb16-16"><a aria-label="16"></a></span>
+<span id="cb16-17"><a aria-label="17"></a><span class="co"># 峰态系数：矩比式 KT = m4 / s^4（正态分布基准为 3）</span></span>
+<span id="cb16-18"><a aria-label="18"></a>kt_raw <span class="ot">&lt;-</span> <span class="fu">mean</span>((sales <span class="sc">-</span> m)<span class="sc">^</span><span class="dv">4</span>) <span class="sc">/</span> s<span class="sc">^</span><span class="dv">4</span></span>
+<span id="cb16-19"><a aria-label="19"></a>kt_raw                                                <span class="co"># 约 2.69 &lt; 3：平峰</span></span>
+<span id="cb16-20"><a aria-label="20"></a></span>
+<span id="cb16-21"><a aria-label="21"></a><span class="co"># ---- 组距分组口径复算（对应讲义"A 同学"分组表） ----</span></span>
+<span id="cb16-22"><a aria-label="22"></a>mid <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">145</span>,<span class="dv">155</span>,<span class="dv">165</span>,<span class="dv">175</span>,<span class="dv">185</span>,<span class="dv">195</span>,<span class="dv">205</span>,<span class="dv">215</span>,<span class="dv">225</span>,<span class="dv">235</span>)     <span class="co"># 组中值</span></span>
+<span id="cb16-23"><a aria-label="23"></a>f   <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">4</span>,<span class="dv">9</span>,<span class="dv">16</span>,<span class="dv">27</span>,<span class="dv">20</span>,<span class="dv">17</span>,<span class="dv">10</span>,<span class="dv">8</span>,<span class="dv">4</span>,<span class="dv">5</span>)                    <span class="co"># 各组天数</span></span>
+<span id="cb16-24"><a aria-label="24"></a>m_g <span class="ot">&lt;-</span> <span class="fu">sum</span>(mid <span class="sc">*</span> f) <span class="sc">/</span> <span class="fu">sum</span>(f)                          <span class="co"># 185</span></span>
+<span id="cb16-25"><a aria-label="25"></a>s_g <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">sum</span>((mid <span class="sc">-</span> m_g)<span class="sc">^</span><span class="dv">2</span> <span class="sc">*</span> f) <span class="sc">/</span> (<span class="fu">sum</span>(f) <span class="sc">-</span> <span class="dv">1</span>))    <span class="co"># 21.58（n-1 口径）</span></span>
+<span id="cb16-26"><a aria-label="26"></a>sk_g <span class="ot">&lt;-</span> <span class="fu">sum</span>((mid <span class="sc">-</span> m_g)<span class="sc">^</span><span class="dv">3</span> <span class="sc">*</span> f) <span class="sc">/</span> (<span class="fu">sum</span>(f) <span class="sc">*</span> s_g<span class="sc">^</span><span class="dv">3</span>)     <span class="co"># 0.448</span></span>
+<span id="cb16-27"><a aria-label="27"></a>kt_g <span class="ot">&lt;-</span> <span class="fu">sum</span>((mid <span class="sc">-</span> m_g)<span class="sc">^</span><span class="dv">4</span> <span class="sc">*</span> f) <span class="sc">/</span> (<span class="fu">sum</span>(f) <span class="sc">*</span> s_g<span class="sc">^</span><span class="dv">4</span>)     <span class="co"># 2.70</span></span>
+<span id="cb16-28"><a aria-label="28"></a></span>
+<span id="cb16-29"><a aria-label="29"></a><span class="fu">c</span>(<span class="at">sk_raw =</span> <span class="fu">round</span>(sk_raw, <span class="dv">3</span>), <span class="at">kt_raw =</span> <span class="fu">round</span>(kt_raw, <span class="dv">3</span>),</span>
+<span id="cb16-30"><a aria-label="30"></a>  <span class="at">sk_grouped =</span> <span class="fu">round</span>(sk_g, <span class="dv">3</span>), <span class="at">kt_grouped =</span> <span class="fu">round</span>(kt_g, <span class="dv">3</span>))</span>
+<span id="cb16-31"><a aria-label="31"></a><span class="co">#  sk_raw   kt_raw sk_grouped kt_grouped</span></span>
+<span id="cb16-32"><a aria-label="32"></a><span class="co">#  0.405    2.690    0.448      2.695</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<div title="callout：偏度峰度的口径辨析">
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>callout：偏度峰度的口径辨析</strong></p>
+</div>
+<div class="callout-content">
+<p>不同软件的偏度/峰度公式不同：psych 的 skew/kurtosis 自带小样本修正（结果接近 0.40/2.7）；e1071 等包还提供多种 type；峰度有”矩比式（正态基准 3）“与”超额峰度（基准 0，即矩比式减 3）“两套。与手算对照时认准讲义口径：<strong>原始数据 SK ≈ 0.41（公式重算值，胡课件 p184 印作 0.4002 且过程数字为分组例数值，已校正）、KT ≈ 2.69；分组口径 SK ≈ 0.448、KT ≈ 2.70</strong>。判读结论不受口径影响：120 天销量分布右偏、比正态略扁平。</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="本章知识点清单" class="slide level2 scrollable">
+<h2>本章知识点清单</h2>
+<p><strong>第一节 总量指标（绝对指标）</strong></p>
+<ol type="1">
+<li><p>总量指标的概念（总规模、总水平、工作总量；总量之间的绝对差数）</p></li>
+<li><p>总量指标的三方面作用</p></li>
+<li><p>按反映总体内容分：总体单位总量与总体标志总量（含义、相互转化、一个单位总量与多个标志总量）</p></li>
+<li><p>按时间状态分：时期指标与时点指标（概念及流量/存量、可否累加、统计方式三点区别）</p></li>
+<li><p>按计量单位分：实物量、价值量、劳动量（含义、计量单位与各自特点）</p></li>
+<li><p>国民经济重要生产总量指标：社会总产品（社会总产值）、增加值（生产法与收入法）、GDP 与社会总产值的关系（物质生产部门与非物质生产部门）</p></li>
+</ol>
+<p><strong>第二节 相对指标（相对数）</strong></p>
+<ol type="1">
+<li><p>相对指标的概念（两个有联系指标的比值）</p></li>
+<li><p>表现形式：有名数（复名数）与无名数（倍数、系数、成数、%）</p></li>
+<li><p>计量单位的重要性（“1元 = 1分”悖论式证明）</p></li>
+<li><p>相对指标的三方面作用与六种类型</p></li>
+<li><p>计划完成相对数：计划数为总量指标（直接对比；正指标/逆指标的评价标准）</p></li>
+<li><p>计划完成相对数：计划数为相对指标（(1±实际百分数)/(1±计划百分数)，成本降低例）</p></li>
+<li><p>计划完成相对数：计划数为平均指标；经济生产量/经济消耗量/中性指标的评价</p></li>
+<li><p>【v3】阅读材料：中长期计划的水平法与累计法（520 亿提前两季度例、30 亿提前 1 年例；滚动 12 个月累计与月内均匀分布假设）</p></li>
+<li><p>结构相对数（部分总量/总体总量，出勤率、合格率）</p></li>
+<li><p>比例相对数（部分/部分，分子分母有的可互换；人口普查总人口与性别比例）</p></li>
+<li><p>比较相对数（不同空间同类指标的静态对比；【v3】典型化基准下分子分母不宜互换，劳动生产率 69.0% 例）</p></li>
+<li><p>结构、比例、比较相对数的两点区别（分子分母内容、说明的问题）</p></li>
+<li><p>【v3】调和平均数权数 M 的辨析（M = X·f 是各组标志值总量，非频数、非总体标志总量）</p></li>
+<li><p>强度相对数（不同总体总量对比；复名数；正指标与逆指标，医院床位例）</p></li>
+<li><p>动态相对数（发展速度 = 报告期/基期；增长速度 = 发展速度 − 1；粮食产量例）</p></li>
+<li><p>六种相对数的分层判别框架（时期→现象→总体→比较关系）</p></li>
+<li><p>应用原则：注意可比性、与总量指标结合、各种相对指标结合；【v3】百分点与百分比之辨（相减用百分点，4%→6% 为提高 2 个百分点）</p></li>
+</ol>
+<p><strong>第三节 平均指标（平均数）</strong></p>
+<ol type="1">
+<li><p>平均指标的概念（一般水平、代表值、集中趋势的测定）</p></li>
+<li><p>数据分布三大特征（集中趋势、离中趋势、偏态与峰态）及适用的描述统计量（【v3】异众比率/四分位差/偏态峰态系数的落点回链）</p></li>
+<li><p>平均指标的特点：同质性、抽象性、代表性</p></li>
+<li><p>平均指标的作用（对比分析、判断标准、推算其它指标）</p></li>
+<li><p>平均指标的种类（静态/动态；数值平均数/位置平均数）</p></li>
+<li><p>算术平均数基本公式与简单算术平均数（50 名员工工资例）</p></li>
+<li><p>加权算术平均数（频数权数与频率权数两种等价形式；权数与影响因素）</p></li>
+<li><p>权数的实质：频率（三组资料对比，频数同比例变化均值不变）</p></li>
+<li><p>组距式数列以组中值计算平均数（近似值；2000 名职工工资例）</p></li>
+<li><p>算术平均数的两条数学性质（离差之和为零、离差平方和最小）</p></li>
+<li><p>调和平均数（倒数平均数）：概念、简单式与加权式（买苹果例）</p></li>
+<li><p>算术平均法与调和平均法的选用（掌握分母资料用算术、掌握分子资料用调和；零售价格与蔬菜批发例）</p></li>
+<li><p>几何平均数（连乘积开方；前提：总量等于各分量乘积）</p></li>
+<li><p>几何平均数应用：流水线平均合格率（工序衔接用几何平均、独立作业用算术平均）</p></li>
+<li><p>几何平均数应用：复利平均年利率（复利用几何平均、单利用算术平均）</p></li>
+<li><p>几何平均数的对数形式（对数平均数；查反对数表求真数）</p></li>
+<li><p>众数：概念与不惟一性（无众数/一个众数/复众数）</p></li>
+<li><p>众数的计算：分类数据（可口可乐）、顺序数据（不满意）、单项式数列、组距数列（上限/下限公式；月收入分布 1040 元、50 名工人 123 个）</p></li>
+<li><p>中位数：概念与特点（不受极端值影响、顺序数据适用、离差绝对值之和最小）</p></li>
+<li><p>中位数计算：顺序数据（150.5→一般）、原始数据（9 家庭 1080、10 家庭 1020）、单项数列（25.5→19 岁）、组距数列（上/下限公式与累计折线图解法，1128.5 元、50 名工人 123.21 个）</p></li>
+<li><p>【v3】四分位数：概念（Q1/Q3、不受极端值）；未分组位置法（(n+1)/4 与 3(n+1)/4；整数取位、非整数插值；11 名工人 6/15 件、12 名工人 6.25/15.75 件）；单项式（满意度 75→不满意、225→一般）；组距式下限插值公式（164 名学生体重 72.4/92.96 Kg）；较大制累计位置对调注意</p></li>
+<li><p>【v3】五数概括与箱线图（最小值/Q1/中位数/Q3/最大值；箱线图五要素；回链第 3 章）</p></li>
+<li><p>【v3】主线数据集：120 天电脑销量（原始 vs 组距分组双口径对照）；120 天四分位数 170.25/197、分组 170.37/198.24；软件口径 170.75 提示</p></li>
+<li><p>常用五种平均数小结（算术/调和/几何/众数/中位数的概念、公式与优缺点）</p></li>
+<li><p>数据类型（分类/顺序/定距/定比）与适用的集中趋势指标（准入依据回链第 1 章）</p></li>
+<li><p>位置平均数与算术平均数的关系（三者大小判别对称与偏态；皮尔生经验公式 <span class="math inline">\(\bar{x} - M_o = 3(\bar{x} - M_e)\)</span> 及其【v3】三个互推变形 Mo=3Me−2x̄ 等；零件直径例）</p></li>
+<li><p>应用平均指标的四条原则（同质性、总平均数与组平均数结合、与典型值和分配数列结合、集中趋势与离散趋势结合）</p></li>
+</ol>
+<p><strong>第四节 标志变异指标</strong></p>
+<ol type="1">
+<li><p>变异指标的概念（反映标志值差异程度和平均数代表性）</p></li>
+<li><p>变异指标的作用（衡量平均数代表性、反映均衡性与协调性、研究偏离正态情况；甲乙两组日产量与两企业季度计划例）</p></li>
+<li><p>【v3】异众比率（Vr = 1 − fm/Σf；配众数、分类数据离散测度；饮料品牌例 Vr = 70%）</p></li>
+<li><p>全距（极差）：概念、公式、易受极端值影响与未考虑分布的局限（【v3】120 天销量 R = 96 台）</p></li>
+<li><p>【v3】四分位差（Qd = Q3 − Q1；中间 50%、不受极端值、配中位数；满意度例 1 个等级；120 天 26.75 台 vs 分组 27.87 台 vs 软件口径 26.25）</p></li>
+<li><p>平均差：概念、简单式与加权式、特点（公司员工工资平均差 328 元例；【v3】120 天 17.43 vs 分组 17 台）</p></li>
+<li><p>方差和标准差：概念、简单式与加权式、总体与样本之分（公司员工工资标准差 433.13 元例）</p></li>
+<li><p>【v3】总体式（n）与样本式（n−1）双轨说明框（R var/sd、Excel STDEV.S/STDEV.P 默认 n−1；120 天 σ=21.59 vs S=21.68）</p></li>
+<li><p>方差和标准差的简易计算公式及推导（<span class="math inline">\(\sigma = \sqrt{\overline{x^2} - \bar{x}^2}\)</span>）</p></li>
+<li><p>变异系数（标准差系数）：<span class="math inline">\(V_\sigma = \sigma/\bar{X}\)</span> 与三点说明（【v3】另两类变异系数 VR=52.0%、VAD=9.4%；120 天 Vs = 11.7%）</p></li>
+<li><p>8 家企业销售额与利润离散程度比较例题（水平悬殊时须用变异系数：0.539 &lt; 0.710）</p></li>
+<li><p>【v3】标准分数（z = (x−x̄)/S；无量纲、标准化变换不改分布形状、|z|&gt;3 离群判别；120 天 z ∈ [−2.01, +2.42] 无离群点）</p></li>
+<li><p>常用标志变异指标小结（异众比率/极差/四分位差/平均差/方差标准差/标准差系数的概念、计算与特点；层次配套：分类配众数、顺序配中位数、数值配均值）</p></li>
+</ol>
+<p><strong>第五节 分布形态的度量（v3 新增）</strong></p>
+<ol type="1">
+<li><p>分布形态＝偏态＋峰态；与集中趋势、离散程度合称”数据的概括性度量”</p></li>
+<li><p>偏态系数判读（SK=0 对称、&gt;0 右偏、&lt;0 左偏；|SK|&gt;1 高度偏态、0.5&lt;|SK|≤1 中等）</p></li>
+<li><p>偏态系数公式（未分组 n/((n−1)(n−2)) 修正式；分组三阶矩比式）与 120 天算例（原始 0.41、分组 0.448，右偏、偏斜较低；与 x̄&gt;Me 及皮尔生估 Mo≈176.9 互证）</p></li>
+<li><p>峰态系数（矩比式 KT，正态基准 3；尖峰&gt;3、平峰&lt;3；超额峰度口径注）与 120 天算例（原始 2.69、分组 2.70，平峰）</p></li>
+<li><p>原始 vs 分组总对照表（组中值近似的误差方向：离散类指标系统性偏低、中位数本例无误差、分组不宜过粗）</p></li>
+</ol>
+
+
+</section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<div class="footer footer-default">
+
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="site_libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="site_libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="site_libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="site_libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="site_libs/revealjs/plugin/reveal-chalkboard/plugin.js"></script>
+  <script src="site_libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="site_libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="site_libs/revealjs/plugin/search/search.js"></script>
+  <script src="site_libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="site_libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': true,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"8\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'chalkboard': {"buttons":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealChalkboard, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    
+
+    <script>
+
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+
+      // slide changes (different for each slide format).
+
+      (function () {
+
+        // dispatch for htmlwidgets
+
+        function fireSlideEnter() {
+
+          const event = window.document.createEvent("Event");
+
+          event.initEvent("slideenter", true, true);
+
+          window.document.dispatchEvent(event);
+
+        }
+
+    
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+
+          fireSlideEnter();
+
+    
+
+          // dispatch for shiny
+
+          if (window.jQuery) {
+
+            if (previousSlide) {
+
+              window.jQuery(previousSlide).trigger("hidden");
+
+            }
+
+            if (currentSlide) {
+
+              window.jQuery(currentSlide).trigger("shown");
+
+            }
+
+          }
+
+        }
+
+    
+
+        // hookup for slidy
+
+        if (window.w3c_slidy) {
+
+          window.w3c_slidy.add_observer(function (slide_num) {
+
+            // slide_num starts at position 1
+
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+
+          });
+
+        }
+
+    
+
+      })();
+
+    </script>
+
+    
+
+    <script id="quarto-html-after-body" type="application/javascript">
+      window.document.addEventListener("DOMContentLoaded", function (event) {
+        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+        tabsets.forEach(function(tabset) {
+          const tabby = new Tabby('#' + tabset.id);
+        });
+        const isCodeAnnotation = (el) => {
+          for (const clz of el.classList) {
+            if (clz.startsWith('code-annotation-')) {                     
+              return true;
+            }
+          }
+          return false;
+        }
+        const onCopySuccess = function(e) {
+          // button target
+          const button = e.trigger;
+          // don't keep focus
+          button.blur();
+          // flash "checked"
+          button.classList.add('code-copy-button-checked');
+          var currentTitle = button.getAttribute("title");
+          button.setAttribute("title", "已复制");
+          let tooltip;
+          if (window.bootstrap) {
+            button.setAttribute("data-bs-toggle", "tooltip");
+            button.setAttribute("data-bs-placement", "left");
+            button.setAttribute("data-bs-title", "已复制");
+            tooltip = new bootstrap.Tooltip(button, 
+              { trigger: "manual", 
+                customClass: "code-copy-button-tooltip",
+                offset: [0, -8]});
+            tooltip.show();    
+          }
+          setTimeout(function() {
+            if (tooltip) {
+              tooltip.hide();
+              button.removeAttribute("data-bs-title");
+              button.removeAttribute("data-bs-toggle");
+              button.removeAttribute("data-bs-placement");
+            }
+            button.setAttribute("title", currentTitle);
+            button.classList.remove('code-copy-button-checked');
+          }, 1000);
+          // clear code selection
+          e.clearSelection();
+        }
+        const getTextToCopy = function(trigger) {
+          const outerScaffold = trigger.parentElement.cloneNode(true);
+          const codeEl = outerScaffold.querySelector('code');
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+        }
+        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+          text: getTextToCopy
+        });
+        clipboard.on('success', onCopySuccess);
+        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+            text: getTextToCopy,
+            container: window.document.getElementById('quarto-embedded-source-code-modal')
+          });
+          clipboardModal.on('success', onCopySuccess);
+        }
+          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+          var mailtoRegex = new RegExp(/^mailto:/);
+            var filterRegex = new RegExp('/' + window.location.host + '/');
+          var isInternal = (href) => {
+              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+          }
+          // Inspect non-navigation links and adorn them if external
+         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+          for (var i=0; i<links.length; i++) {
+            const link = links[i];
+            if (!isInternal(link.href)) {
+              // undo the damage that might have been done by quarto-nav.js in the case of
+              // links that we want to consider external
+              if (link.dataset.originalHref !== undefined) {
+                link.href = link.dataset.originalHref;
+              }
+            }
+          }
+        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+          const config = {
+            allowHTML: true,
+            maxWidth: 500,
+            delay: 100,
+            arrow: false,
+            appendTo: function(el) {
+                return el.closest('section.slide') || el.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'light-border',
+            placement: 'bottom-start',
+          };
+          if (contentFn) {
+            config.content = contentFn;
+          }
+          if (onTriggerFn) {
+            config.onTrigger = onTriggerFn;
+          }
+          if (onUntriggerFn) {
+            config.onUntrigger = onUntriggerFn;
+          }
+            config['offset'] = [0,0];
+            config['maxWidth'] = 700;
+          window.tippy(el, config); 
+        }
+        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+        for (var i=0; i<noterefs.length; i++) {
+          const ref = noterefs[i];
+          tippyHover(ref, function() {
+            // use id or data attribute instead here
+            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+            try { href = new URL(href).hash; } catch {}
+            const id = href.replace(/^#\/?/, "");
+            const note = window.document.getElementById(id);
+            if (note) {
+              return note.innerHTML;
+            } else {
+              return "";
+            }
+          });
+        }
+        const findCites = (el) => {
+          const parentEl = el.parentElement;
+          if (parentEl) {
+            const cites = parentEl.dataset.cites;
+            if (cites) {
+              return {
+                el,
+                cites: cites.split(' ')
+              };
+            } else {
+              return findCites(el.parentElement)
+            }
+          } else {
+            return undefined;
+          }
+        };
+        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+        for (var i=0; i<bibliorefs.length; i++) {
+          const ref = bibliorefs[i];
+          const citeInfo = findCites(ref);
+          if (citeInfo) {
+            tippyHover(citeInfo.el, function() {
+              var popup = window.document.createElement('div');
+              citeInfo.cites.forEach(function(cite) {
+                var citeDiv = window.document.createElement('div');
+                citeDiv.classList.add('hanging-indent');
+                citeDiv.classList.add('csl-entry');
+                var biblioDiv = window.document.getElementById('ref-' + cite);
+                if (biblioDiv) {
+                  citeDiv.innerHTML = biblioDiv.innerHTML;
+                }
+                popup.appendChild(citeDiv);
+              });
+              return popup.innerHTML;
+            });
+          }
+        }
+      });
+      </script>
+    
+
+</body></html>

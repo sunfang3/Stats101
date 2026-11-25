@@ -1,0 +1,3525 @@
+<!DOCTYPE html>
+<html lang="zh-Hans"><head>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-html/tabby.min.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.10.18">
+
+  <meta name="author" content="孙方 · 山东农业大学经济管理学院">
+  <title>统计学原理 · R 语言交互课件（v3 提升版） – 第九章 统计指数分析</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="site_libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="site_libs/revealjs/dist/reveal.css">
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="site_libs/revealjs/dist/theme/quarto-8879e1741d0e5dc2195ca89cb079d87b.css">
+  <link href="site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="site_libs/revealjs/plugin/reveal-chalkboard/font-awesome/css/all.css" rel="stylesheet">
+  <link href="site_libs/revealjs/plugin/reveal-chalkboard/style.css" rel="stylesheet">
+  <link href="site_libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">第九章 统计指数分析</h1>
+  <p class="subtitle">《统计学原理》R 语言交互课件</p>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+孙方 · 山东农业大学经济管理学院
+</div>
+</div>
+</div>
+
+</section>
+<section class="slide level2">
+
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a aria-label="1"></a><span class="co"># 《统计学原理》R 课件 · 公共配置</span></span>
+<span id="cb1-2"><a aria-label="2"></a><span class="co"># 每个章节 qmd 通过 ```{r, file="_setup.R"} 方式引入</span></span>
+<span id="cb1-3"><a aria-label="3"></a></span>
+<span id="cb1-4"><a aria-label="4"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(</span>
+<span id="cb1-5"><a aria-label="5"></a>  <span class="at">comment =</span> <span class="st">"#&gt;"</span>,</span>
+<span id="cb1-6"><a aria-label="6"></a>  <span class="at">collapse =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb1-7"><a aria-label="7"></a>  <span class="at">out.width =</span> <span class="st">"88%"</span>,</span>
+<span id="cb1-8"><a aria-label="8"></a>  <span class="at">fig.align =</span> <span class="st">"center"</span>,</span>
+<span id="cb1-9"><a aria-label="9"></a>  <span class="at">fig.width =</span> <span class="dv">8</span>,</span>
+<span id="cb1-10"><a aria-label="10"></a>  <span class="at">fig.height =</span> <span class="dv">5</span>,</span>
+<span id="cb1-11"><a aria-label="11"></a>  <span class="at">fig.retina =</span> <span class="dv">2</span>,</span>
+<span id="cb1-12"><a aria-label="12"></a>  <span class="at">dev.args =</span> <span class="fu">list</span>(<span class="at">family =</span> <span class="st">"sans"</span>)</span>
+<span id="cb1-13"><a aria-label="13"></a>)</span>
+<span id="cb1-14"><a aria-label="14"></a></span>
+<span id="cb1-15"><a aria-label="15"></a><span class="co"># 中文友好的 ggplot 主题</span></span>
+<span id="cb1-16"><a aria-label="16"></a><span class="cf">if</span> (<span class="fu">requireNamespace</span>(<span class="st">"ggplot2"</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>)) {</span>
+<span id="cb1-17"><a aria-label="17"></a>  ggplot2<span class="sc">::</span><span class="fu">theme_set</span>(</span>
+<span id="cb1-18"><a aria-label="18"></a>    ggplot2<span class="sc">::</span><span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>) <span class="sc">+</span></span>
+<span id="cb1-19"><a aria-label="19"></a>      ggplot2<span class="sc">::</span><span class="fu">theme</span>(</span>
+<span id="cb1-20"><a aria-label="20"></a>        <span class="at">plot.title =</span> ggplot2<span class="sc">::</span><span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb1-21"><a aria-label="21"></a>        <span class="at">panel.grid.minor =</span> ggplot2<span class="sc">::</span><span class="fu">element_blank</span>()</span>
+<span id="cb1-22"><a aria-label="22"></a>      )</span>
+<span id="cb1-23"><a aria-label="23"></a>  )</span>
+<span id="cb1-24"><a aria-label="24"></a>}</span>
+<span id="cb1-25"><a aria-label="25"></a></span>
+<span id="cb1-26"><a aria-label="26"></a><span class="co"># 讲义用统一调色板</span></span>
+<span id="cb1-27"><a aria-label="27"></a>stat_pal <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"#1a6b54"</span>, <span class="st">"#d97706"</span>, <span class="st">"#2563eb"</span>, <span class="st">"#c2410c"</span>, <span class="st">"#7c3aed"</span>, <span class="st">"#0891b2"</span>)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="第一节-统计指数及其种类" class="slide level2">
+<h2>第一节 统计指数及其种类</h2>
+<p>本节从指数的历史起源讲起，给出统计指数的广义与狭义概念，通过一个四商品例题引出个体指数、复杂现象总体与总指数等基本概念，并系统介绍指数的特点、作用、分类与常用符号，为后面各节的学习奠定基础。</p>
+</section>
+<section id="指数的产生与发展" class="slide level2">
+<h2>指数的产生与发展</h2>
+<p><strong>起源</strong>：最早的指数起源于 <strong>18 世纪</strong> 欧洲，最初是关于<strong>物价波动</strong>的研究。</p>
+<p><strong>发展过程</strong>：</p>
+<ul>
+<li>研究范围后来逐渐扩大到<strong>产量、成本、劳动生产率</strong>等指数的计算；</li>
+<li>计算内容由最初计算<strong>一种商品的价格变动</strong>，逐渐扩展到计算<strong>多种商品价格的综合变动</strong>。</li>
+</ul>
+<p><strong>现状</strong>：至今，指数已被广泛应用于社会经济生活各个方面；一些重要的指数已成为社会经济发展的<strong>晴雨表</strong>。</p>
+</section>
+<section id="统计指数的概念广义与狭义" class="slide level2">
+<h2>统计指数的概念：广义与狭义</h2>
+<p><strong>指数</strong>：又称统计指数、经济指数。</p>
+<p><strong>广义上说</strong>：指数是对有关现象进行比较分析的一种相对指标。如发展速度、计划完成相对数、比较相对数等。</p>
+<p><strong>狭义上说</strong>：统计指数是反映<strong>不能直接相加</strong>的<strong>复杂社会经济现象总体数量综合变动程度</strong>的相对数，用以表明所研究现象在时间上的发展变化程度。</p>
+<p><strong>指数的基本计算公式</strong>：</p>
+<p><span class="math display">\[\text{某现象的指数} = \frac{\text{某现象的报告期（计算期）水平}}{\text{基期水平}}\]</span></p>
+<blockquote>
+<p>教学提示：理解狭义指数的关键在于两点——一是”不能直接相加”（复杂总体），二是”综合变动程度”（需通过指数编制方法实现综合对比）。广义指数即一般相对数，狭义指数才是本章研究的核心对象。</p>
+</blockquote>
+</section>
+<section id="例四种商品的个体指数计算与全部商品指数的困境" class="slide level2">
+<h2>【例】四种商品的个体指数计算与”全部商品指数”的困境</h2>
+<p><strong>要求</strong>：</p>
+<p>（1）计算各种商品的价格指数和销售量指数； （2）计算全部商品的价格指数和销售量指数。</p>
+<p><strong>已知数据表</strong>：</p>
+<table class="caption-top" style="width:100%;">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>商品</th>
+<th>单位</th>
+<th>基期价格 <span class="math inline">\(p_0\)</span>（元）</th>
+<th>报告期价格 <span class="math inline">\(p_1\)</span>（元）</th>
+<th>基期销售量 <span class="math inline">\(q_0\)</span></th>
+<th>报告期销售量 <span class="math inline">\(q_1\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>大米</td>
+<td>百公斤</td>
+<td>300</td>
+<td>360</td>
+<td>2400</td>
+<td>2600</td>
+</tr>
+<tr class="even">
+<td>猪肉</td>
+<td>公斤</td>
+<td>18</td>
+<td>20</td>
+<td>84000</td>
+<td>95000</td>
+</tr>
+<tr class="odd">
+<td>服装</td>
+<td>件</td>
+<td>100</td>
+<td>130</td>
+<td>24000</td>
+<td>23000</td>
+</tr>
+<tr class="even">
+<td>冰箱</td>
+<td>台</td>
+<td>2500</td>
+<td>2000</td>
+<td>510</td>
+<td>612</td>
+</tr>
+</tbody>
+</table>
+<p><strong>（1）各种商品的个体指数计算</strong></p>
+<p>个体价格指数（报告期价格与基期价格之比）：</p>
+<p><span class="math display">\[K_p = \frac{p_1}{p_0}\]</span></p>
+<ul>
+<li>大米的价格指数 <span class="math inline">\(= \dfrac{p_1}{p_0} = \dfrac{360}{300} = 120\%\)</span></li>
+<li>猪肉的价格指数 <span class="math inline">\(= \dfrac{p_1}{p_0} = \dfrac{20}{18} = 111.11\%\)</span></li>
+</ul>
+<p>个体销售量指数（报告期销售量与基期销售量之比）：</p>
+<p><span class="math display">\[K_q = \frac{q_1}{q_0}\]</span></p>
+</section>
+<section id="例四种商品的个体指数计算与全部商品指数的困境续" class="slide level2">
+<h2>【例】四种商品的个体指数计算与”全部商品指数”的困境（续）</h2>
+<ul>
+<li>大米的销售量指数 <span class="math inline">\(= \dfrac{q_1}{q_0} = \dfrac{2600}{2400} = 108.33\%\)</span></li>
+<li>猪肉的销售量指数 <span class="math inline">\(= \dfrac{q_1}{q_0} = \dfrac{95000}{84000} = 113.10\%\)</span></li>
+</ul>
+<p>上述反映<strong>单一商品</strong>（个体）价格或销售量变动程度的指数，称为<strong>个体指数</strong>。</p>
+<p><strong>（2）全部商品的（总）价格指数与总销售量指数为何不能直接相加对比</strong></p>
+<p>若把各种商品的价格或销售量直接加总再对比：</p>
+<p><span class="math display">\[\text{全部商品的价格指数} = \frac{\sum p_1}{\sum p_0} = \frac{360+20+130+2000}{300+18+100+2500} \quad (\times)\]</span></p>
+<p><span class="math display">\[\text{全部商品的销售量指数} = \frac{\sum q_1}{\sum q_0} = \frac{2600+95000+23000+612}{2400+84000+24000+510} \quad (\times)\]</span></p>
+<p>上面两个式子不可行，原因在于各种商品<strong>权重不同、单位不同</strong>，价格与销售量不能直接加总、不能直接综合对比。</p>
+<p>由此引出两个概念：</p>
+<ul>
+<li><strong>复杂现象总体</strong>：不能直接加总或不能直接综合对比的现象。</li>
+<li><strong>总指数</strong>：反映复杂现象总体综合变动状况的指数。</li>
+</ul>
+<p>这就为下一节借助同度量因素编制综合指数埋下伏笔。</p>
+</section>
+<section id="统计指数分析与时间数列分析的比较" class="slide level2 scrollable">
+<h2>统计指数分析与时间数列分析的比较</h2>
+<ol type="1">
+<li><p><strong>共同点</strong>：都是从<strong>动态的角度</strong>来研究现象的发展变化。</p></li>
+<li><p><strong>区别</strong>：</p>
+<ul>
+<li><strong>时间数列分析法</strong>侧重于<strong>单个个体现象</strong>的发展变化情况；</li>
+<li><strong>统计指数分析法</strong>着重于<strong>多个复杂现象</strong>的发展变化情况。</li>
+</ul></li>
+</ol>
+<blockquote>
+<p>教学提示：理解两种方法的分工——当研究对象是单一现象随时间的变动时，用时间数列分析；当研究对象是多个不能直接加总的复杂现象的综合变动时，则用统计指数分析。</p>
+</blockquote>
+</section>
+<section id="狭义指数的特点" class="slide level2">
+<h2>（狭义）指数的特点</h2>
+<p><strong>1. 相对性</strong>：指数是总体变量在不同场合下对比形成的<strong>相对数</strong>。</p>
+<p><strong>2. 综合性</strong>：指数反映的<strong>不是单一</strong>事物的变动，而是<strong>多个个体构成的总体</strong>的变动，是一种综合性数值。 例：商品价格指数综合了各种商品价格受各种因素综合影响变动的结果。</p>
+<p><strong>3. 平均性</strong>：指数是总体中各个体变化程度的一个<strong>代表性数值</strong>，即指数所反映的总体的变动只是一种<strong>平均意义上的变动</strong>。</p>
+</section>
+<section id="指数的作用" class="slide level2">
+<h2>指数的作用</h2>
+<p><strong>1. 综合比较的作用</strong>：反映复杂经济现象在时间或空间上的发展变化的方向和程度。</p>
+<p>社会经济现象中，存在着大量<strong>不能直接加总</strong>或<strong>不能直接对比</strong>的复杂总体，想要反映它们的变动方向和变动程度，只能通过统计指数法，编制统计指数才能解决。</p>
+<p><strong>2. 因素分析的作用</strong>：指数可以分析受多因素影响的复杂社会经济现象总变动，以及各个因素的影响方向和影响程度。</p>
+</section>
+<section id="指数的分类" class="slide level2">
+<h2>指数的分类</h2>
+<p>指数可以从三个不同角度进行分类。</p>
+<p><strong>（一）按其涉及的对象范围不同分</strong></p>
+<ul>
+<li><strong>个体指数</strong>：反映某一项目或单个事物变动的相对数；如一种商品的价格或销售量的变动。</li>
+<li><strong>总指数（综合指数）</strong>：反映多个项目或多个事物构成的复杂总体综合变动的相对数；如多种商品的价格或销售量的综合变动。</li>
+<li><strong>类指数（组指数）</strong>：介于个体指数与总指数之间，把研究对象分为几大类，观察大类现象变动的指数。</li>
+</ul>
+<p>三者构成由个别到局部（类）再到整体的关系——个体指数考察单一项目，类指数考察某一类项目，总指数考察全部项目构成的总体的综合变动。</p>
+<p><strong>（二）按其说明对象的特征（指数化指标的性质）不同分</strong></p>
+<p>在统计指数理论中，将所要反映数量变动的那个指标称为<strong>指数化指标</strong>。据此，统计指数可分为两类：</p>
+<ul>
+<li><strong>数量指标指数</strong>：反映说明总体在<strong>规模上、总量上</strong>的数量变动；如产品产量指数、商品销售量指数等。</li>
+<li><strong>质量指标指数</strong>：说明总体在<strong>比较关系上（或一般水平上）</strong>的数量变动；如价格指数、产品成本指数等。</li>
+</ul>
+<p>区分二者的关键是看指数化指标的性质——反映总体规模、总量水平变动的属于数量指标指数；反映总体一般水平、质量对比关系变动的属于质量指标指数。</p>
+<p><strong>（三）按基期不同，动态指数可分为</strong></p>
+<ul>
+<li><strong>环比指数</strong>：在指数数列中，各期指数都<strong>以上期为对比基期</strong>。</li>
+<li><strong>定基指数</strong>：各期指数都以<strong>某一固定时期</strong>为对比基期。</li>
+</ul>
+<p>环比指数与定基指数的关系：</p>
+</section>
+<section id="指数的分类续" class="slide level2">
+<h2>指数的分类（续）</h2>
+<ul>
+<li>对于<strong>个体指数</strong>（即发展速度），二者关系为：</li>
+</ul>
+<p><span class="math display">\[\text{定基指数} = \text{环比指数的连乘积}\]</span></p>
+<ul>
+<li>对于<strong>总指数</strong>，这种关系只有在<strong>特定条件下</strong>才成立。</li>
+</ul>
+<blockquote>
+<p>教学提示：个体指数可直接相互换算（连乘得到定基、相除得到环比）；总指数因同度量因素变动，一般不具备这种换算关系。</p>
+</blockquote>
+<p>分类结构图：</p>
+<pre><code>                    指数的分类
+        ┌──────────────┼──────────────┐
+   按对象范围分    按指数化指标性质分   按基期不同划分
+    ┌──┴──┐        ┌──┴──┐        ┌──┴──┐
+ 个体指数 总指数   数量指标指数 质量指标指数  环比指数 定基指数</code></pre>
+<p><em>（图示说明：树状结构图系统展示指数的三种分类标准及其六种类型，帮助学生建立完整的指数分类知识框架。）</em></p>
+</section>
+<section id="指数计算中常用符号的含义" class="slide level2">
+<h2>指数计算中常用符号的含义</h2>
+<p>在指数分析中，为书写简便，统一约定以下符号：</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>符号</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(q\)</span></td>
+<td>数量指标</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(p\)</span></td>
+<td>质量指标</td>
+</tr>
+<tr class="odd">
+<td>1</td>
+<td>报告期</td>
+</tr>
+<tr class="even">
+<td>0</td>
+<td>基期</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(K\)</span></td>
+<td>个体指数</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\bar{K}\)</span>（<span class="math inline">\(\bar{I}\)</span>）</td>
+<td>总指数</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\bar{K}_q\)</span>（<span class="math inline">\(\bar{I}_q\)</span>）</td>
+<td>综合数量指标指数</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\bar{K}_p\)</span>（<span class="math inline">\(\bar{I}_p\)</span>）</td>
+<td>综合质量指标指数</td>
+</tr>
+</tbody>
+</table>
+<p><strong>教学说明</strong>：</p>
+<ul>
+<li><span class="math inline">\(q\)</span> 与 <span class="math inline">\(p\)</span> 分别代表两类指标：数量指标（如产量、销售量）反映总体规模，质量指标（如价格、单位成本）反映质量水平；</li>
+<li>下标 1 与 0 用于区分报告期与基期，如 <span class="math inline">\(q_1\)</span> 表示报告期数量、<span class="math inline">\(p_0\)</span> 表示基期价格；</li>
+<li>个体指数用 <span class="math inline">\(K\)</span> 表示对单个项目计算的指数；总指数用带上横线的 <span class="math inline">\(\bar{K}\)</span>（<span class="math inline">\(\bar{I}\)</span>）表示对多种项目综合计算的指数；</li>
+<li>总指数按指数化指标性质又分为综合数量指标指数 <span class="math inline">\(\bar{K}_q\)</span>（如销售量总指数）与综合质量指标指数 <span class="math inline">\(\bar{K}_p\)</span>（如价格总指数）。</li>
+</ul>
+<p>掌握这些符号约定，是正确书写和计算各类指数公式的基础。</p>
+</section>
+<section id="指数编制的三个基本问题" class="slide level2 scrollable">
+<h2>指数编制的三个基本问题</h2>
+<p>无论最终采用哪条途径、哪个公式，动手编制一个总指数之前都要先回答三个基本问题：</p>
+<ol type="1">
+<li><strong>选择项目（选择代表规格品）</strong>——市场上商品和服务成千上万，不可能也不必要全部纳入计算，通常是选取消费（销售）量足够大、价格变动有代表性的规格品作为”代表品”，用代表项目的变动代表全部项目的综合变动；</li>
+<li><strong>确定权数</strong>——各项目在总体中的重要性不同，须利用已有的统计信息（如销售额、消费支出构成）构造权数，个别场合也采用主观设定的权数；</li>
+<li><strong>选择计算方法</strong>——在综合与平均两条途径、多种具体公式中，根据研究目的与资料条件选择适当的方法。</li>
+</ol>
+<p>其中第三问正是本章第二节与第三节的主题；第一、二两问将在第五节 CPI 的编制中看到完整实践——“选择调查地区和调查点、选择代表性商品和规格品”对应”选择项目”，“根据城乡居民家庭消费构成确定权数”对应”确定权数”，形成前后呼应。</p>
+</section>
+<section id="总指数的编制途径综合与平均" class="slide level2">
+<h2>总指数的编制途径：综合与平均</h2>
+<p><strong>如何反映复杂现象总体的数量变动？</strong> 由于复杂现象总体的各个组成部分（如不同商品的价格、数量）不能直接相加，因此需要解决——<strong>如何编制总指数？</strong></p>
+<p>编制总指数有两种基本方法：</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>途径</th>
+<th>指数形式</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>通过<strong>综合</strong>的方法</td>
+<td><strong>综合指数</strong></td>
+</tr>
+<tr class="even">
+<td>通过<strong>平均</strong>的方法</td>
+<td><strong>平均指数</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>综合指数</strong>：借助同度量因素，把不能直接相加的复杂现象转化为可以相加的总量指标，然后对比求得总指数（先综合、后对比）；</li>
+<li><strong>平均指数</strong>：对个体指数进行加权平均，从而求得总指数（先对比、后平均）。</li>
+</ul>
+<p><em>（图示说明：层级示意图：从”如何反映复杂现象总体的数量变动？“引出”如何编制总指数？“，再分两支分别指向”综合指数”（通过综合的方法）与”平均指数”（通过平均的方法），直观展示总指数的两条编制途径。）</em></p>
+</section>
+<section id="第二节-综合指数" class="slide level2">
+<h2>第二节 综合指数</h2>
+<p>本节围绕”先综合、后对比”的编制原理，介绍综合指数的定义、同度量因素的作用，依次学习拉氏指数、派氏指数以及马—埃公式、费雪公式、杨格公式等其他类型，并给出数量指标指数与质量指标指数的编制原则和完整例题。</p>
+</section>
+<section id="综合指数的定义" class="slide level2 scrollable">
+<h2>综合指数的定义</h2>
+<p><strong>综合指数</strong>：由两个<strong>总量指标</strong>对比而形成的指数。</p>
+<p>凡是一个总量指标可以分解为两个或两个以上的因素指标时，将其中一个或一个以上的因素指标<strong>固定下来</strong>，仅观察其中一个因素指标的变动程度，这样编制的总指数称为综合指数。</p>
+<p><strong>要点解读</strong>：</p>
+<ol type="1">
+<li>综合指数的本质是两个总量指标的对比；</li>
+<li>前提是总量指标可以分解为两个或两个以上的因素指标；</li>
+<li>编制时将其他因素指标固定下来，仅观察其中一个因素指标的变动程度。</li>
+</ol>
+</section>
+<section id="例四种商品的销售资料与销售额计算表" class="slide level2">
+<h2>【例】四种商品的销售资料与销售额计算表</h2>
+<p>为分析销售量与价格的综合变动，搜集大米、猪肉、服装、冰箱四种商品基期与报告期的价格、销售量资料，并预先计算四个口径的销售额（单位：百元）：</p>
+<table class="caption-top" style="width:100%;">
+<colgroup>
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>商品</th>
+<th>单位</th>
+<th>基期价格 <span class="math inline">\(p_0\)</span>（元）</th>
+<th>报告期价格 <span class="math inline">\(p_1\)</span>（元）</th>
+<th>基期销售量 <span class="math inline">\(q_0\)</span></th>
+<th>报告期销售量 <span class="math inline">\(q_1\)</span></th>
+<th><span class="math inline">\(p_0q_0\)</span>（百元）</th>
+<th><span class="math inline">\(p_1q_1\)</span>（百元）</th>
+<th><span class="math inline">\(p_0q_1\)</span>（百元）</th>
+<th><span class="math inline">\(p_1q_0\)</span>（百元）</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>大米</td>
+<td>百公斤</td>
+<td>300</td>
+<td>360</td>
+<td>2400</td>
+<td>2600</td>
+<td>7200</td>
+<td>9360</td>
+<td>7800</td>
+<td>8640</td>
+</tr>
+<tr class="even">
+<td>猪肉</td>
+<td>公斤</td>
+<td>18</td>
+<td>20</td>
+<td>84000</td>
+<td>95000</td>
+<td>15120</td>
+<td>19000</td>
+<td>17100</td>
+<td>16800</td>
+</tr>
+<tr class="odd">
+<td>服装</td>
+<td>件</td>
+<td>100</td>
+<td>130</td>
+<td>24000</td>
+<td>23000</td>
+<td>24000</td>
+<td>29900</td>
+<td>23000</td>
+<td>31200</td>
+</tr>
+<tr class="even">
+<td>冰箱</td>
+<td>台</td>
+<td>2500</td>
+<td>2000</td>
+<td>510</td>
+<td>612</td>
+<td>12750</td>
+<td>12240</td>
+<td>15300</td>
+<td>10200</td>
+</tr>
+<tr class="odd">
+<td>合计</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>59070</td>
+<td>70500</td>
+<td>63200</td>
+<td>66840</td>
+</tr>
+</tbody>
+</table>
+<p><strong>分析任务</strong>：</p>
+</section>
+<section id="例四种商品的销售资料与销售额计算表续" class="slide level2 scrollable">
+<h2>【例】四种商品的销售资料与销售额计算表（续）</h2>
+<ol type="1">
+<li>分析四种商品<strong>销售量</strong>的综合变动情况；</li>
+<li>分析四种商品<strong>价格</strong>的综合变动情况。</li>
+</ol>
+<p>表中四个销售额合计 <span class="math inline">\(\sum p_0q_0 = 59070\)</span>、<span class="math inline">\(\sum p_1q_1 = 70500\)</span>、<span class="math inline">\(\sum p_0q_1 = 63200\)</span>、<span class="math inline">\(\sum p_1q_0 = 66840\)</span>（百元）将在后续编制销售量综合指数与价格综合指数时直接代入使用。</p>
+</section>
+<section id="综合指数的编制原理先综合后对比" class="slide level2 scrollable">
+<h2>综合指数的编制原理：先综合，后对比</h2>
+<p><strong>原理</strong>：</p>
+<ol type="1">
+<li>引入一个媒介因素——<strong>同度量因素</strong>，解决不能直接加总的问题；</li>
+<li>将同度量因素<strong>固定于某一时期</strong>。</li>
+</ol>
+<p><strong>1. 引入同度量因素的思路</strong></p>
+<p>个体指数无法对多种商品直接综合，需要借助经济联系式：</p>
+<p><span class="math display">\[\text{销售额} = \text{价格} \times \text{销售量}, \qquad pq = p \cdot q\]</span></p>
+<p><strong>（1）价格指数</strong>：以销售量 <span class="math inline">\(q\)</span> 为同度量因素，把不能直接相加的价格过渡为可以相加的销售额：</p>
+<p><span class="math display">\[I_p = \frac{p_1}{p_0} \;\xrightarrow{\times q}\; \frac{\sum p_1 q}{\sum p_0 q}\]</span></p>
+<p>将同度量因素 <span class="math inline">\(q\)</span> 分别固定在不同时期，得到三个综合形式：</p>
+<p><span class="math display">\[\frac{\sum p_1 q_1}{\sum p_0 q_0} \quad (\text{销售额指数}), \qquad \frac{\sum p_1 q_0}{\sum p_0 q_0} \quad (q \text{ 固定于基期}), \qquad \frac{\sum p_1 q_1}{\sum p_0 q_1} \quad (q \text{ 固定于报告期})\]</span></p>
+<p><strong>（2）销售量指数</strong>：以价格 <span class="math inline">\(p\)</span> 为同度量因素：</p>
+</section>
+<section id="综合指数的编制原理先综合后对比续" class="slide level2">
+<h2>综合指数的编制原理：先综合，后对比（续）</h2>
+<p><span class="math display">\[I_q = \frac{q_1}{q_0} \;\xrightarrow{\times p}\; \frac{\sum q_1 p}{\sum q_0 p}\]</span></p>
+<p>将同度量因素 <span class="math inline">\(p\)</span> 分别固定在不同时期，得到三个综合形式：</p>
+<p><span class="math display">\[\frac{\sum p_1 q_1}{\sum p_0 q_0} \quad (\text{销售额指数}), \qquad \frac{\sum p_0 q_1}{\sum p_0 q_0} \quad (p \text{ 固定于基期}), \qquad \frac{\sum p_1 q_1}{\sum p_1 q_0} \quad (p \text{ 固定于报告期})\]</span></p>
+<p>被固定的 <span class="math inline">\(q\)</span> 或 <span class="math inline">\(p\)</span> 均为<strong>同度量因素</strong>：它一方面把不同度量的现象过渡成可以同度量的媒介因素（起同度量作用），另一方面必须固定在同一时期，才能单独观察指数化指标的变动。</p>
+<p><em>（图示说明：公式演化示意图把个体指数经同度量因素过渡到综合形式的过程逐层展开，直观呈现”先综合、后对比”的编制原理。）</em></p>
+</section>
+<section id="同度量因素与指数化指标" class="slide level2">
+<h2>同度量因素与指数化指标</h2>
+<p><strong>两个综合指数公式</strong>：</p>
+<p>数量指标指数（销售量指数）：</p>
+<p><span class="math display">\[I_q = \frac{\sum q_1 p_0}{\sum q_0 p_0}\]</span></p>
+<p>质量指标指数（价格指数）：</p>
+<p><span class="math display">\[I_p = \frac{\sum p_1 q_1}{\sum p_0 q_1}\]</span></p>
+<p>在 <span class="math inline">\(I_q\)</span> 中，<span class="math inline">\(q\)</span> 被标注为<strong>指数化指标（指数化因素）</strong>，<span class="math inline">\(p_0\)</span> 被标注为<strong>同度量因素</strong>。</p>
+<p>在 <span class="math inline">\(I_p\)</span> 中，<span class="math inline">\(p\)</span> 被标注为<strong>指数化指标（指数化因素）</strong>，<span class="math inline">\(q_1\)</span> 被标注为<strong>同度量因素</strong>。</p>
+<p><strong>概念定义</strong>：</p>
+<ul>
+<li><strong>同度量因素</strong>：指把不同度量的现象过渡成可以同度量的媒介因素，起到同度量的作用。</li>
+<li><strong>指数化指标（指数化因素）</strong>：指在指数分析中被研究的指标。</li>
+</ul>
+<p>编制综合指数时，首先要确定指数化指标（被研究对象），再选择相应的同度量因素，将不能直接相加的指标过渡为可以直接加总对比的总量指标。</p>
+</section>
+<section id="拉氏指数l-式指数" class="slide level2">
+<h2>拉氏指数（L 式指数）</h2>
+<p><strong>历史注记</strong>：拉氏指数由德国学者拉斯贝尔斯（Étienne Laspeyres）于 1864 年提出，“拉氏指数”“L 式指数”均由其姓氏而来。</p>
+<p>拉氏指数或 L 式指数把同度量因素固定在<strong>基期</strong>（基期加权综合指数），用上述四种商品数据（销售额单位：百元）计算：</p>
+<p><strong>1. 拉氏价格指数</strong></p>
+<p><span class="math display">\[L_p = \frac{\sum p_1 q_0}{\sum p_0 q_0} = \frac{66840}{59070} = 113.15\%\]</span></p>
+<p>绝对数分析：<span class="math inline">\(\sum p_1 q_0 - \sum p_0 q_0 = 66840 - 59070 = 7770\)</span>（百元）</p>
+<p><strong>2. 拉氏销售量指数</strong></p>
+<p><span class="math display">\[L_q = \frac{\sum q_1 p_0}{\sum q_0 p_0} = \frac{\sum p_0 q_1}{\sum p_0 q_0} = \frac{63200}{59070} = 106.99\%\]</span></p>
+<p>绝对数分析：<span class="math inline">\(\sum p_0 q_1 - \sum p_0 q_0 = 63200 - 59070 = 4130\)</span>（百元）</p>
+<p><strong>读法</strong>：拉氏价格指数表明，四种商品价格综合上涨 13.15%，按基期销售量计算使销售额增加 7770 百元；拉氏销售量指数表明销售量综合增长 6.99%，按基期价格计算使销售额增加 4130 百元。</p>
+</section>
+<section id="派氏指数p-式指数" class="slide level2">
+<h2>派氏指数（P 式指数）</h2>
+<p><strong>历史注记</strong>：派氏指数由德国学者帕舍（Hermann Paasche）于 1874 年提出，“派氏/P 式”与”帕氏指数”均为其姓氏的不同音译。注意规范拼写为 <strong>Paasche</strong>（双 a 双 s）；个别文献写作”帕煦（Pasche）“系拼写之误，Paasche 与 Laspeyres 也绝非一人，引用外文公式名称时按 Laspeyres index、Paasche index 为准。</p>
+<p>派氏指数或 P 式指数把同度量因素固定在<strong>报告期</strong>（报告期加权综合指数），仍用前例四种商品数据（销售额单位：百元）计算：</p>
+<p><strong>1. 派氏价格指数</strong></p>
+<p><span class="math display">\[P_p = \frac{\sum p_1 q_1}{\sum p_0 q_1} = \frac{70500}{63200} = 111.55\%\]</span></p>
+<p>绝对数分析：<span class="math inline">\(\sum p_1 q_1 - \sum p_0 q_1 = 70500 - 63200 = 7300\)</span>（百元）</p>
+<p><strong>2. 派氏销售量指数</strong></p>
+<p><span class="math display">\[P_q = \frac{\sum q_1 p_1}{\sum q_0 p_1} = \frac{\sum p_1 q_1}{\sum p_1 q_0} = \frac{70500}{66840} = 105.48\%\]</span></p>
+<p>绝对数分析：<span class="math inline">\(\sum q_1 p_1 - \sum q_0 p_1 = 70500 - 66840 = 3660\)</span>（百元）</p>
+</section>
+<section id="派氏指数p-式指数续" class="slide level2">
+<h2>派氏指数（P 式指数）（续）</h2>
+<p><strong>读法</strong>：派氏价格指数表明，按报告期销售量计算，四种商品价格综合上涨 11.55%，使销售额增加 7300 百元；派氏销售量指数表明，按报告期价格计算，销售量综合增长 5.48%，使销售额增加 3660 百元。</p>
+</section>
+<section id="拉氏指数与派氏指数的比较与一般选择原则" class="slide level2">
+<h2>拉氏指数与派氏指数的比较与一般选择原则</h2>
+<p><strong>1. 分析的经济意义不完全相同</strong></p>
+<p>拉氏指数与派氏指数各自选取的同度量因素不同：</p>
+<p><span class="math display">\[L_p = \frac{\sum q_0 p_1}{\sum q_0 p_0} \quad (\text{同度量因素固定在基期}) \qquad P_p = \frac{\sum q_1 p_1}{\sum q_1 p_0} \quad (\text{同度量因素固定在报告期})\]</span></p>
+<p>因此两套公式分别按基期、报告期的权数加权，说明的现象变动内容与经济意义不完全相同。</p>
+<p><strong>2. 一般选择原则</strong></p>
+<ul>
+<li>一般地，计算<strong>数量指标指数</strong>采用 <strong>L 式</strong>（拉氏指数，同度量因素固定在基期）；</li>
+<li>计算<strong>质量指标指数</strong>采用 <strong>P 式</strong>（派氏指数，同度量因素固定在报告期）。</li>
+</ul>
+<blockquote>
+<p>记忆口诀：<strong>“垃圾数、派报纸”</strong>——“拉”氏指数对应”数”量指标指数，“派”氏指数对应”报”价（质量指标）指数。</p>
+</blockquote>
+</section>
+<section id="综合指数的其他类型" class="slide level2">
+<h2>综合指数的其他类型</h2>
+<p><strong>（一）马歇尔——埃奇沃斯指数（马—埃公式）</strong></p>
+<p>马—埃公式把同度量因素（权数）取为基期与报告期的<strong>简单算术平均</strong>：</p>
+<p>价格指数（马—埃公式）：</p>
+<p><span class="math display">\[E_p = \frac{\sum p_1 \cdot \dfrac{q_0+q_1}{2}}{\sum p_0 \cdot \dfrac{q_0+q_1}{2}} = \frac{\sum p_1 (q_0+q_1)}{\sum p_0 (q_0+q_1)} = \frac{\sum p_1 q_0 + \sum p_1 q_1}{\sum p_0 q_0 + \sum p_0 q_1}\]</span></p>
+<p>销售量指数（马—埃公式）：</p>
+<p><span class="math display">\[E_q = \frac{\sum q_1 \cdot \dfrac{p_0+p_1}{2}}{\sum q_0 \cdot \dfrac{p_0+p_1}{2}} = \frac{\sum q_1 (p_0+p_1)}{\sum q_0 (p_0+p_1)} = \frac{\sum q_1 p_0 + \sum q_1 p_1}{\sum q_0 p_0 + \sum q_0 p_1}\]</span></p>
+<p><strong>说明</strong>：马—埃公式是对拉氏指数和帕氏指数的权数（同度量因素）进行平均（权交叉）的结果。</p>
+<p><strong>（二）理想指数（费雪公式）</strong></p>
+<p>费雪公式取拉氏指数与派氏指数的<strong>几何平均</strong>：</p>
+<p>价格指数（费雪公式）：</p>
+</section>
+<section id="综合指数的其他类型续" class="slide level2">
+<h2>综合指数的其他类型（续）</h2>
+<p><span class="math display">\[F_p = \sqrt{L_p \times P_p} = \sqrt{\frac{\sum q_1 p_1}{\sum q_1 p_0} \times \frac{\sum q_0 p_1}{\sum q_0 p_0}}\]</span></p>
+<p>销售量指数（费雪公式）：</p>
+<p><span class="math display">\[F_q = \sqrt{L_q \times P_q} = \sqrt{\frac{\sum p_1 q_1}{\sum p_1 q_0} \times \frac{\sum p_0 q_1}{\sum p_0 q_0}}\]</span></p>
+<p><strong>说明</strong>：“理想公式”是对拉氏指数和派氏指数所求的几何平均数。由（美）Fisher 提出，能通过他本人提出的对指数公式测验的重要要求，自称为理想公式。</p>
+<p><strong>（三）固定加权综合指数——杨格公式</strong></p>
+<p>杨格公式把同度量因素固定在<strong>某一特定时期 <span class="math inline">\(n\)</span></strong>（固定权数）：</p>
+<p><span class="math display">\[\bar{I}_p = \frac{\sum p_1 q_n}{\sum p_0 q_n} \qquad \bar{I}_q = \frac{\sum q_1 p_n}{\sum q_0 p_n}\]</span></p>
+<p>其中 <span class="math inline">\(p_n\)</span>、<span class="math inline">\(q_n\)</span> 表示某一固定时期的价格/销售量水平，在对比期内保持不变。</p>
+<p><strong>我国的工业生产指数</strong>：我国的工业生产指数采用固定加权综合指数（不变价格）编制，例如 2000 年各种工业品产量与 1995 年相比：</p>
+</section>
+<section id="综合指数的其他类型续-1" class="slide level2">
+<h2>综合指数的其他类型（续）</h2>
+<p><span class="math display">\[I_q = \frac{\sum q_{2000}\, p_{1990}}{\sum q_{1995}\, p_{1990}}\]</span></p>
+<p>即以某固定年份（如 1990 年）的不变价格 <span class="math inline">\(p_n\)</span> 作为同度量因素，只反映各种工业品产量的综合变动。</p>
+</section>
+<section id="数量指标指数的编制原则与同度量因素的作用" class="slide level2 scrollable">
+<h2>数量指标指数的编制原则与同度量因素的作用</h2>
+<p><strong>编制原则</strong>：在编制数量指标指数时，应该以<strong>基期的质量指标</strong>作为同度量因素。即</p>
+<p><span class="math display">\[I_q = \frac{\sum p_0 q_1}{\sum p_0 q_0}\]</span></p>
+<p>其中价格 <span class="math inline">\(p_0\)</span> 固定在基期，从而单独反映销售量（数量指标）的综合变动。</p>
+<p>编制销售量综合指数时引入价格 <span class="math inline">\(p\)</span> 作为同度量因素，其作用可从三个层面理解：</p>
+<ol type="1">
+<li><strong>同度量作用</strong>：引入价格为同度量因素，将不能同度量的销售量转化为同度量的销售额，不同商品的销售额可以加总、对比；</li>
+<li><strong>固定权数作用</strong>：将各种商品的价格固定在同一时间，销售总额的变化就可以反映销售量的变化；</li>
+<li><strong>权数作用</strong>：在测度销售量综合变化时，价格除了起着同度量的作用，客观上还体现了各种商品销售量变化对销售额总指数的影响程度。</li>
+</ol>
+</section>
+<section id="例三种商品销售量综合指数的计算" class="slide level2">
+<h2>【例】三种商品销售量综合指数的计算</h2>
+<p><strong>例题</strong>：某商场三种商品的销售量和价格资料如下：</p>
+<table class="caption-top" style="width:100%;">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>商品名称</th>
+<th>计量单位</th>
+<th>销售量 2003（<span class="math inline">\(q_0\)</span>）</th>
+<th>销售量 2004（<span class="math inline">\(q_1\)</span>）</th>
+<th>单价（元）2003（<span class="math inline">\(p_0\)</span>）</th>
+<th>单价（元）2004（<span class="math inline">\(p_1\)</span>）</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>甲</td>
+<td>只</td>
+<td>1200</td>
+<td>1500</td>
+<td>3.6</td>
+<td>4.0</td>
+</tr>
+<tr class="even">
+<td>乙</td>
+<td>公斤</td>
+<td>1500</td>
+<td>2000</td>
+<td>2.3</td>
+<td>2.4</td>
+</tr>
+<tr class="odd">
+<td>丙</td>
+<td>件</td>
+<td>500</td>
+<td>600</td>
+<td>9.8</td>
+<td>10.6</td>
+</tr>
+</tbody>
+</table>
+<p><strong>要求</strong>：计算三种商品的<strong>销售量综合指数</strong>。</p>
+<p>以基期价格 <span class="math inline">\(p_0\)</span> 为同度量因素（拉氏公式）：</p>
+<p><span class="math display">\[I_q = \frac{\sum q_1 p_0}{\sum q_0 p_0} = \frac{\text{报告期销售商品按基期价格计算的销售总额}}{\text{基期销售总额}}\]</span></p>
+<p>代入三种商品数据：</p>
+<p><span class="math display">\[I_q = \frac{1500 \times 3.6 + 2000 \times 2.3 + 600 \times 9.8}{1200 \times 3.6 + 1500 \times 2.3 + 500 \times 9.8} = \frac{15880}{12670} = 125.34\%\]</span></p>
+<p><strong>结果表示</strong>：</p>
+<p>（a）三种商品的销售量<strong>平均增加了 25.34%</strong>；</p>
+</section>
+<section id="例三种商品销售量综合指数的计算续" class="slide level2">
+<h2>【例】三种商品销售量综合指数的计算（续）</h2>
+<p>（b）销售量变化对销售总额的影响： - 由于销售量增加 25.34% 而使销售总额相应增加 25.34%； - 由于销售量增加而使销售总额增加的<strong>绝对额 <span class="math inline">\(= 3210\)</span>（元）</strong>（<span class="math inline">\(15880 - 12670 = 3210\)</span>）。</p>
+</section>
+<section id="质量指标指数的编制原则与例题计算" class="slide level2">
+<h2>质量指标指数的编制原则与例题计算</h2>
+<p><strong>编制原则</strong>：在编制质量指标指数时，应该以<strong>报告期的数量指标</strong>作为同度量因素。即</p>
+<p><span class="math display">\[I_p = \frac{\sum q_1 p_1}{\sum q_1 p_0}\]</span></p>
+<p><strong>例题</strong>：仍用上例某商场三种商品的销售量和价格资料，计算三种商品的<strong>价格综合指数</strong>。</p>
+<p>以报告期销售量 <span class="math inline">\(q_1\)</span> 为同度量因素（派氏公式）：</p>
+<p><span class="math display">\[I_p = \frac{\sum q_1 p_1}{\sum q_1 p_0} = \frac{\text{报告期销售总额}}{\text{报告期销售商品按基期价格计算的销售总额}}\]</span></p>
+<p>代入三种商品数据：</p>
+<p><span class="math display">\[I_p = \frac{1500 \times 4.0 + 2000 \times 2.4 + 600 \times 10.6}{1500 \times 3.6 + 2000 \times 2.3 + 600 \times 9.8} = \frac{17160}{15880} = 108.06\%\]</span></p>
+<p><strong>结果表示</strong>：</p>
+<p>（a）三种商品的价格<strong>平均上涨了 8.06%</strong>；</p>
+<p>（b）价格变化对销售总额的影响： - 由于价格上升 8.06% 而使销售总额相应增加 8.06%； - 由于价格上升而使销售总额增加的<strong>绝对额 <span class="math inline">\(= 1280\)</span>（元）</strong>（<span class="math inline">\(17160 - 15880 = 1280\)</span>）。</p>
+</section>
+<section id="质量指标指数的编制原则与例题计算续" class="slide level2">
+<h2>质量指标指数的编制原则与例题计算（续）</h2>
+<blockquote>
+<p>本节配套上机任务见《新增实践 · ch09》实践块 1：三商品数据的拉氏/派氏指数与第三节 A–H 八情景公式的 R 向量化计算对照。</p>
+</blockquote>
+</section>
+<section id="第三节-平均指数" class="slide level2">
+<h2>第三节 平均指数</h2>
+<p>本节介绍编制总指数的第二条途径——平均指数。它以个体指数为基础，通过加权平均得到总指数，本节学习其概念、计算形式、作为综合指数变形的两种平均法指数以及固定权数的平均法指数，并与综合指数作系统比较。</p>
+</section>
+<section id="平均指数的概念先对比后平均" class="slide level2">
+<h2>平均指数的概念：“先对比，后平均”</h2>
+<p><strong>平均指数</strong>是对个体指数进行<strong>加权平均</strong>来求总指数的方法。其计算方法是：首先计算所研究现象的<strong>个体指数</strong>（对比），然后再以某种指标为<strong>权数</strong>进行加权平均而得。</p>
+<p>与综合指数相同，平均指数也是总指数的基本形式之一，用来反映复杂现象的变动。</p>
+<p>平均指数编制的基本方法是”<strong>先对比，后平均</strong>”：</p>
+<ul>
+<li>“先对比”指先通过对比计算个体现象的个体指数；</li>
+<li>“后平均”指将个体指数赋予适当的权数，加以平均得到总指数。</li>
+</ul>
+</section>
+<section id="平均指数的计算形式与主要问题" class="slide level2 scrollable">
+<h2>平均指数的计算形式与主要问题</h2>
+<p>平均指数之所以称为平均指数，是因为它<strong>利用了平均数的计算形式</strong>。在编制平均数指数时，主要的计算形式有<strong>算术平均</strong>和<strong>调和平均</strong>两种。</p>
+<p>平均指数的基本公式形如加权平均：</p>
+<p><span class="math display">\[I = \frac{\sum k \cdot pq}{\sum pq}\]</span></p>
+<p>其中：</p>
+<ul>
+<li><span class="math inline">\(k\)</span>（个体指数）相当于平均数计算公式中<strong>“被平均的标志”</strong>；</li>
+<li>权数 <span class="math inline">\(pq\)</span> 是<strong>与所要编制的指数密切关联的价值总量</strong>。</li>
+</ul>
+<p>编制平均指数需要解决两个主要问题：</p>
+<ol type="1">
+<li><strong>哪种平均法</strong>——采用算术平均还是调和平均；</li>
+<li><strong>权数如何确定</strong>——主要有三种：基期总额（或总量）；报告期总额（总量）；固定权数（<span class="math inline">\(w\)</span>）。</li>
+</ol>
+</section>
+<section id="作为综合指数变形的加权算术平均法指数" class="slide level2">
+<h2>作为综合指数变形的加权算术平均法指数</h2>
+<p>以<strong>基期总额（<span class="math inline">\(q_0p_0\)</span>）为权数</strong>，只有用 <span class="math inline">\(q_0p_0\)</span> 这个特殊权数加权计算，平均指数才可以变形成综合指数。除此之外不会等于综合指数，这是平均指数的独立意义所在。</p>
+<ul>
+<li>加权算术平均法指数<strong>多用于数量指标指数</strong>；</li>
+<li>对于同一资料，计算结果和经济意义与综合指数相同；</li>
+<li>平均指数是总指数的另一重要形式。</li>
+</ul>
+<p><strong>例题</strong>：某企业生产三种产品的有关数据如下，试计算三种商品产量的综合变动情况。</p>
+<table class="caption-top" style="width:100%;">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>商品名称</th>
+<th>计量单位</th>
+<th>总成本（万元）基期（<span class="math inline">\(q_0p_0\)</span>）</th>
+<th>总成本（万元）报告期（<span class="math inline">\(q_1p_1\)</span>）</th>
+<th>个体成本指数（<span class="math inline">\(p_1/p_0\)</span>）</th>
+<th>个体产量指数（<span class="math inline">\(q_1/q_0\)</span>）</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>甲</td>
+<td>件</td>
+<td>200</td>
+<td>220</td>
+<td>1.14</td>
+<td>1.03</td>
+</tr>
+<tr class="even">
+<td>乙</td>
+<td>台</td>
+<td>50</td>
+<td>50</td>
+<td>1.05</td>
+<td>0.98</td>
+</tr>
+<tr class="odd">
+<td>丙</td>
+<td>箱</td>
+<td>120</td>
+<td>150</td>
+<td>1.20</td>
+<td>1.10</td>
+</tr>
+</tbody>
+</table>
+<p>以基期总成本 <span class="math inline">\(q_0p_0\)</span> 为权数，对个体产量指数 <span class="math inline">\(k_q = q_1/q_0\)</span> 加权算术平均：</p>
+</section>
+<section id="作为综合指数变形的加权算术平均法指数续" class="slide level2">
+<h2>作为综合指数变形的加权算术平均法指数（续）</h2>
+<p><span class="math display">\[I_q = \frac{\sum k_q \, q_0 p_0}{\sum q_0 p_0} = \frac{1.03 \times 200 + 0.98 \times 50 + 1.10 \times 120}{200 + 50 + 120} = \frac{387}{370} = 104.59\%\]</span></p>
+<p><strong>结论</strong>：报告期与基期相比，三种产品的产量<strong>平均提高了 4.59%</strong>；由于产量增加使总成本增加 4.59%，由此而增加的总成本 <span class="math inline">\(= 387 - 370 = 17\)</span>（万元）。</p>
+</section>
+<section id="作为综合指数变形的调和平均法指数" class="slide level2">
+<h2>作为综合指数变形的调和平均法指数</h2>
+<p>以<strong>报告期总量（<span class="math inline">\(q_1p_1\)</span>）为权数</strong>，对个体指数加权<strong>调和平均</strong>：</p>
+<p><span class="math display">\[I_p = \frac{\sum q_1 p_1}{\sum \dfrac{q_1 p_1}{p_1 / p_0}} = \frac{\sum q_1 p_1}{\sum \left( \dfrac{p_0}{p_1} \right) q_1 p_1} = \frac{\sum q_1 p_1}{\sum q_1 p_0}\]</span></p>
+<p>（公式编号 10-17）</p>
+<p><strong>要点</strong>：</p>
+<ul>
+<li>只有用 <span class="math inline">\(q_1p_1\)</span> 这个特殊权数加权计算，平均指数才可以变形成综合指数，除此之外，这种关系不存在；</li>
+<li>调和平均法指数<strong>多用于质量指标指数</strong>；</li>
+<li>对于同一资料，计算结果和经济意义与综合指数相同。</li>
+</ul>
+<p><strong>例题</strong>：某企业生产三种产品的数据同上例，试计算三种商品成本的综合变动情况。</p>
+<p>以报告期总成本 <span class="math inline">\(q_1p_1\)</span> 为权数，对个体成本指数 <span class="math inline">\(k_p = p_1/p_0\)</span> 加权调和平均：</p>
+<p><span class="math display">\[I_p = \frac{\sum q_1 p_1}{\sum \dfrac{q_1 p_1}{k_p}} = \frac{220 + 50 + 150}{\dfrac{220}{1.14} + \dfrac{50}{1.05} + \dfrac{150}{1.20}} = \frac{420}{365.60} = 114.88\%\]</span></p>
+</section>
+<section id="作为综合指数变形的调和平均法指数续" class="slide level2">
+<h2>作为综合指数变形的调和平均法指数（续）</h2>
+<p><strong>结论</strong>：报告期与基期相比，三种产品的单位成本<strong>平均提高了 14.88%</strong>；由于单位成本上升使总成本增加 14.88%，由于单位成本增加而增加的总成本 <span class="math inline">\(= (420 - 365.60)\)</span> 万元。</p>
+</section>
+<section id="权数资料条件匹配与情景变式训练" class="slide level2">
+<h2>权数—资料条件匹配与情景变式训练</h2>
+<p>前面两小节分别用基期总额 <span class="math inline">\(q_0p_0\)</span> 加权的算术平均、报告期总额 <span class="math inline">\(q_1p_1\)</span> 加权的调和平均”还原”出了综合指数。一个自然的问题是：<strong>如果统计员手里掌握的是别的口径的资料呢？</strong> 本小节引入权数的双下标记号，给出”资料条件 × 平均形式 × 权数”的完整匹配表，再用本章自己的数据做三个课堂变式，把”平均指数是综合指数的变形”从一句结论变成可验证的体验。</p>
+<p><strong>一、权数的双下标记号</strong></p>
+<p>加权平均指数的权数是两个有内在联系变量的乘积（如销售额 <span class="math inline">\(=\)</span> 价格 <span class="math inline">\(\times\)</span> 销售量），既可以是<strong>同期</strong>变量的乘积，也可以是<strong>混合时期</strong>变量的乘积。引入双下标记号（第一个下标标记 <span class="math inline">\(q\)</span> 的时期、第二个下标标记 <span class="math inline">\(p\)</span> 的时期）：</p>
+<p><span class="math display">\[f_{00} = q_0p_0, \qquad f_{01} = q_0p_1, \qquad f_{10} = q_1p_0, \qquad f_{11} = q_1p_1\]</span></p>
+<p>配套的个体指数记号：<span class="math inline">\(k_q = q_1/q_0\)</span>（个体数量指数）、<span class="math inline">\(k_p = p_1/p_0\)</span>（个体质量指数）。</p>
+<p><strong>二、资料条件 × 平均形式 × 权数匹配表</strong></p>
+<p>能作为”变形目标”的综合指数只有四个，每个都是”分子合计 ÷ 分母合计”的结构：</p>
+</section>
+<section id="权数资料条件匹配与情景变式训练续" class="slide level2">
+<h2>权数—资料条件匹配与情景变式训练（续）</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>目标指数</th>
+<th>比值结构</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>拉氏数量指数 <span class="math inline">\(L_q\)</span></td>
+<td><span class="math inline">\(\dfrac{\sum q_1p_0}{\sum q_0p_0} = \dfrac{\sum f_{10}}{\sum f_{00}}\)</span></td>
+</tr>
+<tr class="even">
+<td>拉氏质量指数 <span class="math inline">\(L_p\)</span></td>
+<td><span class="math inline">\(\dfrac{\sum p_1q_0}{\sum p_0q_0} = \dfrac{\sum f_{01}}{\sum f_{00}}\)</span></td>
+</tr>
+<tr class="odd">
+<td>派氏数量指数 <span class="math inline">\(P_q\)</span></td>
+<td><span class="math inline">\(\dfrac{\sum q_1p_1}{\sum q_0p_1} = \dfrac{\sum f_{11}}{\sum f_{01}}\)</span></td>
+</tr>
+<tr class="even">
+<td>派氏质量指数 <span class="math inline">\(P_p\)</span></td>
+<td><span class="math inline">\(\dfrac{\sum p_1q_1}{\sum p_1q_0} = \dfrac{\sum f_{11}}{\sum f_{10}}\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>于是<strong>已知哪个口径的 <span class="math inline">\(f\)</span>，就能还原哪个指数</strong>，平均形式由权数在目标指数中的位置决定——已知权数位于目标指数的<strong>分母</strong>时用<strong>加权算术平均</strong>，位于<strong>分子</strong>时用<strong>加权调和平均</strong>。按此规则共得八个情景（编号 A–H）：</p>
+</section>
+<section id="权数资料条件匹配与情景变式训练续-1" class="slide level2">
+<h2>权数—资料条件匹配与情景变式训练（续）</h2>
+<table class="caption-top" style="width:100%;">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>情景</th>
+<th>已知资料</th>
+<th>平均形式</th>
+<th>公式</th>
+<th>还原的综合指数</th>
+<th>公式代号</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>A</td>
+<td>基期总额 <span class="math inline">\(f_{00}\)</span> + <span class="math inline">\(k_q\)</span></td>
+<td>算术</td>
+<td><span class="math inline">\(\dfrac{\sum k_q f_{00}}{\sum f_{00}}\)</span></td>
+<td>拉氏数量 <span class="math inline">\(L_q\)</span></td>
+<td><span class="math inline">\(A_q(L)\)</span></td>
+</tr>
+<tr class="even">
+<td>B</td>
+<td>基期总额 <span class="math inline">\(f_{00}\)</span> + <span class="math inline">\(k_p\)</span></td>
+<td>算术</td>
+<td><span class="math inline">\(\dfrac{\sum k_p f_{00}}{\sum f_{00}}\)</span></td>
+<td>拉氏质量 <span class="math inline">\(L_p\)</span></td>
+<td><span class="math inline">\(A_p(L)\)</span></td>
+</tr>
+<tr class="odd">
+<td>C</td>
+<td>混合总额 <span class="math inline">\(f_{01}\)</span> + <span class="math inline">\(k_q\)</span></td>
+<td>算术</td>
+<td><span class="math inline">\(\dfrac{\sum k_q f_{01}}{\sum f_{01}}\)</span></td>
+<td>派氏数量 <span class="math inline">\(P_q\)</span></td>
+<td><span class="math inline">\(A_q(P)\)</span></td>
+</tr>
+<tr class="even">
+<td>D</td>
+<td>混合总额 <span class="math inline">\(f_{10}\)</span> + <span class="math inline">\(k_p\)</span></td>
+<td>算术</td>
+<td><span class="math inline">\(\dfrac{\sum k_p f_{10}}{\sum f_{10}}\)</span></td>
+<td>派氏质量 <span class="math inline">\(P_p\)</span></td>
+<td><span class="math inline">\(A_p(P)\)</span></td>
+</tr>
+<tr class="odd">
+<td>E</td>
+<td>混合总额 <span class="math inline">\(f_{10}\)</span> + <span class="math inline">\(k_q\)</span></td>
+<td>调和</td>
+<td><span class="math inline">\(\dfrac{\sum f_{10}}{\sum f_{10}/k_q}\)</span></td>
+<td>拉氏数量 <span class="math inline">\(L_q\)</span></td>
+<td><span class="math inline">\(H_q(L)\)</span></td>
+</tr>
+<tr class="even">
+<td>F</td>
+<td>混合总额 <span class="math inline">\(f_{01}\)</span> + <span class="math inline">\(k_p\)</span></td>
+<td>调和</td>
+<td><span class="math inline">\(\dfrac{\sum f_{01}}{\sum f_{01}/k_p}\)</span></td>
+<td>拉氏质量 <span class="math inline">\(L_p\)</span></td>
+<td><span class="math inline">\(H_p(L)\)</span></td>
+</tr>
+<tr class="odd">
+<td>G</td>
+<td>报告期总额 <span class="math inline">\(f_{11}\)</span> + <span class="math inline">\(k_q\)</span></td>
+<td>调和</td>
+<td><span class="math inline">\(\dfrac{\sum f_{11}}{\sum f_{11}/k_q}\)</span></td>
+<td>派氏数量 <span class="math inline">\(P_q\)</span></td>
+<td><span class="math inline">\(H_q(P)\)</span></td>
+</tr>
+<tr class="even">
+<td>H</td>
+<td>报告期总额 <span class="math inline">\(f_{11}\)</span> + <span class="math inline">\(k_p\)</span></td>
+<td>调和</td>
+<td><span class="math inline">\(\dfrac{\sum f_{11}}{\sum f_{11}/k_p}\)</span></td>
+<td>派氏质量 <span class="math inline">\(P_p\)</span></td>
+<td><span class="math inline">\(H_p(P)\)</span></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="权数资料条件匹配与情景变式训练续-2" class="slide level2">
+<h2>权数—资料条件匹配与情景变式训练（续）</h2>
+<p>以情景 A 为例验证变形机制：<span class="math inline">\(\sum k_q f_{00} = \sum \dfrac{q_1}{q_0} \cdot q_0p_0 = \sum q_1p_0\)</span>，故 <span class="math inline">\(A_q(L) = \dfrac{\sum q_1p_0}{\sum q_0p_0} = L_q\)</span>；其余七个情景同理（如情景 H 的分母 <span class="math inline">\(\sum f_{11}/k_p = \sum \dfrac{q_1p_1}{p_1/p_0} = \sum q_1p_0\)</span>，故 <span class="math inline">\(H_p(P) = \dfrac{\sum q_1p_1}{\sum q_1p_0} = P_p\)</span>）。由此可见：<strong>同一个综合指数可由两套资料条件、两种平均形式还原出来</strong>（A 与 E 同得 <span class="math inline">\(L_q\)</span>，B 与 F 同得 <span class="math inline">\(L_p\)</span>，C 与 G 同得 <span class="math inline">\(P_q\)</span>，D 与 H 同得 <span class="math inline">\(P_p\)</span>）。本节前文的两类标准变形正是表中 A 行（算术、基期权数，多用于数量指标指数）与 H 行（调和、报告期权数，多用于质量指标指数）。</p>
+<blockquote>
+<p><strong>公式选择三问</strong>：拿到”部分产值 + 个体指数”型资料时依次自问——①目标指数是哪一个（拉氏还是派氏、数量还是质量）？②已知权数是哪个口径（<span class="math inline">\(f_{00}\)</span>、<span class="math inline">\(f_{01}\)</span>、<span class="math inline">\(f_{10}\)</span>、<span class="math inline">\(f_{11}\)</span>）？③该权数在目标指数的分母还是分子？分母用算术平均、分子用调和平均，对号入座即可。</p>
+</blockquote>
+<p><strong>三、情景变式训练（用本章自己的数据）</strong></p>
+</section>
+<section id="权数资料条件匹配与情景变式训练续-3" class="slide level2">
+<h2>权数—资料条件匹配与情景变式训练（续）</h2>
+<p>以下三个变式的数据底座分别是第二节三商品商场例题与第四节粮油市场例题。<strong>同一个数据底座，每次只换”已知的资料条件”</strong>：请先遮住解答，判断该用哪个情景的公式，动笔计算后再与综合指数结果对照。</p>
+<p><strong>数据底座（三商品商场，单位：元）</strong>：四个口径的销售额为</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>口径</th>
+<th>甲</th>
+<th>乙</th>
+<th>丙</th>
+<th>合计</th>
+<th>记号</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(q_0p_0\)</span></td>
+<td>4320</td>
+<td>3450</td>
+<td>4900</td>
+<td>12670</td>
+<td><span class="math inline">\(\sum f_{00}\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(q_1p_0\)</span></td>
+<td>5400</td>
+<td>4600</td>
+<td>5880</td>
+<td>15880</td>
+<td><span class="math inline">\(\sum f_{10}\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(q_0p_1\)</span></td>
+<td>4800</td>
+<td>3600</td>
+<td>5300</td>
+<td>13700</td>
+<td><span class="math inline">\(\sum f_{01}\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(q_1p_1\)</span></td>
+<td>6000</td>
+<td>4800</td>
+<td>6360</td>
+<td>17160</td>
+<td><span class="math inline">\(\sum f_{11}\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>个体销售量指数 <span class="math inline">\(k_q\)</span>：甲 <span class="math inline">\(\dfrac{1500}{1200}=125\%\)</span>、乙 <span class="math inline">\(\dfrac{2000}{1500}=133.33\%\)</span>、丙 <span class="math inline">\(\dfrac{600}{500}=120\%\)</span>；个体价格指数 <span class="math inline">\(k_p\)</span>：甲 <span class="math inline">\(\dfrac{4.0}{3.6}=111.11\%\)</span>、乙 <span class="math inline">\(\dfrac{2.4}{2.3}=104.35\%\)</span>、丙 <span class="math inline">\(\dfrac{10.6}{9.8}=108.16\%\)</span>。</p>
+</section>
+<section id="权数资料条件匹配与情景变式训练续-4" class="slide level2">
+<h2>权数—资料条件匹配与情景变式训练（续）</h2>
+<p><strong>变式一（情景 A 型）</strong>：统计员只留下基期销售台账和三类商品的个体销售量指数——基期销售额 <span class="math inline">\(f_{00}\)</span>：甲 4320 元、乙 3450 元、丙 4900 元；<span class="math inline">\(k_q\)</span>：甲 <span class="math inline">\(1.25\)</span>、乙 <span class="math inline">\(1.3333\)</span>、丙 <span class="math inline">\(1.20\)</span>。求销售量总指数。</p>
+<p>判断：已知 <span class="math inline">\(f_{00}\)</span> + <span class="math inline">\(k_q\)</span>，<span class="math inline">\(f_{00}\)</span> 是 <span class="math inline">\(L_q\)</span> 的分母 → 情景 A，加权算术平均：</p>
+<p><span class="math display">\[A_q(L) = \frac{\sum k_q f_{00}}{\sum f_{00}} = \frac{1.25 \times 4320 + 1.3333 \times 3450 + 1.20 \times 4900}{4320 + 3450 + 4900} = \frac{5400 + 4600 + 5880}{12670} = \frac{15880}{12670} = 125.34\%\]</span></p>
+<p><strong>殊途同归</strong>：与第二节直接用拉氏公式 <span class="math inline">\(I_q = \dfrac{\sum q_1p_0}{\sum q_0p_0}\)</span> 算得的 <span class="math inline">\(125.34\%\)</span> 完全一致，影响绝对额同为 <span class="math inline">\(15880 - 12670 = 3210\)</span>（元）——一张报告期销售量表都没有，照样还原出综合指数。</p>
+</section>
+<section id="权数资料条件匹配与情景变式训练续-5" class="slide level2">
+<h2>权数—资料条件匹配与情景变式训练（续）</h2>
+<p><strong>变式二（情景 H 型）</strong>：换一位统计员，手里只有报告期销售报表和个体价格指数——<span class="math inline">\(f_{11}\)</span>：甲 6000 元、乙 4800 元、丙 6360 元；<span class="math inline">\(k_p\)</span>：甲 <span class="math inline">\(1.1111\)</span>、乙 <span class="math inline">\(1.0435\)</span>、丙 <span class="math inline">\(1.0816\)</span>。求价格总指数。</p>
+<p>判断：已知 <span class="math inline">\(f_{11}\)</span> + <span class="math inline">\(k_p\)</span>，<span class="math inline">\(f_{11}\)</span> 是 <span class="math inline">\(P_p\)</span> 的分子 → 情景 H，加权调和平均：</p>
+<p><span class="math display">\[H_p(P) = \frac{\sum f_{11}}{\sum f_{11}/k_p} = \frac{6000 + 4800 + 6360}{\dfrac{6000}{1.1111} + \dfrac{4800}{1.0435} + \dfrac{6360}{1.0816}} = \frac{17160}{5400 + 4600 + 5880} = \frac{17160}{15880} = 108.06\%\]</span></p>
+<p><strong>殊途同归</strong>：与第二节派氏价格指数 <span class="math inline">\(108.06\%\)</span>、影响额 1280 元完全一致。注意调和平均的分母 <span class="math inline">\(\sum f_{11}/k_p\)</span> 把报告期销售额逐项”除以个体指数”折回了 <span class="math inline">\(\sum q_1p_0\)</span>——这正是变形的关键一步。</p>
+</section>
+<section id="权数资料条件匹配与情景变式训练续-6" class="slide level2">
+<h2>权数—资料条件匹配与情景变式训练（续）</h2>
+<p><strong>变式三（情景 B 型，粮油市场数据）</strong>：第四节粮油市场例题只算了派氏价格指数 <span class="math inline">\(102.44\%\)</span>。若统计员掌握的是<strong>基期</strong>销售额和个体价格指数——<span class="math inline">\(f_{00}\)</span>：粳米 312000 元、标准粉 345000 元、花生油 14700 元；<span class="math inline">\(k_p\)</span>：粳米 <span class="math inline">\(1.1538\)</span>、标准粉 <span class="math inline">\(0.9130\)</span>、花生油 <span class="math inline">\(1.0714\)</span>。求拉氏价格指数。</p>
+<p>判断：已知 <span class="math inline">\(f_{00}\)</span> + <span class="math inline">\(k_p\)</span>，<span class="math inline">\(f_{00}\)</span> 是 <span class="math inline">\(L_p\)</span> 的分母 → 情景 B，加权算术平均：</p>
+<p><span class="math display">\[A_p(L) = \frac{\sum k_p f_{00}}{\sum f_{00}} = \frac{1.1538 \times 312000 + 0.9130 \times 345000 + 1.0714 \times 14700}{312000 + 345000 + 14700} = \frac{360000 + 315000 + 15750}{671700} = \frac{690750}{671700} = 102.84\%\]</span></p>
+</section>
+<section id="权数资料条件匹配与情景变式训练续-7" class="slide level2">
+<h2>权数—资料条件匹配与情景变式训练（续）</h2>
+<p>即按基期销售量加权，三种粮油价格综合上涨 <span class="math inline">\(2.84\%\)</span>，影响绝对额 <span class="math inline">\(690750 - 671700 = 19050\)</span>（元）。与已有的派氏结果对照：<span class="math inline">\(L_p = 102.84\% &gt; P_p = 102.44\%\)</span>——涨价的粳米（<span class="math inline">\(+15.38\%\)</span>）在基期权数中占 <span class="math inline">\(46.4\%\)</span>，在派氏（报告期销售量）权数中降为 <span class="math inline">\(45.1\%\)</span>；降价的标准粉（<span class="math inline">\(-8.70\%\)</span>）权重则由 <span class="math inline">\(51.4\%\)</span> 升至 <span class="math inline">\(53.1\%\)</span>。权数结构的变化使派氏低于拉氏，这从数据上印证了第二节”两套公式的经济意义不完全相同”的论断：<strong>资料条件（权数口径）本身就在影响测算结果</strong>，报告测算结果时必须交代按哪一期权数加权。</p>
+</section>
+<section id="权数资料条件匹配与情景变式训练续-8" class="slide level2">
+<h2>权数—资料条件匹配与情景变式训练（续）</h2>
+<blockquote>
+<p><strong>教师参考框</strong>：胡华平课件以同一套企业三产品数据（<span class="math inline">\(\sum f_{00}=745.6\)</span> 万元、<span class="math inline">\(\sum f_{10}=873.2\)</span> 万元、<span class="math inline">\(\sum f_{01}=821.6\)</span> 万元、<span class="math inline">\(\sum f_{11}=962.0\)</span> 万元）对 A–H 八个情景逐一做了”数据表 → 判断 → 解答”的完整推演（每个情景两页，如情景 A 得 <span class="math inline">\(117.11\%\)</span>、情景 G 得 <span class="math inline">\(117.09\%\)</span>），课堂需要更多变式时可直接取用。引用其结果页时注意四处排版误植：p20 帕氏质量指数的差额误标 <span class="math inline">\(\Delta p(L)\)</span>（应为 <span class="math inline">\(\Delta p(P)\)</span>）；p44 标题误写”加权算数平均”而实际公式为调和平均 <span class="math inline">\(H_p(L)\)</span>；p46 帕氏调和数量指数的结果页误标代号 <span class="math inline">\(A_q(P)\)</span>（应为 <span class="math inline">\(H_q(P)\)</span>）；p13 将帕氏指数英文名误拼为”Paasche Laspeyres index”（两种指数混拼为一词）——引用时按本节匹配表的代号与本讲义的规范拼写为准。</p>
+</blockquote>
+<blockquote>
+<p>本节配套上机任务见《新增实践 · ch09》实践块 1：A–H 八情景公式的 R 向量化计算与”殊途同归”对照。</p>
+</blockquote>
+</section>
+<section id="r-实践-八情景公式选择的向量化计算" class="slide level2 r-demo">
+<h2>R 实践 · 八情景公式选择的向量化计算</h2>
+<p>讲义第三节的匹配表给出 A–H 八个情景：已知权数在目标指数<strong>分母</strong>用加权算术平均 <span class="math inline">\(A=\sum k f/\sum f\)</span>，在<strong>分子</strong>用加权调和平均 <span class="math inline">\(H=\sum f/\sum(f/k)\)</span>。用向量运算一次性算完八个情景，并与四个综合指数直接对照——“殊途同归”当场可见。</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a aria-label="1"></a><span class="co"># 三商品商场数据（讲义第二节例题）</span></span>
+<span id="cb3-2"><a aria-label="2"></a>q0 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1200</span>, <span class="dv">1500</span>, <span class="dv">500</span>)      <span class="co"># 基期销售量</span></span>
+<span id="cb3-3"><a aria-label="3"></a>q1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1500</span>, <span class="dv">2000</span>, <span class="dv">600</span>)      <span class="co"># 报告期销售量</span></span>
+<span id="cb3-4"><a aria-label="4"></a>p0 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">3.6</span>, <span class="fl">2.3</span>, <span class="fl">9.8</span>)        <span class="co"># 基期价格</span></span>
+<span id="cb3-5"><a aria-label="5"></a>p1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">4.0</span>, <span class="fl">2.4</span>, <span class="fl">10.6</span>)       <span class="co"># 报告期价格</span></span>
+<span id="cb3-6"><a aria-label="6"></a></span>
+<span id="cb3-7"><a aria-label="7"></a>f00 <span class="ot">&lt;-</span> q0 <span class="sc">*</span> p0   <span class="co"># c(4320, 3450, 4900)   合计 12670</span></span>
+<span id="cb3-8"><a aria-label="8"></a>f01 <span class="ot">&lt;-</span> q0 <span class="sc">*</span> p1   <span class="co"># c(4800, 3600, 5300)   合计 13700</span></span>
+<span id="cb3-9"><a aria-label="9"></a>f10 <span class="ot">&lt;-</span> q1 <span class="sc">*</span> p0   <span class="co"># c(5400, 4600, 5880)   合计 15880</span></span>
+<span id="cb3-10"><a aria-label="10"></a>f11 <span class="ot">&lt;-</span> q1 <span class="sc">*</span> p1   <span class="co"># c(6000, 4800, 6360)   合计 17160</span></span>
+<span id="cb3-11"><a aria-label="11"></a>kq  <span class="ot">&lt;-</span> q1 <span class="sc">/</span> q0   <span class="co"># 个体销售量指数</span></span>
+<span id="cb3-12"><a aria-label="12"></a>kp  <span class="ot">&lt;-</span> p1 <span class="sc">/</span> p0   <span class="co"># 个体价格指数</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a aria-label="1"></a><span class="co"># 第二节两行验证：拉氏销售量指数与派氏价格指数（讲义手算 125.34%、108.06%）</span></span>
+<span id="cb4-2"><a aria-label="2"></a><span class="fu">round</span>(<span class="fu">c</span>(<span class="at">Lq =</span> <span class="fu">sum</span>(f10) <span class="sc">/</span> <span class="fu">sum</span>(f00), <span class="at">Pp =</span> <span class="fu">sum</span>(f11) <span class="sc">/</span> <span class="fu">sum</span>(f10)), <span class="dv">4</span>)</span>
+<span id="cb4-3"><a aria-label="3"></a><span class="co">#&gt;     Lq     Pp </span></span>
+<span id="cb4-4"><a aria-label="4"></a><span class="co">#&gt; 1.2534 1.0806</span></span>
+<span id="cb4-5"><a aria-label="5"></a><span class="co">#&gt;      Lq      Pp</span></span>
+<span id="cb4-6"><a aria-label="6"></a><span class="co">#&gt;  1.2534  1.0806</span></span>
+<span id="cb4-7"><a aria-label="7"></a></span>
+<span id="cb4-8"><a aria-label="8"></a><span class="co"># 八情景速查函数：arith = 加权算术平均，harm = 加权调和平均</span></span>
+<span id="cb4-9"><a aria-label="9"></a>arith <span class="ot">&lt;-</span> <span class="cf">function</span>(k, f) <span class="fu">sum</span>(k <span class="sc">*</span> f) <span class="sc">/</span> <span class="fu">sum</span>(f)   <span class="co"># 等价于 weighted.mean(k, f)</span></span>
+<span id="cb4-10"><a aria-label="10"></a>harm  <span class="ot">&lt;-</span> <span class="cf">function</span>(k, f) <span class="fu">sum</span>(f) <span class="sc">/</span> <span class="fu">sum</span>(f <span class="sc">/</span> k)</span>
+<span id="cb4-11"><a aria-label="11"></a></span>
+<span id="cb4-12"><a aria-label="12"></a>tab <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb4-13"><a aria-label="13"></a>  <span class="at">scenario  =</span> LETTERS[<span class="dv">1</span><span class="sc">:</span><span class="dv">8</span>],</span>
+<span id="cb4-14"><a aria-label="14"></a>  <span class="at">known     =</span> <span class="fu">c</span>(<span class="st">"f00+kq"</span>, <span class="st">"f00+kp"</span>, <span class="st">"f01+kq"</span>, <span class="st">"f10+kp"</span>,</span>
+<span id="cb4-15"><a aria-label="15"></a>                <span class="st">"f10+kq"</span>, <span class="st">"f01+kp"</span>, <span class="st">"f11+kq"</span>, <span class="st">"f11+kp"</span>),</span>
+<span id="cb4-16"><a aria-label="16"></a>  <span class="at">form      =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"算术"</span>, <span class="st">"调和"</span>), <span class="at">each =</span> <span class="dv">4</span>),</span>
+<span id="cb4-17"><a aria-label="17"></a>  <span class="at">value     =</span> <span class="fu">c</span>(<span class="fu">arith</span>(kq, f00), <span class="fu">arith</span>(kp, f00), <span class="fu">arith</span>(kq, f01), <span class="fu">arith</span>(kp, f10),</span>
+<span id="cb4-18"><a aria-label="18"></a>                <span class="fu">harm</span>(kq, f10),  <span class="fu">harm</span>(kp, f01),  <span class="fu">harm</span>(kq, f11),  <span class="fu">harm</span>(kp, f11)),</span>
+<span id="cb4-19"><a aria-label="19"></a>  <span class="at">target    =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"Lq"</span>, <span class="st">"Lp"</span>, <span class="st">"Pq"</span>, <span class="st">"Pp"</span>), <span class="dv">2</span>)</span>
+<span id="cb4-20"><a aria-label="20"></a>)</span>
+<span id="cb4-21"><a aria-label="21"></a>tab<span class="sc">$</span>percent <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="dv">100</span> <span class="sc">*</span> tab<span class="sc">$</span>value, <span class="dv">2</span>)</span>
+<span id="cb4-22"><a aria-label="22"></a>tab</span>
+<span id="cb4-23"><a aria-label="23"></a><span class="co">#&gt;   scenario  known form    value target percent</span></span>
+<span id="cb4-24"><a aria-label="24"></a><span class="co">#&gt; 1        A f00+kq 算术 1.253354     Lq  125.34</span></span>
+<span id="cb4-25"><a aria-label="25"></a><span class="co">#&gt; 2        B f00+kp 算术 1.081294     Lp  108.13</span></span>
+<span id="cb4-26"><a aria-label="26"></a><span class="co">#&gt; 3        C f01+kq 算术 1.252555     Pq  125.26</span></span>
+<span id="cb4-27"><a aria-label="27"></a><span class="co">#&gt; 4        D f10+kp 算术 1.080605     Pp  108.06</span></span>
+<span id="cb4-28"><a aria-label="28"></a><span class="co">#&gt; 5        E f10+kq 调和 1.253354     Lq  125.34</span></span>
+<span id="cb4-29"><a aria-label="29"></a><span class="co">#&gt; 6        F f01+kp 调和 1.081294     Lp  108.13</span></span>
+<span id="cb4-30"><a aria-label="30"></a><span class="co">#&gt; 7        G f11+kq 调和 1.252555     Pq  125.26</span></span>
+<span id="cb4-31"><a aria-label="31"></a><span class="co">#&gt; 8        H f11+kp 调和 1.080605     Pp  108.06</span></span>
+<span id="cb4-32"><a aria-label="32"></a><span class="co">#&gt;   scenario known  form  value target percent</span></span>
+<span id="cb4-33"><a aria-label="33"></a><span class="co">#&gt; 1        A f00+kq  算术 1.2534     Lq  125.34   &lt;- 讲义变式一</span></span>
+<span id="cb4-34"><a aria-label="34"></a><span class="co">#&gt; 2        B f00+kp  算术 1.0813     Lp  108.13   &lt;- 讲义变式三（粮油数据同型）</span></span>
+<span id="cb4-35"><a aria-label="35"></a><span class="co">#&gt; 3        C f01+kq  算术 1.2526     Pq  125.26</span></span>
+<span id="cb4-36"><a aria-label="36"></a><span class="co">#&gt; 4        D f10+kp  算术 1.0806     Pp  108.06</span></span>
+<span id="cb4-37"><a aria-label="37"></a><span class="co">#&gt; 5        E f10+kq  调和 1.2534     Lq  125.34</span></span>
+<span id="cb4-38"><a aria-label="38"></a><span class="co">#&gt; 6        F f01+kp  调和 1.0813     Lp  108.13</span></span>
+<span id="cb4-39"><a aria-label="39"></a><span class="co">#&gt; 7        G f11+kq  调和 1.2526     Pq  125.26</span></span>
+<span id="cb4-40"><a aria-label="40"></a><span class="co">#&gt; 8        H f11+kp  调和 1.0806     Pp  108.06   &lt;- 讲义变式二</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a aria-label="1"></a><span class="co"># 殊途同归验证：A=E、B=F、C=G、D=H，且各自等于直接计算的综合指数</span></span>
+<span id="cb5-2"><a aria-label="2"></a>comp <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">Lq =</span> <span class="fu">sum</span>(f10) <span class="sc">/</span> <span class="fu">sum</span>(f00),</span>
+<span id="cb5-3"><a aria-label="3"></a>          <span class="at">Lp =</span> <span class="fu">sum</span>(f01) <span class="sc">/</span> <span class="fu">sum</span>(f00),</span>
+<span id="cb5-4"><a aria-label="4"></a>          <span class="at">Pq =</span> <span class="fu">sum</span>(f11) <span class="sc">/</span> <span class="fu">sum</span>(f01),</span>
+<span id="cb5-5"><a aria-label="5"></a>          <span class="at">Pp =</span> <span class="fu">sum</span>(f11) <span class="sc">/</span> <span class="fu">sum</span>(f10))</span>
+<span id="cb5-6"><a aria-label="6"></a><span class="fu">all.equal</span>(tab<span class="sc">$</span>value[<span class="dv">1</span>], comp[[<span class="st">"Lq"</span>]])   <span class="co"># A = Lq：TRUE（用 [[ 取元素，避免携带名字属性）</span></span>
+<span id="cb5-7"><a aria-label="7"></a><span class="co">#&gt; [1] TRUE</span></span>
+<span id="cb5-8"><a aria-label="8"></a><span class="fu">all.equal</span>(tab<span class="sc">$</span>value[<span class="dv">8</span>], comp[[<span class="st">"Pp"</span>]])   <span class="co"># H = Pp：TRUE</span></span>
+<span id="cb5-9"><a aria-label="9"></a><span class="co">#&gt; [1] TRUE</span></span>
+<span id="cb5-10"><a aria-label="10"></a><span class="fu">round</span>(comp, <span class="dv">4</span>)</span>
+<span id="cb5-11"><a aria-label="11"></a><span class="co">#&gt;     Lq     Lp     Pq     Pp </span></span>
+<span id="cb5-12"><a aria-label="12"></a><span class="co">#&gt; 1.2534 1.0813 1.2526 1.0806</span></span>
+<span id="cb5-13"><a aria-label="13"></a><span class="co">#&gt;      Lq      Lp      Pq      Pp</span></span>
+<span id="cb5-14"><a aria-label="14"></a><span class="co">#&gt;  1.2534  1.0813  1.2526  1.0806</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div title="与讲义手算对照">
+<div class="callout callout-note callout-titled callout-style-simple">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>与讲义手算对照</strong></p>
+</div>
+<div class="callout-content">
+<p>情景 A 得 125.34%、情景 H 得 108.06%，与讲义第二节的拉氏销售量指数、派氏价格指数手算值完全一致；情景 B 的 108.13% 即讲义变式三粮油数据的同型公式（三商品口径的拉氏价格指数）。上机时可以任意”扣掉”一个 <span class="math inline">\(f\)</span> 口径，只留个体指数与另一个口径，再选对公式复算——这正是八情景训练的玩法。作业与考试仍按讲义手算书写，软件用于验证与探索。</p>
+</div>
+</div>
+</div>
+</div>
+<div title="动手实验：资料条件一变，公式跟着变">
+<div class="callout callout-note callout-titled callout-style-simple">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>动手实验：资料条件一变，公式跟着变</strong></p>
+</div>
+<div class="callout-content">
+<p>试试只用 <code>f11</code> 与 <code>kq</code> 求<strong>销售量</strong>总指数（情景 G）：<code>harm(kq, f11)</code> 得 1.2526，即派氏数量指数 <span class="math inline">\(P_q\)</span>；再用 <code>arith(kq, f01)</code>（情景 C）对照，两者理应相等。若误用了算术形式 <code>arith(kq, f11)</code>，会得到一个不属于任何综合指数的数值——体会”权数在分子必须用调和平均”这条规则为什么不能违反。</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="固定权数的平均法指数" class="slide level2">
+<h2>固定权数的平均法指数</h2>
+<p><strong>固定权数平均法指数</strong>的特点：</p>
+<ul>
+<li>权数<strong>不随基期或报告期改变而改变</strong>，在较长时间内固定不变；</li>
+<li>权数一般用<strong>比重形式</strong>（<span class="math inline">\(w\)</span>，<span class="math inline">\(\sum w = 100\%\)</span> 或 <span class="math inline">\(1\)</span>）；</li>
+<li>便于<strong>长期对比</strong>，不受权数变化的影响；</li>
+<li><strong>既可用于数量指标指数，也可用于质量指标指数</strong>。</li>
+</ul>
+<p>计算公式为固定加权算术平均形式：</p>
+<p><span class="math display">\[I_q = \frac{\sum I_q w}{\sum w}\]</span></p>
+<p>其中 <span class="math inline">\(I_q\)</span> 为个体（类）指数，<span class="math inline">\(w\)</span> 为固定权数。</p>
+<p>平均指数<strong>不仅仅是综合指数的变形</strong>，在许多场合下它还是一种<strong>相对独立的总指数编制方法</strong>，具有比综合指数更广泛的适用性。</p>
+</section>
+<section id="平均指数与综合指数的区别" class="slide level2">
+<h2>平均指数与综合指数的区别</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>比较角度</th>
+<th>综合指数</th>
+<th>平均指数</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>⒈ 解决复杂总体不能直接同度量问题的<strong>思想</strong>不同</td>
+<td><strong>先综合，后对比</strong></td>
+<td><strong>先对比，后综合</strong></td>
+</tr>
+<tr class="even">
+<td>⒉ 运用资料的<strong>条件</strong>不同</td>
+<td>需具备研究总体的<strong>全面资料</strong></td>
+<td><strong>同时适用于全面、非全面资料</strong></td>
+</tr>
+<tr class="odd">
+<td>⒊ 在经济分析中的<strong>具体作用</strong>不同</td>
+<td>可同时进行<strong>相对分析与绝对分析</strong></td>
+<td>除作为综合指数变形加以应用的情况外，一般只能进行<strong>相对分析</strong></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="第四节-指数体系与因素分析" class="slide level2">
+<h2>第四节 指数体系与因素分析</h2>
+<p>本节是全章的核心与落脚点：先建立指数体系的概念与相对数、绝对数两方面关系，再利用指数体系进行指数间的相互推算，进而系统学习总量指标的两因素与多因素分析、平均指标的因素分析，并通过一系列完整例题掌握操作步骤。</p>
+<blockquote>
+<p><strong>四步解题模板</strong>：本节两因素、多因素、平均指标三类因素分析的例题，统一按四步展开——<strong>步骤 1</strong> 建立指数体系（确定分解公式）；<strong>步骤 2</strong> 计算总变动指数与各因素指数；<strong>步骤 3</strong> 相对数分解验证（对象指数 = 各因素指数之积）；<strong>步骤 4</strong> 绝对数分解验证（总差额 = 各因素影响差额之和）。读例题与做作业时都按此四步对号入座，形成稳定的解题心智模型。</p>
+</blockquote>
+</section>
+<section id="指数体系的概念" class="slide level2">
+<h2>指数体系的概念</h2>
+<p><strong>指数体系</strong>：经济上有一定联系、数量上保持一定对等关系的若干指数构成的<strong>有机整体</strong>。</p>
+<p>例如：</p>
+<p><span class="math display">\[\text{销售额指数} = \text{销售量指数} \times \text{价格指数}\]</span></p>
+<p><span class="math display">\[\text{总成本指数} = \text{总产量指数} \times \text{单位产品成本指数}\]</span></p>
+<p>在体系中，等式左边的指数（如销售额指数、总成本指数）称为<strong>对象指数</strong>，等式右边的各因素指数（如销售量指数、价格指数）称为<strong>因素指数</strong>。</p>
+</section>
+<section id="指数体系的具体内容相对数与绝对数关系" class="slide level2">
+<h2>指数体系的具体内容：相对数与绝对数关系</h2>
+<p>以销售额指数体系为例：</p>
+<p><span class="math display">\[\frac{\sum q_1 p_1}{\sum q_0 p_0} = \frac{\sum q_1 p_0}{\sum q_0 p_0} \times \frac{\sum q_1 p_1}{\sum q_1 p_0}\]</span></p>
+<p><strong>1、相对数关系</strong>：某一现象的总量（变动）指数等于其各个影响因素指数的乘积，即</p>
+<p><span class="math display">\[\text{销售额指数} = \text{销售量指数} \times \text{价格指数}\]</span></p>
+<p><strong>2、绝对数关系</strong>：总量变动的绝对差额等于各因素变动的影响差额之和，即</p>
+<p><span class="math display">\[\sum q_1 p_1 - \sum q_0 p_0 = \left( \sum q_1 p_0 - \sum q_0 p_0 \right) + \left( \sum q_1 p_1 - \sum q_1 p_0 \right)\]</span></p>
+<p>（前一括号为销售量变动的影响差额，后一括号为价格变动的影响差额。）</p>
+</section>
+<section id="例三种商品销售额指数体系的验证" class="slide level2">
+<h2>【例】三种商品销售额指数体系的验证</h2>
+<p>利用第二节某商场三种商品的销售量和价格资料：</p>
+<table class="caption-top" style="width:100%;">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>商品名称</th>
+<th>计量单位</th>
+<th>销售量 2003（<span class="math inline">\(q_0\)</span>）</th>
+<th>销售量 2004（<span class="math inline">\(q_1\)</span>）</th>
+<th>单价（元）2003（<span class="math inline">\(p_0\)</span>）</th>
+<th>单价（元）2004（<span class="math inline">\(p_1\)</span>）</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>甲</td>
+<td>只</td>
+<td>1200</td>
+<td>1500</td>
+<td>3.6</td>
+<td>4.0</td>
+</tr>
+<tr class="even">
+<td>乙</td>
+<td>公斤</td>
+<td>1500</td>
+<td>2000</td>
+<td>2.3</td>
+<td>2.4</td>
+</tr>
+<tr class="odd">
+<td>丙</td>
+<td>件</td>
+<td>500</td>
+<td>600</td>
+<td>9.8</td>
+<td>10.6</td>
+</tr>
+</tbody>
+</table>
+<p>销售额 <span class="math inline">\(=\)</span> 销售量 <span class="math inline">\(\times\)</span> 销售价格，其指数体系为销售额指数 <span class="math inline">\(=\)</span> 销售量指数 <span class="math inline">\(\times\)</span> 销售价格指数。</p>
+<p><strong>验证</strong>：代入第二节例题的计算结果：</p>
+<p><span class="math display">\[135.44\% = 125.34\% \times 108.06\%\]</span></p>
+<p>绝对数关系：</p>
+<p><span class="math display">\[\left( 17160 - 12670 \right) = \left( 15880 - 12670 \right) + \left( 17160 - 15880 \right)\]</span></p>
+<p><span class="math display">\[4490 = 3210 + 1280\]</span></p>
+<p>即三种商品销售额共增加 4490 元，其中由于销售量增长使销售额增加 3210 元，由于价格上升使销售额增加 1280 元，相对数关系与绝对数关系均得到验证。</p>
+</section>
+<section id="指数体系的作用一指数间的相互推算" class="slide level2">
+<h2>指数体系的作用（一）：指数间的相互推算</h2>
+<p>利用指数体系，可进行指数之间的相互推算：利用已知的指数推算未知的指数。</p>
+<p><strong>【例 1】</strong> 已知某地区商品价格报告期比基期增长 5%，销售量增长 2%，求该地区商品销售总额的增长幅度。</p>
+<p><strong>解</strong>：已知 <span class="math inline">\(\bar{K}_P = 1 + 5\%\)</span>，<span class="math inline">\(\bar{K}_Q = 1 + 2\%\)</span>，则</p>
+<p><span class="math display">\[k_{PQ} = \bar{K}_P \times \bar{K}_Q = (1 + 5\%) \times (1 + 2\%) = 107.1\%\]</span></p>
+<p>即销售总额增长了 7.1%。</p>
+<p><strong>【例 2】</strong> 已知同样多的人民币，报告期比基期<strong>少购买 7%</strong> 的商品，问物价指数是多少？</p>
+<p><strong>解</strong>：由指数体系</p>
+<p><span class="math display">\[\text{购买额指数} = \text{购买量指数} \times \text{物价指数}\]</span></p>
+<p>（同样多的人民币即购买额指数为 100%，购买量指数为 <span class="math inline">\(1 - 7\% = 93\%\)</span>）</p>
+<p><span class="math display">\[\text{物价指数} = \text{购买额指数} \div \text{购买量指数} = 100\% \div (1 - 7\%) = 107.5\%\]</span></p>
+<p>即物价上涨了 7.5%。</p>
+<p><strong>【例 3】</strong> 已知某企业产值报告期比基期增长了 24%，职工人数增长了 17%，问劳动生产率如何变化？</p>
+<p><strong>解</strong>：由指数体系</p>
+<p><span class="math display">\[\text{工业总产值指数} = \text{职工人数指数} \times \text{劳动生产率指数}\]</span></p>
+<p>于是</p>
+</section>
+<section id="指数体系的作用一指数间的相互推算续" class="slide level2">
+<h2>指数体系的作用（一）：指数间的相互推算（续）</h2>
+<p><span class="math display">\[\text{劳动生产率提高程度百分比} = \text{工业总产值指数} \div \text{职工人数指数} - 1\]</span></p>
+<p><span class="math display">\[= (1 + 24\%) \div (1 + 17\%) - 1 = 5.98\%\]</span></p>
+<p>即该企业劳动生产率提高了 5.98%。</p>
+</section>
+<section id="例-4零售额变动的因素推算与影响绝对值分析" class="slide level2">
+<h2>【例 4】零售额变动的因素推算与影响绝对值分析</h2>
+<p><strong>题目</strong>：某市 2008 年社会商品零售额 12,000 万元，2009 年增加为 15,600 万元。物价指数提高了 4%，试计算零售量指数，并分析零售量和物价因素变动对零售总额变动的影响绝对值。</p>
+<p>（依据的指数关系：零售额 <span class="math inline">\(=\)</span> 零售量 <span class="math inline">\(\times\)</span> 物价，即零售额指数 <span class="math inline">\(=\)</span> 零售量指数 <span class="math inline">\(\times\)</span> 物价指数。）</p>
+<p><strong>解</strong>：已知：<span class="math inline">\(\sum p_0 q_0 = 12000\)</span> 万元（2008 年零售额），<span class="math inline">\(\sum p_1 q_1 = 15600\)</span> 万元（2009 年零售额），物价指数 <span class="math inline">\(= 104\%\)</span>。</p>
+<p>物价指数（派氏形式）为</p>
+<p><span class="math display">\[\frac{\sum p_1 q_1}{\sum p_1 q_0} = 104\%\]</span></p>
+<p>则按报告期价格计算的基期假定零售额</p>
+<p><span class="math display">\[\sum p_1 q_0 = 15600 \div 104\% = 15000 \text{（万元）}\]</span></p>
+<p>于是零售量指数</p>
+<p><span class="math display">\[\frac{\sum p_1 q_0}{\sum p_0 q_0} = \frac{15000}{12000} = 125\%\]</span></p>
+<p>即该市零售量增长了 25%。</p>
+<p><strong>影响绝对值的因素分析</strong>：</p>
+<p>零售量变动影响的零售额：</p>
+<p><span class="math display">\[\sum q_1 p_0 - \sum q_0 p_0 = 15000 - 12000 = 3000 \text{（万元）}\]</span></p>
+<p>零售物价变动影响的零售额：</p>
+</section>
+<section id="例-4零售额变动的因素推算与影响绝对值分析续" class="slide level2">
+<h2>【例 4】零售额变动的因素推算与影响绝对值分析（续）</h2>
+<p><span class="math display">\[\sum q_1 p_1 - \sum q_1 p_0 = 15600 - 15000 = 600 \text{（万元）}\]</span></p>
+<p><strong>结论</strong>：零售量增加 25% 使零售额增加 3000 万元，零售物价上涨 4% 使零售额增加 600 万元，两因素共同影响使零售额增加 3600 万元。</p>
+</section>
+<section id="因素分析的意义与总量指标因素分析的分类" class="slide level2">
+<h2>因素分析的意义与总量指标因素分析的分类</h2>
+<p>所谓<strong>因素分析</strong>，就是利用统计指数体系中各个指数之间的数量关系，对现象总体总变动的各个影响因素进行分解，分析各因素变动对现象总体总变动的影响程度和影响数额。</p>
+<p>总量指标的因素分析通常可以分为<strong>两因素分析</strong>和<strong>多因素分析</strong>两种。</p>
+</section>
+<section id="例-1三种产品总成本变动的两因素分析" class="slide level2">
+<h2>【例 1】三种产品总成本变动的两因素分析</h2>
+<p><strong>例 1</strong>：某厂生产的三种产品的有关资料如下。</p>
+<p><strong>分析思路</strong>：欲求<strong>单位成本指数、产量指数、总成本指数</strong>，要先建立<strong>指数体系</strong>。</p>
+<p>∵ 总成本 = 单位成本 × 产量</p>
+<p>∴ 总成本指数 = 单位成本指数 × 产量指数</p>
+<p><strong>求解思路</strong>：先综合（计算 <span class="math inline">\(\sum q_0p_0\)</span>、<span class="math inline">\(\sum q_1p_0\)</span>、<span class="math inline">\(\sum q_1p_1\)</span>），再求三个指数及各指数分子、分母之差。</p>
+<p>原始数据表：</p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>产品名称</th>
+<th>产量(件) 基期 <span class="math inline">\(q_0\)</span></th>
+<th>产量(件) 报告期 <span class="math inline">\(q_1\)</span></th>
+<th>单位产品成本(元) 基期 <span class="math inline">\(p_0\)</span></th>
+<th>单位产品成本(元) 报告期 <span class="math inline">\(p_1\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>甲</td>
+<td>1000</td>
+<td>1200</td>
+<td>10</td>
+<td>8</td>
+</tr>
+<tr class="even">
+<td>乙</td>
+<td>5000</td>
+<td>5000</td>
+<td>4</td>
+<td>4.5</td>
+</tr>
+<tr class="odd">
+<td>丙</td>
+<td>1500</td>
+<td>2000</td>
+<td>8</td>
+<td>7</td>
+</tr>
+</tbody>
+</table>
+<p>综合汇总计算表：</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>产品</th>
+<th><span class="math inline">\(q_0p_0\)</span></th>
+<th><span class="math inline">\(q_1p_1\)</span></th>
+<th><span class="math inline">\(q_1p_0\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>甲</td>
+<td>10000</td>
+<td>9600</td>
+<td>12000</td>
+</tr>
+<tr class="even">
+<td>乙</td>
+<td>20000</td>
+<td>22500</td>
+<td>20000</td>
+</tr>
+<tr class="odd">
+<td>丙</td>
+<td>12000</td>
+<td>14000</td>
+<td>16000</td>
+</tr>
+<tr class="even">
+<td>合计</td>
+<td>42000</td>
+<td>46100</td>
+<td>48000</td>
+</tr>
+</tbody>
+</table>
+<p><strong>解（1）：三种产品的单位成本指数以及由于单位产品成本变动的绝对额</strong></p>
+</section>
+<section id="例-1三种产品总成本变动的两因素分析续" class="slide level2">
+<h2>【例 1】三种产品总成本变动的两因素分析（续）</h2>
+<p><span class="math display">\[\frac{\sum q_1 p_1}{\sum q_1 p_0} = \frac{46100}{48000} = 96.04\%\]</span></p>
+<p>即三种产品的单位成本指数为 96.04%，成本水平平均降低 3.96%；由于单位产品成本变动影响的绝对额为 <span class="math inline">\(\sum q_1 p_1 - \sum q_1 p_0\)</span>。</p>
+<p><strong>解（2）：三种产品产量指数以及由于产量变动而使总成本变动的绝对额</strong></p>
+<p><span class="math display">\[\frac{\sum q_1 p_0}{\sum q_0 p_0} = \frac{48000}{42000} = 114.29\%\]</span></p>
+<p>即三种产品的产量指数为 114.29%，产量平均增加 14.29%；由于产量变动而使总成本变动的绝对额为 <span class="math inline">\(\sum q_1 p_0 - \sum q_0 p_0\)</span>。</p>
+<p><strong>解（3）：利用指数体系分析说明总成本（相对程度和绝对额）变动情况</strong></p>
+<p>总成本指数：</p>
+<p><span class="math display">\[\frac{\sum q_1 p_1}{\sum q_0 p_0} = \frac{46100}{42000} = 109.76\%\]</span></p>
+<p>总成本变动的绝对额：</p>
+<p><span class="math display">\[\sum q_1 p_1 - \sum q_0 p_0 = 46100 - 42000 = 4100 \text{（元）}\]</span></p>
+<p>指数体系：</p>
+<p><span class="math display">\[109.76\% = 96.04\% \times 114.29\%\]</span></p>
+</section>
+<section id="例-1三种产品总成本变动的两因素分析续-1" class="slide level2">
+<h2>【例 1】三种产品总成本变动的两因素分析（续）</h2>
+<p><span class="math display">\[4100 \text{（元）} = -1900 \text{（元）} + 6000 \text{（元）}\]</span></p>
+<p><strong>分析说明</strong>：报告期总成本比基期增加了 9.76%，增加的绝对额为 4100 元。由于各种产品的单位产品成本平均降低了 3.96%（甲、丙产品成本降低，乙产品成本提高），使总成本节约了 1900 元；由于各种产品的产量增加了 14.29%，使报告期的总成本比基期增加了 6000 元。</p>
+</section>
+<section id="例-2粮油零售市场三种商品销售额变动的两因素分析" class="slide level2">
+<h2>【例 2】粮油零售市场三种商品销售额变动的两因素分析</h2>
+<p><strong>题目</strong>：设某粮油零售市场 2017 年和 2018 年三种商品的零售价格和销售量资料如下表。试计算三种商品的价格综合指数和销售量综合指数。</p>
+<p><strong>某粮油零售市场三种商品的价格和销售量</strong></p>
+<table class="caption-top" style="width:100%;">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>商品名称</th>
+<th>计量单位</th>
+<th>销售量 2017</th>
+<th>销售量 2018</th>
+<th>单价(元) 2017</th>
+<th>单价(元) 2018</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>粳米</td>
+<td>t</td>
+<td>120</td>
+<td>150</td>
+<td>2600</td>
+<td>3000</td>
+</tr>
+<tr class="even">
+<td>标准粉</td>
+<td>t</td>
+<td>150</td>
+<td>200</td>
+<td>2300</td>
+<td>2100</td>
+</tr>
+<tr class="odd">
+<td>花生油</td>
+<td>kg</td>
+<td>1500</td>
+<td>1600</td>
+<td>9.8</td>
+<td>10.5</td>
+</tr>
+</tbody>
+</table>
+<p><strong>解：三个指数的计算</strong></p>
+<p>销售额指数：</p>
+<p><span class="math display">\[\frac{\sum q_1 p_1}{\sum q_0 p_0} = \frac{886800}{671700} = 132.02\%\]</span></p>
+<p>销售量指数：</p>
+<p><span class="math display">\[\frac{\sum q_1 p_0}{\sum q_0 p_0} = \frac{865680}{671700} = 128.88\%\]</span></p>
+<p>价格指数：</p>
+<p><span class="math display">\[\frac{\sum q_1 p_1}{\sum q_1 p_0} = \frac{886800}{865680} = 102.44\%\]</span></p>
+<p><strong>解：绝对额（差额）分析</strong></p>
+<p>销售额变动：</p>
+</section>
+<section id="例-2粮油零售市场三种商品销售额变动的两因素分析续" class="slide level2">
+<h2>【例 2】粮油零售市场三种商品销售额变动的两因素分析（续）</h2>
+<p><span class="math display">\[\sum p_1 q_1 - \sum p_0 q_0 = 886800 - 671700 = 215100 \text{（元）}\]</span></p>
+<p>价格变动的影响额：</p>
+<p><span class="math display">\[\sum p_1 q_1 - \sum p_1 q_0 = 886800 - 865680 = 21120 \text{（元）}\]</span></p>
+<p>销售量变动的影响额：</p>
+<p><span class="math display">\[\sum p_1 q_0 - \sum p_0 q_0 = 865680 - 671700 = 193980 \text{（元）}\]</span></p>
+<p><strong>结论</strong>：</p>
+<p>三者之间的相对数量关系：</p>
+<p><span class="math display">\[132.02\% = 102.44\% \times 128.88\%\]</span></p>
+<p>三者之间的绝对数量关系：</p>
+<p><span class="math display">\[215100 = 21120 + 193980\]</span></p>
+<p>2018 年与 2017 年相比，三种商品的销售额增长 32.02%，增加销售额 215100 元。其中由于零售价格变动使销售额增长 2.44%，增加销售额 21120 元；由于销售量变动使销售额增长 28.88%，增加销售额 193980 元。</p>
+</section>
+<section id="练习三种商品销售额变动的两因素分析" class="slide level2">
+<h2>【练习】三种商品销售额变动的两因素分析</h2>
+<p>试建立指数体系，从相对数与绝对数两方面对三种商品销售额的变动进行因素分析。</p>
+<table class="caption-top" style="width:100%;">
+<colgroup>
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>商品名称</th>
+<th>计量单位</th>
+<th>销售量 基期 <span class="math inline">\(Q_0\)</span></th>
+<th>销售量 报告期 <span class="math inline">\(Q_1\)</span></th>
+<th>价格(元) 基期 <span class="math inline">\(P_0\)</span></th>
+<th>价格(元) 报告期 <span class="math inline">\(P_1\)</span></th>
+<th>销售额(元) <span class="math inline">\(P_0Q_0\)</span></th>
+<th>销售额(元) <span class="math inline">\(P_1Q_1\)</span></th>
+<th>销售额(元) <span class="math inline">\(P_0Q_1\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>甲</td>
+<td>件</td>
+<td>120</td>
+<td>100</td>
+<td>20</td>
+<td>25</td>
+<td>2400</td>
+<td>2500</td>
+<td>2000</td>
+</tr>
+<tr class="even">
+<td>乙</td>
+<td>支</td>
+<td>1000</td>
+<td>1200</td>
+<td>4</td>
+<td>5</td>
+<td>4000</td>
+<td>6000</td>
+<td>4800</td>
+</tr>
+<tr class="odd">
+<td>丙</td>
+<td>台</td>
+<td>60</td>
+<td>100</td>
+<td>290</td>
+<td>300</td>
+<td>17400</td>
+<td>30000</td>
+<td>29000</td>
+</tr>
+<tr class="even">
+<td>合计</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>23800</td>
+<td>38500</td>
+<td>35800</td>
+</tr>
+</tbody>
+</table>
+<p><strong>解：销售总额变动的两因素分析</strong></p>
+<p>销售总额的变动：</p>
+<p><span class="math display">\[k_{PQ} = \frac{\sum Q_1 P_1}{\sum Q_0 P_0} = \frac{38500}{23800} = 161.76\%\]</span></p>
+<p><span class="math display">\[\sum Q_1 P_1 - \sum Q_0 P_0 = 38500 - 23800 = 14700 \text{（元）}\]</span></p>
+<p>其中：受销售量变动的影响为：</p>
+</section>
+<section id="练习三种商品销售额变动的两因素分析续" class="slide level2">
+<h2>【练习】三种商品销售额变动的两因素分析（续）</h2>
+<p><span class="math display">\[\overline{K}_Q = \frac{\sum Q_1 P_0}{\sum Q_0 P_0} = \frac{35800}{23800} = 150.42\%\]</span></p>
+<p><span class="math display">\[\sum Q_1 P_0 - \sum Q_0 P_0 = 35800 - 23800 = 12000 \text{（元）}\]</span></p>
+<p>受价格变动的影响为：</p>
+<p><span class="math display">\[\overline{K}_P = \frac{\sum Q_1 P_1}{\sum Q_1 P_0} = \frac{38500}{35800} = 107.54\%\]</span></p>
+<p><span class="math display">\[\sum Q_1 P_1 - \sum Q_1 P_0 = 38500 - 35800 = 2700 \text{（元）}\]</span></p>
+<p>综合影响：</p>
+<p><span class="math display">\[161.76\% = 150.42\% \times 107.54\%\]</span></p>
+<p><span class="math display">\[14700 \text{（元）} = 12000 \text{（元）} + 2700 \text{（元）}\]</span></p>
+</section>
+<section id="多因素分析的步骤" class="slide level2">
+<h2>多因素分析的步骤</h2>
+<p>多因素分析的<strong>基本原理和方法与两因素分析类似，但又有不同</strong>。</p>
+<p><strong>步骤</strong>：</p>
+<p>（1）将各因素按照<strong>数量指标在前，质量指标在后</strong>的原则排列，如：</p>
+<p><span class="math display">\[\text{利润额} = \text{销售量} \times \text{单位商品价格} \times \text{利润率}\]</span></p>
+<p>（2）各因素的排列顺序应使两两相乘具有经济意义，如：</p>
+<p><span class="math display">\[\text{利润额} = \text{销售量} \times \text{单位商品价格} \times \text{利润率} = \text{销售收入} \times \text{利润率}\]</span></p>
+<p>（3）测定其中某个因素的影响时，将其余所有因素都要固定。一般将该因素指标<strong>以前的因素固定在报告期</strong>，而将该因素指标<strong>以后的因素固定在基期</strong>。</p>
+<p>上述方法在统计教材中称为<strong>连锁替代法</strong>：从基期总量 <span class="math inline">\(\sum A_0B_0C_0D_0\)</span> 出发，按排列顺序将各因素逐一替换为报告期，每替换一个因素得到一个因素指数；相邻两式的分子与分母只差一个因素，链式相乘时所有中间项恰好约去，最终回到报告期总量。以四因素总量（如总产值 = 工人人数 <span class="math inline">\(A\)</span> × 时劳动生产率 <span class="math inline">\(B\)</span> × 平均每日工作时长 <span class="math inline">\(C\)</span> × 平均每月工作天数 <span class="math inline">\(D\)</span>）为例，链式通式为</p>
+</section>
+<section id="多因素分析的步骤续" class="slide level2">
+<h2>多因素分析的步骤（续）</h2>
+<p><span class="math display">\[K_{ABCD} = K_A \times K_B \times K_C \times K_D = \frac{\sum A_1B_0C_0D_0}{\sum A_0B_0C_0D_0} \times \frac{\sum A_1B_1C_0D_0}{\sum A_1B_0C_0D_0} \times \frac{\sum A_1B_1C_1D_0}{\sum A_1B_1C_0D_0} \times \frac{\sum A_1B_1C_1D_1}{\sum A_1B_1C_1D_0}\]</span></p>
+<p>本节下文原材料支出额的 <span class="math inline">\(q \times m \times p\)</span> 三因素体系，正是该通式取前三个因素（<span class="math inline">\(D\)</span> 恒为 1）的特例；掌握通式后，因素个数可推广到任意多个。</p>
+</section>
+<section id="例题原材料支出额变动的多因素分析" class="slide level2">
+<h2>【例题】原材料支出额变动的多因素分析</h2>
+<p><strong>某企业生产某种产品的产量及原材料消耗资料</strong></p>
+<table class="caption-top" style="width:100%;">
+<colgroup>
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>车间</th>
+<th>产量 <span class="math inline">\(q_0\)</span>（万件）</th>
+<th>产量 <span class="math inline">\(q_1\)</span>（万件）</th>
+<th>单耗 <span class="math inline">\(m_0\)</span>（公斤/件）</th>
+<th>单耗 <span class="math inline">\(m_1\)</span>（公斤/件）</th>
+<th>原材料单价 <span class="math inline">\(p_0\)</span>（元/公斤）</th>
+<th>原材料单价 <span class="math inline">\(p_1\)</span>（元/公斤）</th>
+<th>原材料支出额 <span class="math inline">\(q_0m_0p_0\)</span></th>
+<th>原材料支出额 <span class="math inline">\(q_1m_1p_1\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>一</td>
+<td>85</td>
+<td>90</td>
+<td>21</td>
+<td>19</td>
+<td>8</td>
+<td>9</td>
+<td>14280</td>
+<td>15390</td>
+</tr>
+<tr class="even">
+<td>二</td>
+<td>80</td>
+<td>90</td>
+<td>22</td>
+<td>19</td>
+<td>8</td>
+<td>9</td>
+<td>14080</td>
+<td>15390</td>
+</tr>
+<tr class="odd">
+<td>合计</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>28360</td>
+<td>30780</td>
+</tr>
+</tbody>
+</table>
+<p><strong>题目要求</strong>：试建立指数体系，从相对数与绝对数两方面对该企业原材料支出额的变动进行因素分析。</p>
+<p><strong>原材料费用总额的三因素指数体系</strong></p>
+<p>根据以上原则，原材料费用总额可分解为三个指数，形成一个指数体系。</p>
+<p><strong>原材料费用总额指数 = 产量指数 × 单耗指数 × 单位原材料价格指数</strong></p>
+</section>
+<section id="例题原材料支出额变动的多因素分析续" class="slide level2">
+<h2>【例题】原材料支出额变动的多因素分析（续）</h2>
+<p><span class="math display">\[\frac{\sum q_1 m_1 p_1}{\sum q_0 m_0 p_0} = \frac{\sum q_1 m_0 p_0}{\sum q_0 m_0 p_0} \times \frac{\sum q_1 m_1 p_0}{\sum q_1 m_0 p_0} \times \frac{\sum q_1 m_1 p_1}{\sum q_1 m_1 p_0}\]</span></p>
+<p><strong>四个差额之间有如下关系</strong>：</p>
+<p><span class="math display">\[\sum q_1 m_1 p_1 - \sum q_0 m_0 p_0 = \left(\sum q_1 m_0 p_0 - \sum q_0 m_0 p_0\right) + \left(\sum q_1 m_1 p_0 - \sum q_1 m_0 p_0\right) + \left(\sum q_1 m_1 p_1 - \sum q_1 m_1 p_0\right)\]</span></p>
+<p><strong>解（1）：原材料支出总额指数</strong></p>
+<p><span class="math display">\[\frac{\sum q_1 m_1 p_1}{\sum q_0 m_0 p_0} = \frac{30780}{28360} = 108.53\%\]</span></p>
+<p>原材料支出总额报告期比基期多支出 8.53%。绝对额为：</p>
+<p><span class="math display">\[\sum q_1 m_1 p_1 - \sum q_0 m_0 p_0 = 30780 - 28360 = 2420 \text{（万元）}\]</span></p>
+<p><strong>解（2）：产品产量指数</strong></p>
+</section>
+<section id="例题原材料支出额变动的多因素分析续-1" class="slide level2">
+<h2>【例题】原材料支出额变动的多因素分析（续）</h2>
+<p><span class="math display">\[\frac{\sum q_1 m_0 p_0}{\sum q_0 m_0 p_0} = \frac{90 \times 21 \times 8 + 90 \times 22 \times 8}{85 \times 21 \times 8 + 80 \times 22 \times 8} = \frac{30960}{28360} = 109.17\%\]</span></p>
+<p>产品产量报告期比基期增长了 9.17%，由此而增加原材料支出额为：</p>
+<p><span class="math display">\[\sum q_1 m_0 p_0 - \sum q_0 m_0 p_0 = 30960 - 28360 = 2600 \text{（万元）}\]</span></p>
+<p><strong>解（3）：原材料单耗指数</strong></p>
+<p><span class="math display">\[\frac{\sum q_1 m_1 p_0}{\sum q_1 m_0 p_0} = \frac{90 \times 19 \times 8 + 90 \times 19 \times 8}{90 \times 21 \times 8 + 90 \times 22 \times 8} = \frac{27360}{30960} = 88.37\%\]</span></p>
+<p>产品原材料单耗报告期比基期减少 11.63%，由此而节约原材料支出额为：</p>
+<p><span class="math display">\[\sum q_1 m_1 p_0 - \sum q_1 m_0 p_0 = 27360 - 30960 = -3600 \text{（万元）}\]</span></p>
+<p><strong>解（4）：原材料单价指数</strong></p>
+</section>
+<section id="例题原材料支出额变动的多因素分析续-2" class="slide level2">
+<h2>【例题】原材料支出额变动的多因素分析（续）</h2>
+<p><span class="math display">\[\frac{\sum q_1 m_1 p_1}{\sum q_1 m_1 p_0} = \frac{90 \times 19 \times 9 + 90 \times 19 \times 9}{90 \times 19 \times 8 + 90 \times 19 \times 8} = \frac{30780}{27360} = 112.50\%\]</span></p>
+<p>原材料单价报告期比基期提高 12.50%，由此而增加原材料支出额为：</p>
+<p><span class="math display">\[\sum q_1 m_1 p_1 - \sum q_1 m_1 p_0 = 30780 - 27360 = 3420 \text{（万元）}\]</span></p>
+<p>上列计算结果整理：</p>
+<p><span class="math display">\[108.53\% = 109.17\% \times 88.37\% \times 112.50\%\]</span></p>
+<p><span class="math display">\[2420 = 2600 - 3600 + 3420 \text{（万元）}\]</span></p>
+<p><strong>分析说明</strong>：报告期由于产量增长 9.17%，单耗下降 11.63% 和原材料单价上升 12.50% 三方面因素，而使该种产品原材料支出总额增长 8.53%；多支出 2420 万元，是由于产量增加和原材料价格上升分别多支出 2600 万元和 3420 万元，以及由于单耗下降而少支出 3600 万元综合的结果。</p>
+</section>
+<section id="平均指标因素分析意义与适用情形" class="slide level2">
+<h2>平均指标因素分析：意义与适用情形</h2>
+<p>在分组条件下，总平均指标的变动受两个因素的影响：</p>
+<ul>
+<li>各组平均指标 <span class="math inline">\(x\)</span> 变动；</li>
+<li>各组总体单位数 <span class="math inline">\(f\)</span>（即在全部总体单位数中所占比重）的变动。</li>
+</ul>
+<p>可看出平均数的变动受两个因素影响：一是各组的变量水平（<span class="math inline">\(x\)</span>），另一个是各组的结构（<span class="math inline">\(\frac{f}{\sum f}\)</span>）。</p>
+<p><span class="math display">\[\bar{X} = \frac{\sum X f}{\sum f} = \sum X \cdot \frac{f}{\sum f}\]</span></p>
+<p>其中 <span class="math inline">\(X\)</span> 为各组水平，<span class="math inline">\(\dfrac{f}{\sum f}\)</span> 为各组结构。</p>
+<p><strong>适用情形</strong>：</p>
+<ul>
+<li><strong>平均工资（变动）</strong>——各类工人工资水平（变动）；各类工人占工人人数的比重，即总体结构（变动）。</li>
+<li><strong>劳动生产率（劳均产值）（变动）</strong>——各类工人产值水平（变动）；各类工人比重（变动）。</li>
+<li><strong>单位产品成本（变动）</strong>——各批次产品成本水平（变动）；各批产品比重（变动）。</li>
+<li><strong>农作物单位面积产量</strong>——各类型地块亩产水平（变动）；各类型地块面积比重（变动）。</li>
+</ul>
+</section>
+<section id="平均指标指数与平均指标指数体系" class="slide level2">
+<h2>平均指标指数与平均指标指数体系</h2>
+<p><strong>（一）平均指标指数</strong></p>
+<p>平均指标指数，又称为总平均数指数，是指不同时期同一经济内容的两个平均指标值对比形成的指数。</p>
+<p><span class="math display">\[K = \frac{\bar{X}_1}{\bar{X}_0}\]</span></p>
+<p>其中 <span class="math inline">\(\bar{X}_1\)</span>、<span class="math inline">\(\bar{X}_0\)</span> 分别表示报告期、基期某一经济量的平均数。</p>
+<p><strong>平均指标指数体系的构造（相对数形式）</strong></p>
+<p><span class="math display">\[\frac{\bar{X}_1}{\bar{X}_0} = \frac{\dfrac{\sum x_1 f_1}{\sum f_1}}{\dfrac{\sum x_0 f_0}{\sum f_0}} = \frac{\dfrac{\sum x_0 f_1}{\sum f_1}}{\dfrac{\sum x_0 f_0}{\sum f_0}} \times \frac{\dfrac{\sum x_1 f_1}{\sum f_1}}{\dfrac{\sum x_0 f_1}{\sum f_1}}\]</span></p>
+<p>即：</p>
+<p><strong>可变构成指数 = 结构变动影响指数 × 固定构成指数</strong></p>
+<p>其中假定平均数 <span class="math inline">\(\bar{X}_n = \dfrac{\sum x_0 f_1}{\sum f_1}\)</span>（记为 <span class="math inline">\(\bar{X}_n\)</span>）。</p>
+</section>
+<section id="平均指标指数与平均指标指数体系续" class="slide level2">
+<h2>平均指标指数与平均指标指数体系（续）</h2>
+<blockquote>
+<p><strong>术语对照框</strong>：本教材的”可变构成指数、结构变动影响指数、固定构成指数”，在其他教材（如胡华平《统计学原理》课件）中分别称”<strong>总变动指数、结构变动指数、组水平变动指数</strong>”，体系记作 <span class="math inline">\(I_{Xf} = I_f \times I_X\)</span>——分解结构完全相同，仅命名有别。阅读不同教材、论文或考研资料时按下表对照换算，防止概念混淆：</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>本教材</th>
+<th>另一种命名</th>
+<th>记号</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>可变构成指数</td>
+<td>总变动指数</td>
+<td><span class="math inline">\(I_{Xf} = \bar{X}_1/\bar{X}_0\)</span></td>
+</tr>
+<tr class="even">
+<td>结构变动影响指数</td>
+<td>结构变动指数</td>
+<td><span class="math inline">\(I_f = \bar{X}_n/\bar{X}_0\)</span></td>
+</tr>
+<tr class="odd">
+<td>固定构成指数</td>
+<td>组水平变动指数</td>
+<td><span class="math inline">\(I_X = \bar{X}_1/\bar{X}_n\)</span></td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+</section>
+<section id="平均指标因素分析的原理与步骤" class="slide level2">
+<h2>平均指标因素分析的原理与步骤</h2>
+<p><strong>1. 计算平均指标</strong></p>
+<p>报告期平均指标：</p>
+<p><span class="math display">\[\bar{x}_1 = \frac{\sum x_1 f_1}{\sum f_1}\]</span></p>
+<p>假定平均指标（报告期结构、基期水平）：</p>
+<p><span class="math display">\[\bar{x}_n = \frac{\sum x_0 f_1}{\sum f_1}\]</span></p>
+<p>基期平均指标：</p>
+<p><span class="math display">\[\bar{x}_0 = \frac{\sum x_0 f_0}{\sum f_0}\]</span></p>
+<p>三个平均数均为加权算术平均数形式，下标组合分别为 <span class="math inline">\(x_1f_1\)</span>、<span class="math inline">\(x_0f_1\)</span>、<span class="math inline">\(x_0f_0\)</span>。</p>
+<p><strong>2. 计算可变构成指数</strong></p>
+<p><span class="math display">\[\text{可变构成指数} = \frac{\bar{x}_1}{\bar{x}_0} = \frac{\sum x_1 f_1}{\sum f_1} \div \frac{\sum x_0 f_0}{\sum f_0} = \sum x_1 \cdot \frac{f_1}{\sum f_1} \div \sum x_0 \cdot \frac{f_0}{\sum f_0}\]</span></p>
+<p>其中 <span class="math inline">\(x_1\)</span>、<span class="math inline">\(x_0\)</span> 为报告期与基期各组水平，<span class="math inline">\(f_1\)</span>、<span class="math inline">\(f_0\)</span> 为报告期与基期各组次数（权数），<span class="math inline">\(\bar{x}_1\)</span>、<span class="math inline">\(\bar{x}_0\)</span> 为报告期与基期总平均数。</p>
+<p><strong>3. 计算固定构成指数（也称组平均数指数）</strong></p>
+</section>
+<section id="平均指标因素分析的原理与步骤续" class="slide level2">
+<h2>平均指标因素分析的原理与步骤（续）</h2>
+<p><span class="math display">\[\text{固定构成指数} = \frac{\bar{x}_1}{\bar{x}_n} = \frac{\sum x_1 f_1}{\sum f_1} \div \frac{\sum x_0 f_1}{\sum f_1} = \sum x_1 \cdot \frac{f_1}{\sum f_1} \div \sum x_0 \cdot \frac{f_1}{\sum f_1}\]</span></p>
+<p><strong>4. 计算结构变动指数</strong></p>
+<p><span class="math display">\[\text{结构变动影响指数} = \frac{\bar{x}_n}{\bar{x}_0} = \frac{\sum x_0 f_1}{\sum f_1} \div \frac{\sum x_0 f_0}{\sum f_0} = \sum x_0 \cdot \frac{f_1}{\sum f_1} \div \sum x_0 \cdot \frac{f_0}{\sum f_0}\]</span></p>
+<p><strong>5. 三个指数之间的关系</strong></p>
+<p>相对数关系：</p>
+<p><span class="math display">\[\frac{\bar{x}_1}{\bar{x}_0} = \frac{\bar{x}_1}{\bar{x}_n} \times \frac{\bar{x}_n}{\bar{x}_0}\]</span></p>
+<p>即：<strong>可变构成指数 = 固定构成指数 × 结构变动指数</strong>。</p>
+<p>绝对数量关系：</p>
+</section>
+<section id="平均指标因素分析的原理与步骤续-1" class="slide level2">
+<h2>平均指标因素分析的原理与步骤（续）</h2>
+<p><span class="math display">\[\bar{x}_1 - \bar{x}_0 = \left(\bar{x}_1 - \bar{x}_n\right) + \left(\bar{x}_n - \bar{x}_0\right)\]</span></p>
+</section>
+<section id="例-1总平均劳动生产率变动的因素分析" class="slide level2">
+<h2>【例 1】总平均劳动生产率变动的因素分析</h2>
+<p><strong>题目</strong>：某公司有三个企业，2011 年和 2010 年各企业的工人数和劳动生产率资料如下表。试分析该公司总平均劳动生产率的变动及其原因。</p>
+<p><strong>某公司职工人数和劳动生产率资料</strong></p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>企业</th>
+<th>职工人数(人) 2010 <span class="math inline">\(f_0\)</span></th>
+<th>职工人数(人) 2011 <span class="math inline">\(f_1\)</span></th>
+<th>劳动生产率(万元/人) 2010 <span class="math inline">\(x_0\)</span></th>
+<th>劳动生产率(万元/人) 2011 <span class="math inline">\(x_1\)</span></th>
+<th>总产值(万元) 2010 <span class="math inline">\(x_0f_0\)</span></th>
+<th>总产值(万元) 2011 <span class="math inline">\(x_1f_1\)</span></th>
+<th>总产值(万元) 假定 <span class="math inline">\(x_0f_1\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>甲</td>
+<td>150</td>
+<td>160</td>
+<td>30</td>
+<td>32</td>
+<td>4500</td>
+<td>5120</td>
+<td>4800</td>
+</tr>
+<tr class="even">
+<td>乙</td>
+<td>180</td>
+<td>170</td>
+<td>40</td>
+<td>47</td>
+<td>7200</td>
+<td>7990</td>
+<td>6800</td>
+</tr>
+<tr class="odd">
+<td>丙</td>
+<td>200</td>
+<td>140</td>
+<td>45</td>
+<td>50</td>
+<td>9000</td>
+<td>7000</td>
+<td>6300</td>
+</tr>
+<tr class="even">
+<td>合计</td>
+<td>530</td>
+<td>470</td>
+<td>39.057</td>
+<td>42.787</td>
+<td>20700</td>
+<td>20110</td>
+<td>17900</td>
+</tr>
+</tbody>
+</table>
+<p><strong>计算三个平均指标</strong>：</p>
+<p>基期平均劳动生产率：</p>
+<p><span class="math display">\[\bar{x}_0 = \frac{\sum x_0 f_0}{\sum f_0} = \frac{20700}{530} = 39.057 \text{（万元/人）}\]</span></p>
+</section>
+<section id="例-1总平均劳动生产率变动的因素分析续" class="slide level2">
+<h2>【例 1】总平均劳动生产率变动的因素分析（续）</h2>
+<p>假定平均劳动生产率（报告期人数、基期水平）：</p>
+<p><span class="math display">\[\bar{x}_n = \frac{\sum x_0 f_1}{\sum f_1} = \frac{17900}{470} = 38.085 \text{（万元/人）}\]</span></p>
+<p>报告期平均劳动生产率：</p>
+<p><span class="math display">\[\bar{x}_1 = \frac{\sum x_1 f_1}{\sum f_1} = \frac{20110}{470} = 42.787 \text{（万元/人）}\]</span></p>
+<p><strong>解 1：公司劳动生产率指数（可变构成指数）</strong></p>
+<p><span class="math display">\[\frac{\bar{x}_1}{\bar{x}_0} = \frac{\sum x_1 f_1}{\sum f_1} \div \frac{\sum x_0 f_0}{\sum f_0} = \frac{42.787}{39.057} = 109.55\%\]</span></p>
+<p>公司劳动生产率变动量 <span class="math inline">\(= 42.787 - 39.057 = 3.73\)</span>（万元/人）。</p>
+<p><strong>表明</strong>：2011 年与 2010 年相比，该公司总的平均劳动生产率提高了 9.55%，即提高了 3.73 万元/人。</p>
+<p><strong>解 2：各企业劳动生产率指数（固定构成指数）</strong></p>
+</section>
+<section id="例-1总平均劳动生产率变动的因素分析续-1" class="slide level2">
+<h2>【例 1】总平均劳动生产率变动的因素分析（续）</h2>
+<p><span class="math display">\[\frac{\bar{x}_1}{\bar{x}_n} = \frac{\sum x_1 f_1}{\sum f_1} \div \frac{\sum x_0 f_1}{\sum f_1} = \frac{42.787}{38.085} = 112.35\%\]</span></p>
+<p>各企业劳动生产率的影响量 <span class="math inline">\(= 42.787 - 38.085 = 4.702\)</span>（万元/人）。</p>
+<p><strong>表明</strong>：各企业生产率提高使总平均劳动生产率提高了 12.35%，使公司人均产值提高了 4.702 万元。</p>
+<p><strong>解 3：企业职工人数结构影响指数（结构变动指数）</strong></p>
+<p><span class="math display">\[\frac{\bar{x}_n}{\bar{x}_0} = \frac{\sum x_0 f_1}{\sum f_1} \div \frac{\sum x_0 f_0}{\sum f_0} = \frac{38.085}{39.057} = 97.51\%\]</span></p>
+<p>结构变动的影响量 <span class="math inline">\(= 38.085 - 39.057 = -0.972\)</span>（万元/人）。</p>
+<p><strong>表示</strong>：由于职工人数结构变动使公司总平均劳动生产率下降了 2.49%，即减少 0.972 万元/人。</p>
+<p><strong>解 4：三者之间的关系为</strong></p>
+<p><span class="math display">\[109.55\% = 112.35\% \times 97.51\%\]</span></p>
+<p><span class="math display">\[3.73 = 4.702 - 0.972 \text{（万元/人）}\]</span></p>
+</section>
+<section id="例-1总平均劳动生产率变动的因素分析续-2" class="slide level2">
+<h2>【例 1】总平均劳动生产率变动的因素分析（续）</h2>
+<p><strong>结论（文字分析说明）</strong>：2011 年同 2010 年相比，该公司总的平均劳动生产率提高了 9.55%，人均产值增加了 3.73 万元。这是由于：</p>
+<ul>
+<li>各企业劳动生产率的提高使公司总的平均生产率提高了 12.35%，人均产值提高 4.702 万元；</li>
+<li>职工人数结构变化，使公司总的平均劳动生产率下降了 2.49%，人均产值下降 0.972 万元。</li>
+</ul>
+</section>
+<section id="例-2总平均工资变动的因素分析" class="slide level2">
+<h2>【例 2】总平均工资变动的因素分析</h2>
+<p><strong>题目</strong>：已知某公司下属三个商场的职工人数和工资资料如下，试建立指数体系，从相对数与绝对数两方面对该公司三个商场总平均工资的变动进行因素分析。</p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>商场</th>
+<th>平均工资 <span class="math inline">\(x_0\)</span>（元）</th>
+<th>平均工资 <span class="math inline">\(x_1\)</span>（元）</th>
+<th>职工人数 <span class="math inline">\(f_0\)</span>（人）</th>
+<th>职工人数 <span class="math inline">\(f_1\)</span>（人）</th>
+<th>工资总额 <span class="math inline">\(x_0f_0\)</span>（万元）</th>
+<th>工资总额 <span class="math inline">\(x_1f_1\)</span>（万元）</th>
+<th>工资总额 <span class="math inline">\(x_0f_1\)</span>（万元）</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>甲</td>
+<td>310</td>
+<td>350</td>
+<td>150</td>
+<td>180</td>
+<td>4.65</td>
+<td>6.30</td>
+<td>5.58</td>
+</tr>
+<tr class="even">
+<td>乙</td>
+<td>440</td>
+<td>480</td>
+<td>120</td>
+<td>150</td>
+<td>5.28</td>
+<td>7.20</td>
+<td>6.60</td>
+</tr>
+<tr class="odd">
+<td>丙</td>
+<td>470</td>
+<td>530</td>
+<td>200</td>
+<td>180</td>
+<td>9.40</td>
+<td>9.54</td>
+<td>8.46</td>
+</tr>
+<tr class="even">
+<td>合计</td>
+<td>411.28</td>
+<td>451.76</td>
+<td>470</td>
+<td>510</td>
+<td>19.33</td>
+<td>23.04</td>
+<td>20.64</td>
+</tr>
+</tbody>
+</table>
+<p><strong>解：计算总平均工资及其变动</strong></p>
+<p>报告期总平均工资：</p>
+<p><span class="math display">\[\bar{X}_1 = \frac{\sum x_1 f_1}{\sum f_1} = \frac{23.04 \times 10000}{510} = 451.76 \text{（元）}\]</span></p>
+<p>基期总平均工资：</p>
+</section>
+<section id="例-2总平均工资变动的因素分析续" class="slide level2 scrollable">
+<h2>【例 2】总平均工资变动的因素分析（续）</h2>
+<p><span class="math display">\[\bar{X}_0 = \frac{\sum x_0 f_0}{\sum f_0} = \frac{19.33 \times 10000}{470} = 411.28 \text{（元）}\]</span></p>
+<p>假定总平均工资（按基期工资水平、报告期人数结构）：</p>
+<p><span class="math display">\[\bar{X}_n = \frac{\sum x_0 f_1}{\sum f_1} = \frac{20.64 \times 10000}{510} = 404.71 \text{（元）}\]</span></p>
+<p>则总平均工资的变动为（可变构成指数）：</p>
+<p><span class="math display">\[K_{\text{可变}} = \frac{\bar{X}_1}{\bar{X}_0} = \frac{451.76}{411.28} = 109.84\%\]</span></p>
+<p><span class="math display">\[\bar{X}_1 - \bar{X}_0 = 451.76 - 411.28 = 40.48 \text{（元）}\]</span></p>
+<p><strong>影响因素分析</strong>：</p>
+<ol type="1">
+<li>受各商场职工人数比重变化的影响为（结构变动影响指数）：</li>
+</ol>
+<p><span class="math display">\[\bar{K}_{\text{结构}} = \frac{\bar{X}_n}{\bar{X}_0} = \frac{404.71}{411.28} = 98.40\%\]</span></p>
+<p><span class="math display">\[\bar{X}_n - \bar{X}_0 = 404.71 - 411.28 = -6.57 \text{（元）}\]</span></p>
+<ol start="2" type="1">
+<li>受各商场平均工资水平变动的影响为（固定构成指数）：</li>
+</ol>
+</section>
+<section id="例-2总平均工资变动的因素分析续-1" class="slide level2 scrollable">
+<h2>【例 2】总平均工资变动的因素分析（续）</h2>
+<p><span class="math display">\[\bar{K}_{\text{固定}} = \frac{\bar{X}_1}{\bar{X}_n} = \frac{451.76}{404.71} = 111.63\%\]</span></p>
+<p><span class="math display">\[\bar{X}_1 - \bar{X}_n = 451.76 - 404.71 = 47.05 \text{（元）}\]</span></p>
+<ol start="3" type="1">
+<li>综合影响：</li>
+</ol>
+<p><span class="math display">\[109.84\% = 98.40\% \times 111.63\%\]</span></p>
+<p><span class="math display">\[40.48 \text{（元）} = -6.57 \text{（元）} + 47.05 \text{（元）}\]</span></p>
+<p><strong>结论（文字分析说明）</strong>：报告期同基期相比，该公司总的平均工资提高了 9.84%，对应的绝对数额为 40.48 元。这是由于：</p>
+<ul>
+<li>由于各商场职工人数比重变化使公司总的平均工资下降了 1.6%，下降了 6.57 元；</li>
+<li>由于各商场平均工资水平变动，使公司总的平均工资上升了 11.63%，对应上升的绝对数额为 47.05 元。</li>
+</ul>
+</section>
+<section id="练习-1总平均工资变动的因素分析" class="slide level2">
+<h2>【练习 1】总平均工资变动的因素分析</h2>
+<p>试建立指数体系，从相对数与绝对数两方面对该公司总平均工资的变动进行因素分析。</p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>按级别分组</th>
+<th>平均工资(元) 基期</th>
+<th>平均工资(元) 报告期</th>
+<th>工人数(人) 基期</th>
+<th>工人数(人) 报告期</th>
+<th>工资总额(元) 基期</th>
+<th>工资总额(元) 报告期</th>
+<th>工资总额(元) 假定</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>5级以上</td>
+<td>60</td>
+<td>62</td>
+<td>45</td>
+<td>50</td>
+<td>2700</td>
+<td>3100</td>
+<td>3000</td>
+</tr>
+<tr class="even">
+<td>3-4级</td>
+<td>50</td>
+<td>52</td>
+<td>120</td>
+<td>180</td>
+<td>6000</td>
+<td>9360</td>
+<td>9000</td>
+</tr>
+<tr class="odd">
+<td>1-2级</td>
+<td>36</td>
+<td>37</td>
+<td>40</td>
+<td>135</td>
+<td>1440</td>
+<td>4995</td>
+<td>4860</td>
+</tr>
+<tr class="even">
+<td>合计</td>
+<td>49.46</td>
+<td>47.82</td>
+<td>205</td>
+<td>365</td>
+<td>10140</td>
+<td>17455</td>
+<td>16860</td>
+</tr>
+</tbody>
+</table>
+<p><strong>解（1）可变构成工资指数</strong></p>
+<p><span class="math display">\[\frac{\bar{X}_1}{\bar{X}_0} = \frac{\dfrac{\sum x_1 f_1}{\sum f_1}}{\dfrac{\sum x_0 f_0}{\sum f_0}} = \frac{47.82}{49.46} = 0.9668\]</span></p>
+<p><span class="math display">\[\bar{X}_1 - \bar{X}_0 = 47.82 - 49.46 = -1.64 \text{（元）}\]</span></p>
+<p><strong>解（2）固定构成工资指数</strong></p>
+</section>
+<section id="练习-1总平均工资变动的因素分析续" class="slide level2">
+<h2>【练习 1】总平均工资变动的因素分析（续）</h2>
+<p><span class="math display">\[\frac{\dfrac{\sum x_1 f_1}{\sum f_1}}{\dfrac{\sum x_0 f_1}{\sum f_1}} = \frac{47.82}{46.19} = 1.035\]</span></p>
+<p><span class="math display">\[\frac{\sum x_1 f_1}{\sum f_1} - \frac{\sum x_0 f_1}{\sum f_1} = 47.82 - 46.19 = 1.63 \text{（元）}\]</span></p>
+<p><strong>解（3）结构影响指数及分析</strong></p>
+<p><span class="math display">\[\frac{\dfrac{\sum x_0 f_1}{\sum f_1}}{\dfrac{\sum x_0 f_0}{\sum f_0}} = \frac{46.19}{49.46} = 0.934\]</span></p>
+<p><span class="math display">\[\frac{\sum x_0 f_1}{\sum f_1} - \frac{\sum x_0 f_0}{\sum f_0} = 46.19 - 49.46 = -3.27 \text{（元）}\]</span></p>
+<p>三个指数之间的关系：</p>
+<p><span class="math display">\[0.9668 = 1.035 \times 0.934\]</span></p>
+<p><span class="math display">\[-1.64 = 1.63 + (-3.27) \text{（元）}\]</span></p>
+</section>
+<section id="练习-1总平均工资变动的因素分析续-1" class="slide level2">
+<h2>【练习 1】总平均工资变动的因素分析（续）</h2>
+<p><strong>分析</strong>：从相对数上看，总平均工资报告期比基期减少了 3.32%，其中由于各组工资水平的变化使总平均工资提高了 3.5%，由于各组工人结构的变动而影响使总平均工资降低了 6.6%。从绝对数上看：总平均工资报告期比基期减少了 1.64 元，是由于各组工人工资水平上升而增加 1.63 元、各组工人结构变动而降低 3.27 元所造成的。</p>
+</section>
+<section id="第五节-几种常见的经济指数" class="slide level2">
+<h2>第五节 几种常见的经济指数</h2>
+<p>本节把前几节的方法落实到实践中，介绍与宏观经济和日常生活密切相关的几种重要指数：居民消费价格指数（CPI）、生产价格指数以及股票价格指数。</p>
+</section>
+<section id="r-实践-指数体系与因素分析一步到位" class="slide level2 r-demo">
+<h2>R 实践 · 指数体系与因素分析一步到位</h2>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a aria-label="1"></a><span class="co"># 例2：某粮油零售市场三种商品（2017 基期 / 2018 报告期）</span></span>
+<span id="cb6-2"><a aria-label="2"></a>goods <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb6-3"><a aria-label="3"></a>  商品 <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"粳米"</span>, <span class="st">"标准粉"</span>, <span class="st">"花生油"</span>),</span>
+<span id="cb6-4"><a aria-label="4"></a>  <span class="at">q0 =</span> <span class="fu">c</span>(<span class="dv">120</span>, <span class="dv">150</span>, <span class="dv">1500</span>),    <span class="at">q1 =</span> <span class="fu">c</span>(<span class="dv">150</span>, <span class="dv">200</span>, <span class="dv">1600</span>),      <span class="co"># 销售量</span></span>
+<span id="cb6-5"><a aria-label="5"></a>  <span class="at">p0 =</span> <span class="fu">c</span>(<span class="dv">2600</span>, <span class="dv">2300</span>, <span class="fl">9.8</span>),   <span class="at">p1 =</span> <span class="fu">c</span>(<span class="dv">3000</span>, <span class="dv">2100</span>, <span class="fl">10.5</span>)     <span class="co"># 单价（元）</span></span>
+<span id="cb6-6"><a aria-label="6"></a>)</span>
+<span id="cb6-7"><a aria-label="7"></a>pq0 <span class="ot">&lt;-</span> <span class="fu">with</span>(goods, <span class="fu">sum</span>(p0 <span class="sc">*</span> q0))   <span class="co"># Σp₀q₀ 基期销售额</span></span>
+<span id="cb6-8"><a aria-label="8"></a>pq1 <span class="ot">&lt;-</span> <span class="fu">with</span>(goods, <span class="fu">sum</span>(p1 <span class="sc">*</span> q1))   <span class="co"># Σp₁q₁ 报告期销售额</span></span>
+<span id="cb6-9"><a aria-label="9"></a>p0q1 <span class="ot">&lt;-</span> <span class="fu">with</span>(goods, <span class="fu">sum</span>(p0 <span class="sc">*</span> q1))  <span class="co"># Σp₀q₁ 假定销售额</span></span>
+<span id="cb6-10"><a aria-label="10"></a></span>
+<span id="cb6-11"><a aria-label="11"></a><span class="fu">c</span>(销售额指数 <span class="ot">=</span> <span class="fu">round</span>(pq1 <span class="sc">/</span> pq0 <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>),        <span class="co"># 132.02%</span></span>
+<span id="cb6-12"><a aria-label="12"></a>  价格指数_派氏 <span class="ot">=</span> <span class="fu">round</span>(pq1 <span class="sc">/</span> p0q1 <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>),    <span class="co"># 102.44%</span></span>
+<span id="cb6-13"><a aria-label="13"></a>  销售量指数_拉氏 <span class="ot">=</span> <span class="fu">round</span>(p0q1 <span class="sc">/</span> pq0 <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>))  <span class="co"># 128.88%</span></span>
+<span id="cb6-14"><a aria-label="14"></a><span class="co">#&gt;      销售额指数   价格指数_派氏 销售量指数_拉氏 </span></span>
+<span id="cb6-15"><a aria-label="15"></a><span class="co">#&gt;          132.02          102.44          128.88</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a aria-label="1"></a><span class="co"># 指数体系的绝对量分解：总变动 = 价格影响 + 销售量影响</span></span>
+<span id="cb7-2"><a aria-label="2"></a><span class="fu">data.frame</span>(</span>
+<span id="cb7-3"><a aria-label="3"></a>  分解 <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"销售额总变动"</span>, <span class="st">"其中：价格变动影响"</span>, <span class="st">"其中：销售量变动影响"</span>),</span>
+<span id="cb7-4"><a aria-label="4"></a>  绝对额 <span class="ot">=</span> <span class="fu">c</span>(pq1 <span class="sc">-</span> pq0, pq1 <span class="sc">-</span> p0q1, p0q1 <span class="sc">-</span> pq0)</span>
+<span id="cb7-5"><a aria-label="5"></a>)</span>
+<span id="cb7-6"><a aria-label="6"></a><span class="co">#&gt;                   分解 绝对额</span></span>
+<span id="cb7-7"><a aria-label="7"></a><span class="co">#&gt; 1         销售额总变动 215100</span></span>
+<span id="cb7-8"><a aria-label="8"></a><span class="co">#&gt; 2   其中：价格变动影响  21120</span></span>
+<span id="cb7-9"><a aria-label="9"></a><span class="co">#&gt; 3 其中：销售量变动影响 193980</span></span>
+<span id="cb7-10"><a aria-label="10"></a><span class="co"># 验证：215100 = 21120 + 193980 —— 与手算逐位一致</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div title="同度量因素">
+<div class="callout callout-tip callout-titled callout-style-simple">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>同度量因素</strong></p>
+</div>
+<div class="callout-content">
+<p>销售量（数量指标）指数用<strong>基期价格</strong> p₀ 作同度量因素（拉氏），价格（质量指标）指数用<strong>报告期销售量</strong> q₁ 作同度量因素（派氏）——两者相乘恰好约去假定项，还原成销售额指数。R 里只是三个 <code>sum()</code> 的事，但要清楚每个和式<strong>度量的是什么</strong>。</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="居民消费价格指数cpi的概念" class="slide level2">
+<h2>居民消费价格指数（CPI）的概念</h2>
+<p>居民消费价格指数在国外称之为消费者价格指数（Consumer Price Index，简记 CPI）。是度量一组代表性消费品及服务项目价格水平随时间而变动的指数，反映居民家庭所购买的生活消费品和服务价格水平变动的情况。通常被用来作为反映通货膨胀或通货紧缩程度的指标，观察和分析价格水平变动对居民货币工资的影响。</p>
+<p><strong>世界各国普遍编制的一种价格指数</strong>：</p>
+<ul>
+<li>不同国家对这一指数赋予的名称不一致；</li>
+<li>我国称之为居民消费价格指数。</li>
+</ul>
+</section>
+<section id="cpi-的编制方法和步骤" class="slide level2">
+<h2>CPI 的编制方法和步骤</h2>
+<p>（1）选择调查地区和调查点。</p>
+<p>（2）分类（大中小细类）、选择代表性商品和规格品。</p>
+<p>（3）收集价格资料。</p>
+<p>（4）确定层次的权数（根据城乡居民家庭消费构成来确定，权数相对固定，每年调整）。</p>
+<p>（5）计算价格指数。</p>
+<p>依次计算：代表品—细类—小类—中类—大类—总指数。</p>
+</section>
+<section id="中国-cpi-的八大类及权数" class="slide level2 scrollable">
+<h2>中国 CPI 的八大类及权数</h2>
+<p>中国 CPI 包括八个大类，每个大类在其中所占权重不同，根据最新公布的 CPI 权数调整，目前是这样的：</p>
+<ol type="1">
+<li>食品类：31.79%</li>
+<li>烟酒及用品：3.49%</li>
+<li>服装：8.51%</li>
+<li>家庭设备用品及服务：5.64%</li>
+<li>医疗保健及个人用品：9.64%</li>
+<li>交通和通信：9.95%</li>
+<li>娱乐教育文化用品及服务：13.75%</li>
+<li>居住（建房和装修材料费用；租房房租；房屋贷款；物业费；水电燃料费）：17.22%</li>
+</ol>
+</section>
+<section id="cpi-的基期轮换" class="slide level2">
+<h2>CPI 的基期轮换</h2>
+<p>从 2021 年 1 月起，我国 CPI 开始计算以 2020 年为对比基期的价格指数序列。这是自 2001 年计算 CPI 定基价格指数以来，第五次进行基期例行更换，首轮基期为 2000 年，第二轮基期为 2005 年，第三轮为 2010 年。</p>
+<p>调整基期，是为了更容易比较。因为对比基期越久，价格规格品品质变化就越大，可比性就会下降。选择逢 0 逢 5 年度作为计算 CPI 的对比基期，目的是为了与我国国民经济和社会发展五年规划保持相同周期，便于数据分析与使用。</p>
+</section>
+<section id="cpi-的应用" class="slide level2">
+<h2>CPI 的应用</h2>
+<p><strong>1. 反映通货膨胀状况</strong></p>
+<p><span class="math display">\[\text{通货膨胀率} = \frac{\text{报告期消费价格指数} - \text{基期消费价格指数}}{\text{基期消费价格指数}} \times 100\%\]</span></p>
+<ul>
+<li>一般说来当 CPI&gt;3% 的增幅时我们称为 INFLATION，就是通货膨胀；</li>
+<li>而当 CPI&gt;5% 的增幅时，我们把他称为 SERIOUS INFLATION，就是严重的通货膨胀。</li>
+</ul>
+<p><strong>2. 反映货币购买力变动</strong></p>
+<p><span class="math display">\[\text{货币购买力指数} = \frac{1}{\text{居民消费价格指数}} \times 100\%\]</span></p>
+<p>例如，在过去 12 个月，消费者物价指数上升 2%，那表示，生活成本比 12 个月前平均上升 2%。当生活成本提高，你的金钱价值便随之下降。也就是说，一年前价格为 100 元的商品或服务，今年的价格为 102 元，而一年前收到的一张 100 元纸币，今日只可以买到价值 98.03 元的商品及服务。</p>
+<p><strong>3. 反映对职工实际工资的影响</strong></p>
+<p><span class="math display">\[\text{实际工资} = \frac{\text{名义工资}}{\text{消费价格指数}}\]</span></p>
+<p>以上三个公式如何落到具体数据上？下面两个动手案例分别演示 CPI 的<strong>分层加权计算</strong>与 <strong>CPI 平减</strong>的完整操作——它们同时是前文”货币购买力指数”“实际工资”两个公式的落地演练。</p>
+</section>
+<section id="动手案例-1食品类-cpi-的分层加权计算" class="slide level2">
+<h2>【动手案例 1】食品类 CPI 的分层加权计算</h2>
+<p><strong>题目</strong>：某市 2026 年 1—2 月（春节所在月份）食品类部分规格品价格与权数资料如下表。要求：（1）计算表中所空缺的 a）、b）、c）、d）四个指数；（2）利用计算结果进一步计算该市食品类消费价格指数。</p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>类别（层级）</th>
+<th>1 月价格（元/公斤）</th>
+<th>2 月价格（元/公斤）</th>
+<th>权数 <span class="math inline">\(w\)</span>（%）</th>
+<th>指数（%，2 月比 1 月）</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1 粮食</td>
+<td>—</td>
+<td>—</td>
+<td>35（食品类内）</td>
+<td>d）______</td>
+</tr>
+<tr class="even">
+<td>　1.1 细粮</td>
+<td>—</td>
+<td>—</td>
+<td>65（粮食内）</td>
+<td>c）______</td>
+</tr>
+<tr class="odd">
+<td>　　1.1.1 面粉（标准粉）</td>
+<td>5.90</td>
+<td>6.05</td>
+<td>40（细粮内）</td>
+<td>a）______</td>
+</tr>
+<tr class="even">
+<td>　　1.1.2 大米（粳米）</td>
+<td>6.60</td>
+<td>6.85</td>
+<td>60（细粮内）</td>
+<td>b）______</td>
+</tr>
+<tr class="odd">
+<td>　1.2 粗粮</td>
+<td>—</td>
+<td>—</td>
+<td>35（粮食内）</td>
+<td>101.6（已知）</td>
+</tr>
+<tr class="even">
+<td>2 副食品</td>
+<td>—</td>
+<td>—</td>
+<td>45（食品类内）</td>
+<td>104.2（已知）</td>
+</tr>
+<tr class="odd">
+<td>3 其他食品</td>
+<td>—</td>
+<td>—</td>
+<td>20（食品类内）</td>
+<td>101.5（已知）</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="动手案例-1食品类-cpi-的分层加权计算续" class="slide level2">
+<h2>【动手案例 1】食品类 CPI 的分层加权计算（续）</h2>
+<p><strong>说明</strong>：本例层级结构仿照我国 CPI”代表规格品 → 基本分类 → 小类 → 中类 → 大类 → 总指数”的编制框架设计；价格与指数为教学自造数字（量级参照 2024—2025 年我国市场物价水平设定），不代表任何官方发布数据。每一层用的都是第三节”固定权数的平均法指数”公式 <span class="math inline">\(I = \dfrac{\sum k\,w}{\sum w}\)</span>——只需要个体（类）指数与相对固定的权数，完全不需要销售量资料。</p>
+<p><strong>解（1）：自下而上逐层填空</strong></p>
+<p>a）面粉个体指数：</p>
+<p><span class="math display">\[k_{\text{面粉}} = \frac{6.05}{5.90} \times 100\% = 102.5\%\]</span></p>
+<p>b）大米个体指数：</p>
+<p><span class="math display">\[k_{\text{大米}} = \frac{6.85}{6.60} \times 100\% = 103.8\%\]</span></p>
+<p>c）细粮类指数（面粉权数 40%、大米权数 60%）：</p>
+<p><span class="math display">\[I_{\text{细粮}} = \sum k\,\frac{w}{\sum w} = 102.5\% \times 40\% + 103.8\% \times 60\% = 103.3\%\]</span></p>
+<p>（按未舍入的个体指数计算为 <span class="math inline">\(102.542\% \times 0.4 + 103.788\% \times 0.6 = 103.29\%\)</span>，与用舍入值的结果一致。）</p>
+<p>d）粮食类指数（细粮权数 65%、粗粮权数 35%）：</p>
+</section>
+<section id="动手案例-1食品类-cpi-的分层加权计算续-1" class="slide level2">
+<h2>【动手案例 1】食品类 CPI 的分层加权计算（续）</h2>
+<p><span class="math display">\[I_{\text{粮食}} = 103.3\% \times 65\% + 101.6\% \times 35\% = 102.7\%\]</span></p>
+<p><strong>解（2）：食品类消费价格指数</strong>（粮食权数 35%、副食品 45%、其他食品 20%）：</p>
+<p><span class="math display">\[I_{\text{食品}} = 102.7\% \times 35\% + 104.2\% \times 45\% + 101.5\% \times 20\% = 103.1\%\]</span></p>
+<p>即 2 月与 1 月相比，该市食品类价格平均上涨 <span class="math inline">\(3.1\%\)</span>（春节效应）。</p>
+<p><strong>解读</strong>：从规格品个体指数到食品类指数共走了三层，每层都是”个体（类）指数 × 固定权数”的加权算术平均——这正是固定权数平均法指数”便于长期对比、不需要全面资料”的优势在真实编制工作中的体现。食品类在 CPI 中的权数很大（本教材口径为 31.79%），其分项波动对总指数的方向影响显著：国家统计局数据显示，2024 年我国 CPI 全年仅上涨 0.2%，2025 年 CPI 总体持平，其中 2025 年 9 月食品价格同比下降 4.4%——低通胀环境下，食品分项往往决定总指数的涨跌方向。</p>
+</section>
+<section id="动手案例-1食品类-cpi-的分层加权计算续-2" class="slide level2">
+<h2>【动手案例 1】食品类 CPI 的分层加权计算（续）</h2>
+<blockquote>
+<p><strong>教师参考框</strong>：实际编制中，基本分类的月度价格指数先对多个代表规格品的价格相对数求几何平均，小类及以上层级才用固定权数算术平均；本例为聚焦分层加权结构，将基本分类简化为单一代表规格品。教师课堂可展示我国零售价格指数 16 大类的完整计算表样例（教材表 14-5，总指数 111.6），让学生看到真实统计工作的层级结构。</p>
+</blockquote>
+</section>
+<section id="r-实践-cpi-分层加权计算" class="slide level2 r-demo">
+<h2>R 实践 · CPI 分层加权计算</h2>
+<p>讲义动手案例 1 的”面粉 → 细粮 → 粮食 → 食品”逐层加权，每一层都是一个 <code>weighted.mean()</code>。自下而上算一遍，再做一次权数敏感性实验。</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a aria-label="1"></a><span class="co"># 第一层：代表规格品个体指数（2 月价格 / 1 月价格 × 100）</span></span>
+<span id="cb8-2"><a aria-label="2"></a>flour <span class="ot">&lt;-</span> <span class="fl">6.05</span> <span class="sc">/</span> <span class="fl">5.90</span> <span class="sc">*</span> <span class="dv">100</span>   <span class="co"># 面粉 102.5</span></span>
+<span id="cb8-3"><a aria-label="3"></a>rice  <span class="ot">&lt;-</span> <span class="fl">6.85</span> <span class="sc">/</span> <span class="fl">6.60</span> <span class="sc">*</span> <span class="dv">100</span>   <span class="co"># 大米 103.8</span></span>
+<span id="cb8-4"><a aria-label="4"></a><span class="fu">c</span>(<span class="at">flour =</span> <span class="fu">round</span>(flour, <span class="dv">1</span>), <span class="at">rice =</span> <span class="fu">round</span>(rice, <span class="dv">1</span>))</span>
+<span id="cb8-5"><a aria-label="5"></a><span class="co">#&gt; flour  rice </span></span>
+<span id="cb8-6"><a aria-label="6"></a><span class="co">#&gt; 102.5 103.8</span></span>
+<span id="cb8-7"><a aria-label="7"></a><span class="co">#&gt; flour  rice</span></span>
+<span id="cb8-8"><a aria-label="8"></a><span class="co">#&gt; 102.5 103.8</span></span>
+<span id="cb8-9"><a aria-label="9"></a></span>
+<span id="cb8-10"><a aria-label="10"></a><span class="co"># 第二层：细粮类指数（面粉 40%、大米 60%）</span></span>
+<span id="cb8-11"><a aria-label="11"></a>i_fine <span class="ot">&lt;-</span> <span class="fu">weighted.mean</span>(<span class="fu">c</span>(flour, rice), <span class="at">w =</span> <span class="fu">c</span>(<span class="dv">40</span>, <span class="dv">60</span>))</span>
+<span id="cb8-12"><a aria-label="12"></a><span class="fu">round</span>(i_fine, <span class="dv">1</span>)</span>
+<span id="cb8-13"><a aria-label="13"></a><span class="co">#&gt; [1] 103.3</span></span>
+<span id="cb8-14"><a aria-label="14"></a><span class="co">#&gt; 103.3</span></span>
+<span id="cb8-15"><a aria-label="15"></a></span>
+<span id="cb8-16"><a aria-label="16"></a><span class="co"># 第三层：粮食类指数（细粮 65%、粗粮 35%，粗粮指数已知 101.6）</span></span>
+<span id="cb8-17"><a aria-label="17"></a>i_grain <span class="ot">&lt;-</span> <span class="fu">weighted.mean</span>(<span class="fu">c</span>(i_fine, <span class="fl">101.6</span>), <span class="at">w =</span> <span class="fu">c</span>(<span class="dv">65</span>, <span class="dv">35</span>))</span>
+<span id="cb8-18"><a aria-label="18"></a><span class="fu">round</span>(i_grain, <span class="dv">1</span>)</span>
+<span id="cb8-19"><a aria-label="19"></a><span class="co">#&gt; [1] 102.7</span></span>
+<span id="cb8-20"><a aria-label="20"></a><span class="co">#&gt; 102.7</span></span>
+<span id="cb8-21"><a aria-label="21"></a></span>
+<span id="cb8-22"><a aria-label="22"></a><span class="co"># 第四层：食品类 CPI（粮食 35%、副食品 45%、其他食品 20%）</span></span>
+<span id="cb8-23"><a aria-label="23"></a>i_food <span class="ot">&lt;-</span> <span class="fu">weighted.mean</span>(<span class="fu">c</span>(i_grain, <span class="fl">104.2</span>, <span class="fl">101.5</span>), <span class="at">w =</span> <span class="fu">c</span>(<span class="dv">35</span>, <span class="dv">45</span>, <span class="dv">20</span>))</span>
+<span id="cb8-24"><a aria-label="24"></a><span class="fu">round</span>(i_food, <span class="dv">1</span>)</span>
+<span id="cb8-25"><a aria-label="25"></a><span class="co">#&gt; [1] 103.1</span></span>
+<span id="cb8-26"><a aria-label="26"></a><span class="co">#&gt; 103.1</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a aria-label="1"></a><span class="co"># 权数敏感性：把涨得最多的副食品（104.2）权数由 45% 提到 50%</span></span>
+<span id="cb9-2"><a aria-label="2"></a><span class="co"># （粮食 35%-&gt;32%、其他食品 20%-&gt;18%，合计仍为 100%）</span></span>
+<span id="cb9-3"><a aria-label="3"></a>i_food2 <span class="ot">&lt;-</span> <span class="fu">weighted.mean</span>(<span class="fu">c</span>(i_grain, <span class="fl">104.2</span>, <span class="fl">101.5</span>), <span class="at">w =</span> <span class="fu">c</span>(<span class="dv">32</span>, <span class="dv">50</span>, <span class="dv">18</span>))</span>
+<span id="cb9-4"><a aria-label="4"></a><span class="fu">round</span>(<span class="fu">c</span>(原权数 <span class="ot">=</span> i_food, 新权数 <span class="ot">=</span> i_food2), <span class="dv">2</span>)</span>
+<span id="cb9-5"><a aria-label="5"></a><span class="co">#&gt; 原权数 新权数 </span></span>
+<span id="cb9-6"><a aria-label="6"></a><span class="co">#&gt; 103.13 103.23</span></span>
+<span id="cb9-7"><a aria-label="7"></a><span class="co">#&gt; 原权数 新权数</span></span>
+<span id="cb9-8"><a aria-label="8"></a><span class="co">#&gt; 103.13 103.23</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div title="与讲义手算对照">
+<div class="callout callout-note callout-titled callout-style-simple">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>与讲义手算对照</strong></p>
+</div>
+<div class="callout-content">
+<p>四层结果 102.5、103.8、103.3、102.7、103.1 与讲义动手案例 1 的填空答案逐一吻合；软件用未舍入的个体指数连算，讲义用逐层舍入值手算，最终均落在 103.1%。敏感性实验显示：副食品权数上调 5 个百分点，食品类指数上移约 0.1 个百分点——<strong>权数是 CPI 的”指挥棒”</strong>，这正是第五节强调”权数按消费构成确定、每年调整”的原因。</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="动手案例-2用-cpi-平减名义工资换基与平减两步法" class="slide level2">
+<h2>【动手案例 2】用 CPI 平减名义工资：换基与平减两步法</h2>
+<p><strong>题目</strong>：某地区某企业 2025 年 1—12 月的定基 CPI（以 2025 年 1 月 <span class="math inline">\(= 100\)</span>）与职工月人均名义工资如下表。为使各月实际工资具有可比性，请以 <strong>6 月为基准月</strong>（以 6 月物价水平为”不变价格”）对工资序列做 CPI 平减，计算各月实际人均工资。</p>
+<table class="caption-top" style="width:100%;">
+<colgroup>
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>月份</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+<th>11</th>
+<th>12</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>CPI（定基，1 月 = 100）</td>
+<td>100.0</td>
+<td>101.6</td>
+<td>100.8</td>
+<td>100.7</td>
+<td>100.6</td>
+<td>100.8</td>
+<td>100.4</td>
+<td>100.1</td>
+<td>100.5</td>
+<td>100.7</td>
+<td>101.2</td>
+<td>101.4</td>
+</tr>
+<tr class="even">
+<td>名义工资（元/人·月）</td>
+<td>8200</td>
+<td>8200</td>
+<td>8300</td>
+<td>8350</td>
+<td>8400</td>
+<td>8450</td>
+<td>8500</td>
+<td>8550</td>
+<td>8600</td>
+<td>8650</td>
+<td>8700</td>
+<td>8800</td>
+</tr>
+</tbody>
+</table>
+<p><strong>说明</strong>：CPI 与工资均为教学自造序列——CPI 波幅参照 2024—2025 年我国月度物价温和波动的量级设计（2024 年全年上涨 0.2%、2025 年总体持平），工资水平参照城镇就业人员月均收入量级设定，不代表任何官方发布数据。</p>
+</section>
+<section id="动手案例-2用-cpi-平减名义工资换基与平减两步法续" class="slide level2">
+<h2>【动手案例 2】用 CPI 平减名义工资：换基与平减两步法（续）</h2>
+<p><strong>第 1 步（换基）</strong>：把”1 月 <span class="math inline">\(= 100\)</span>“的定基 CPI 序列换算为”6 月 <span class="math inline">\(= 100\)</span>“的新序列：</p>
+<p><span class="math display">\[CPI^{(6)}_t = 100 \times \frac{CPI_t}{CPI_6} = 100 \times \frac{CPI_t}{100.8}\]</span></p>
+<p>定基指数换基不改变各月之间的相对关系，只是把”尺子的刻度原点”挪到 6 月：换基后 6 月为 100，<strong>小于 100 的月份物价水平低于 6 月</strong>，大于 100 的月份高于 6 月。</p>
+<p><strong>第 2 步（平减）</strong>：逐月用换基后的 CPI 去除名义工资，得到按 6 月不变价衡量的实际工资：</p>
+<p><span class="math display">\[\text{实际工资}_t = \frac{\text{名义工资}_t}{CPI^{(6)}_t / 100}\]</span></p>
+<p><strong>计算与结果表</strong>（实际工资按保留一位小数的换基 CPI 计算）：</p>
+</section>
+<section id="动手案例-2用-cpi-平减名义工资换基与平减两步法续-1" class="slide level2">
+<h2>【动手案例 2】用 CPI 平减名义工资：换基与平减两步法（续）</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>月份</th>
+<th>CPI（1 月 = 100）</th>
+<th>换基 CPI（6 月 = 100）</th>
+<th>名义工资（元）</th>
+<th>实际工资（元，按 6 月物价）</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>100.0</td>
+<td>99.2</td>
+<td>8200</td>
+<td>8266.1</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>101.6</td>
+<td>100.8</td>
+<td>8200</td>
+<td>8134.9</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>100.8</td>
+<td>100.0</td>
+<td>8300</td>
+<td>8300.0</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>100.7</td>
+<td>99.9</td>
+<td>8350</td>
+<td>8358.4</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>100.6</td>
+<td>99.8</td>
+<td>8400</td>
+<td>8416.8</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>100.8</td>
+<td>100.0</td>
+<td>8450</td>
+<td>8450.0</td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td>100.4</td>
+<td>99.6</td>
+<td>8500</td>
+<td>8534.1</td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td>100.1</td>
+<td>99.3</td>
+<td>8550</td>
+<td>8610.3</td>
+</tr>
+<tr class="odd">
+<td>9</td>
+<td>100.5</td>
+<td>99.7</td>
+<td>8600</td>
+<td>8625.9</td>
+</tr>
+<tr class="even">
+<td>10</td>
+<td>100.7</td>
+<td>99.9</td>
+<td>8650</td>
+<td>8658.7</td>
+</tr>
+<tr class="odd">
+<td>11</td>
+<td>101.2</td>
+<td>100.4</td>
+<td>8700</td>
+<td>8665.3</td>
+</tr>
+<tr class="even">
+<td>12</td>
+<td>101.4</td>
+<td>100.6</td>
+<td>8800</td>
+<td>8747.5</td>
+</tr>
+</tbody>
+</table>
+<p><strong>结果讨论</strong>：</p>
+</section>
+<section id="动手案例-2用-cpi-平减名义工资换基与平减两步法续-2" class="slide level2 scrollable">
+<h2>【动手案例 2】用 CPI 平减名义工资：换基与平减两步法（续）</h2>
+<ol type="1">
+<li><strong>名义与实际为何”分道扬镳”？</strong> 名义工资逐月上行（8200 → 8800 元），实际工资却随物价起伏：2 月春节物价冲高（换基 CPI <span class="math inline">\(= 100.8\)</span>），8200 元名义工资的实际购买力跌到 8134.9 元——涨价”吃掉”了 65 元。</li>
+<li><strong>为什么 7—10 月实际工资反而高于名义？</strong> 这些月份换基 CPI <span class="math inline">\(&lt; 100\)</span>（如 8 月为 99.3），即物价水平低于 6 月基准月，货币购买力高于基准月（购买力指数 <span class="math inline">\(= 100/99.3 = 100.7\% &gt; 100\%\)</span>），同样的名义收入能买到更多东西——这正是”实际工资 = 名义工资 ÷ CPI”在 CPI <span class="math inline">\(&lt; 100\)</span> 时的直观表现。现实中确有其例：2025 年 2 月我国 CPI 同比下降 0.7%、9 月下降 0.3%——低通胀乃至负通胀月份，名义收入的购买力不降反升。</li>
+<li><strong>全年算总账</strong>：名义工资增长 <span class="math inline">\(8800/8200 - 1 = 7.3\%\)</span>；按 6 月不变价衡量的实际工资增长 <span class="math inline">\(8747.5/8266.1 - 1 = 5.8\%\)</span>——全年物价的累计上涨吞掉了约 1.5 个百分点的”含金量”。</li>
+<li><strong>方法注记</strong>：官方按月发布的 CPI 多为同比（上年同月 <span class="math inline">\(= 100\)</span>）与环比（上月 <span class="math inline">\(= 100\)</span>）口径，做跨月平减前必须先统一到同一基期（如本例”6 月 <span class="math inline">\(= 100\)</span>“）；更长序列的平减应使用定基指数链式衔接。本案例与”货币购买力指数 <span class="math inline">\(= 1/\text{CPI}\)</span>“一脉相承——平减本质上是逐月计算购买力指数并把工资折算到基准月的购买力尺度上。</li>
+</ol>
+</section>
+<section id="动手案例-2用-cpi-平减名义工资换基与平减两步法续-3" class="slide level2">
+<h2>【动手案例 2】用 CPI 平减名义工资：换基与平减两步法（续）</h2>
+<blockquote>
+<p>本节配套上机任务见《新增实践 · ch09》实践块 2、3：CPI 分层加权计算；CPI 平减工资序列与名义/实际工资双线图。</p>
+</blockquote>
+</section>
+<section id="r-实践-cpi-平减工资序列与双线图" class="slide level2 r-demo">
+<h2>R 实践 · CPI 平减工资序列与双线图</h2>
+<p>讲义动手案例 2 的”换基 + 平减”两步法，向量运算两行即可完成，随后把名义工资与实际工资画成双线图。</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a aria-label="1"></a><span class="co"># 数据（讲义动手案例 2，教学自造序列）</span></span>
+<span id="cb10-2"><a aria-label="2"></a>cpi  <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">100.0</span>, <span class="fl">101.6</span>, <span class="fl">100.8</span>, <span class="fl">100.7</span>, <span class="fl">100.6</span>, <span class="fl">100.8</span>,</span>
+<span id="cb10-3"><a aria-label="3"></a>          <span class="fl">100.4</span>, <span class="fl">100.1</span>, <span class="fl">100.5</span>, <span class="fl">100.7</span>, <span class="fl">101.2</span>, <span class="fl">101.4</span>)   <span class="co"># 定基 CPI，1 月 = 100</span></span>
+<span id="cb10-4"><a aria-label="4"></a>wage <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">8200</span>, <span class="dv">8200</span>, <span class="dv">8300</span>, <span class="dv">8350</span>, <span class="dv">8400</span>, <span class="dv">8450</span>,</span>
+<span id="cb10-5"><a aria-label="5"></a>          <span class="dv">8500</span>, <span class="dv">8550</span>, <span class="dv">8600</span>, <span class="dv">8650</span>, <span class="dv">8700</span>, <span class="dv">8800</span>)         <span class="co"># 名义工资（元/人·月）</span></span>
+<span id="cb10-6"><a aria-label="6"></a>base <span class="ot">&lt;-</span> <span class="dv">6</span>                                             <span class="co"># 基准月：6 月</span></span>
+<span id="cb10-7"><a aria-label="7"></a></span>
+<span id="cb10-8"><a aria-label="8"></a>cpi6 <span class="ot">&lt;-</span> <span class="dv">100</span> <span class="sc">*</span> cpi <span class="sc">/</span> cpi[base]     <span class="co"># 第 1 步：换基（6 月 = 100）</span></span>
+<span id="cb10-9"><a aria-label="9"></a>real <span class="ot">&lt;-</span> wage <span class="sc">/</span> (cpi6 <span class="sc">/</span> <span class="dv">100</span>)       <span class="co"># 第 2 步：平减得实际工资</span></span>
+<span id="cb10-10"><a aria-label="10"></a></span>
+<span id="cb10-11"><a aria-label="11"></a><span class="fu">round</span>(<span class="fu">data.frame</span>(月份 <span class="ot">=</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>,</span>
+<span id="cb10-12"><a aria-label="12"></a>                 换基<span class="at">CPI =</span> <span class="fu">round</span>(cpi6, <span class="dv">1</span>),</span>
+<span id="cb10-13"><a aria-label="13"></a>                 名义工资 <span class="ot">=</span> wage,</span>
+<span id="cb10-14"><a aria-label="14"></a>                 实际工资 <span class="ot">=</span> <span class="fu">round</span>(real, <span class="dv">1</span>)), <span class="dv">1</span>)</span>
+<span id="cb10-15"><a aria-label="15"></a><span class="co">#&gt;    月份 换基CPI 名义工资 实际工资</span></span>
+<span id="cb10-16"><a aria-label="16"></a><span class="co">#&gt; 1     1    99.2     8200   8265.6</span></span>
+<span id="cb10-17"><a aria-label="17"></a><span class="co">#&gt; 2     2   100.8     8200   8135.4</span></span>
+<span id="cb10-18"><a aria-label="18"></a><span class="co">#&gt; 3     3   100.0     8300   8300.0</span></span>
+<span id="cb10-19"><a aria-label="19"></a><span class="co">#&gt; 4     4    99.9     8350   8358.3</span></span>
+<span id="cb10-20"><a aria-label="20"></a><span class="co">#&gt; 5     5    99.8     8400   8416.7</span></span>
+<span id="cb10-21"><a aria-label="21"></a><span class="co">#&gt; 6     6   100.0     8450   8450.0</span></span>
+<span id="cb10-22"><a aria-label="22"></a><span class="co">#&gt; 7     7    99.6     8500   8533.9</span></span>
+<span id="cb10-23"><a aria-label="23"></a><span class="co">#&gt; 8     8    99.3     8550   8609.8</span></span>
+<span id="cb10-24"><a aria-label="24"></a><span class="co">#&gt; 9     9    99.7     8600   8625.7</span></span>
+<span id="cb10-25"><a aria-label="25"></a><span class="co">#&gt; 10   10    99.9     8650   8658.6</span></span>
+<span id="cb10-26"><a aria-label="26"></a><span class="co">#&gt; 11   11   100.4     8700   8665.6</span></span>
+<span id="cb10-27"><a aria-label="27"></a><span class="co">#&gt; 12   12   100.6     8800   8747.9</span></span>
+<span id="cb10-28"><a aria-label="28"></a><span class="co">#&gt;    月份 换基CPI 名义工资 实际工资</span></span>
+<span id="cb10-29"><a aria-label="29"></a><span class="co">#&gt; 1     1    99.2     8200   8265.6   &lt;- CPI&lt;100：实际高于名义</span></span>
+<span id="cb10-30"><a aria-label="30"></a><span class="co">#&gt; 2     2   100.8     8200   8135.4   &lt;- 春节物价冲高：实际缩水</span></span>
+<span id="cb10-31"><a aria-label="31"></a><span class="co">#&gt; 3     3   100.0     8300   8300.0</span></span>
+<span id="cb10-32"><a aria-label="32"></a><span class="co">#&gt; 4     4    99.9     8350   8358.4</span></span>
+<span id="cb10-33"><a aria-label="33"></a><span class="co">#&gt; 5     5    99.8     8400   8416.7</span></span>
+<span id="cb10-34"><a aria-label="34"></a><span class="co">#&gt; 6     6   100.0     8450   8450.0   &lt;- 基准月：名义 = 实际</span></span>
+<span id="cb10-35"><a aria-label="35"></a><span class="co">#&gt; 7     7    99.6     8500   8533.9</span></span>
+<span id="cb10-36"><a aria-label="36"></a><span class="co">#&gt; 8     8    99.3     8550   8609.8</span></span>
+<span id="cb10-37"><a aria-label="37"></a><span class="co">#&gt; 9     9    99.7     8600   8625.7</span></span>
+<span id="cb10-38"><a aria-label="38"></a><span class="co">#&gt; 10   10    99.9     8650   8658.6</span></span>
+<span id="cb10-39"><a aria-label="39"></a><span class="co">#&gt; 11   11   100.4     8700   8665.6   &lt;- CPI&gt;100：物价吞掉涨幅</span></span>
+<span id="cb10-40"><a aria-label="40"></a><span class="co">#&gt; 12   12   100.6     8800   8747.9</span></span>
+<span id="cb10-41"><a aria-label="41"></a></span>
+<span id="cb10-42"><a aria-label="42"></a><span class="co"># 全年算总账：名义增长 7.3%，实际增长 5.8%</span></span>
+<span id="cb10-43"><a aria-label="43"></a><span class="fu">c</span>(<span class="at">nominal =</span> wage[<span class="dv">12</span>] <span class="sc">/</span> wage[<span class="dv">1</span>] <span class="sc">-</span> <span class="dv">1</span>, <span class="at">real =</span> real[<span class="dv">12</span>] <span class="sc">/</span> real[<span class="dv">1</span>] <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">|&gt;</span> <span class="fu">round</span>(<span class="dv">3</span>)</span>
+<span id="cb10-44"><a aria-label="44"></a><span class="co">#&gt; nominal    real </span></span>
+<span id="cb10-45"><a aria-label="45"></a><span class="co">#&gt;   0.073   0.058</span></span>
+<span id="cb10-46"><a aria-label="46"></a><span class="co">#&gt; nominal    real</span></span>
+<span id="cb10-47"><a aria-label="47"></a><span class="co">#&gt;   0.073   0.058</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a aria-label="1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb11-2"><a aria-label="2"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">month =</span> <span class="fu">factor</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>, <span class="at">levels =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>, <span class="at">labels =</span> <span class="fu">paste0</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>, <span class="st">"月"</span>)),</span>
+<span id="cb11-3"><a aria-label="3"></a>                 <span class="at">nominal =</span> wage, <span class="at">real =</span> real,</span>
+<span id="cb11-4"><a aria-label="4"></a>                 <span class="at">above =</span> real <span class="sc">&gt;</span> wage)   <span class="co"># 实际高于名义的月份</span></span>
+<span id="cb11-5"><a aria-label="5"></a></span>
+<span id="cb11-6"><a aria-label="6"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(month, <span class="at">group =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb11-7"><a aria-label="7"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> nominal, <span class="at">color =</span> <span class="st">"名义工资"</span>), <span class="at">linewidth =</span> <span class="fl">0.9</span>) <span class="sc">+</span></span>
+<span id="cb11-8"><a aria-label="8"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> real, <span class="at">color =</span> <span class="st">"实际工资（按 6 月不变价）"</span>), <span class="at">linewidth =</span> <span class="fl">0.9</span>) <span class="sc">+</span></span>
+<span id="cb11-9"><a aria-label="9"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> <span class="fu">subset</span>(df, above), <span class="fu">aes</span>(month, real),</span>
+<span id="cb11-10"><a aria-label="10"></a>             <span class="at">color =</span> <span class="st">"#b2182b"</span>, <span class="at">size =</span> <span class="fl">2.4</span>, <span class="at">shape =</span> <span class="dv">16</span>) <span class="sc">+</span></span>
+<span id="cb11-11"><a aria-label="11"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"名义工资"</span> <span class="ot">=</span> <span class="st">"#1a6b54"</span>,</span>
+<span id="cb11-12"><a aria-label="12"></a>                                <span class="st">"实际工资（按 6 月不变价）"</span> <span class="ot">=</span> <span class="st">"#b2182b"</span>)) <span class="sc">+</span></span>
+<span id="cb11-13"><a aria-label="13"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"CPI 平减：名义工资与实际工资（2025 年 1—12 月）"</span>,</span>
+<span id="cb11-14"><a aria-label="14"></a>       <span class="at">subtitle =</span> <span class="st">"红点标记实际工资高于名义工资的月份（换基 CPI &lt; 100，物价水平低于 6 月基准）"</span>,</span>
+<span id="cb11-15"><a aria-label="15"></a>       <span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="st">"工资（元/人·月）"</span>,</span>
+<span id="cb11-16"><a aria-label="16"></a>       <span class="at">color =</span> <span class="cn">NULL</span>,</span>
+<span id="cb11-17"><a aria-label="17"></a>       <span class="at">caption =</span> <span class="st">"教学自造数据；两步法：换基 CPI(6月=100) -&gt; 实际工资 = 名义工资 / (CPI/100)"</span>) <span class="sc">+</span></span>
+<span id="cb11-18"><a aria-label="18"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">13</span>)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+
+</div>
+<img data-src="ch09-index-v3_files/figure-revealjs/unnamed-chunk-10-1.png" class="quarto-figure quarto-figure-center r-stretch" style="width:88.0%"><div title="与讲义手算对照">
+<div class="callout callout-note callout-titled callout-style-simple">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>与讲义手算对照</strong></p>
+</div>
+<div class="callout-content">
+<p>讲义结果表按”保留一位小数的换基 CPI”手算（如 1 月 8200/99.2% = 8266.1 元），软件用未舍入的换基 CPI（8200×100.8/100.0 = 8265.6 元），两者相差不超过 0.6 元——差异全部来自舍入顺序，结论完全一致：7—10 月等换基 CPI&lt;100 的月份实际工资反超名义，2 月春节涨价月实际缩水，全年名义 +7.3%、实际 +5.8%。这同时演示了”货币购买力指数 = 1/CPI”：8 月购买力指数 100/99.3 = 100.7% &gt; 100%。</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="生产价格指数" class="slide level2 scrollable">
+<h2>生产价格指数</h2>
+<ol type="1">
+<li><p>测量在初级市场上出售的货物（即在非零售市场上首次购买某种商品时）的价格变动的一种价格指数。</p></li>
+<li><p>它是根据每种商品在非零售市场上首次交易时的价格计算的。其计入的产品覆盖了原始的、经过制造的和在各个加工阶段上加工的货物，也包括制造业、农业、林业、渔业以及公用事业等的各类产出。生产价格指数通常用于<strong>反映消费价格和生活费用未来的趋势</strong>。</p></li>
+<li><p>生产价格指数的上涨反映了生产者价格的提高。</p></li>
+<li><p>通常是按月公布。</p></li>
+</ol>
+</section>
+<section id="股票价格指数的概念与计算方法" class="slide level2 scrollable">
+<h2>股票价格指数的概念与计算方法</h2>
+<ol type="1">
+<li><p><strong>定义</strong>：股票价格指数是反映某一股票市场上多种股票价格变动趋势的一种相对数，简称<strong>股价指数</strong>。</p></li>
+<li><p><strong>计量单位——“点”（point）</strong>：股价指数的单位一般用”点”表示，即将基期指数定为 100，此后每上升或下降一个单位即称为”1 点”。</p></li>
+<li><p><strong>计算方法</strong>：计算时一般以<strong>发行量</strong>为权数进行加权综合，其公式为</p></li>
+</ol>
+<p><span class="math display">\[I_p = \frac{\sum_{i} p_{1i}q_i}{\sum_{i} p_{0i}q_i}\]</span></p>
+<p>其中 <span class="math inline">\(p_{1i}\)</span> 为第 <span class="math inline">\(i\)</span> 种股票的报告期价格，<span class="math inline">\(p_{0i}\)</span> 为第 <span class="math inline">\(i\)</span> 种股票的基期价格，<span class="math inline">\(q_i\)</span> 为第 <span class="math inline">\(i\)</span> 种股票的发行量（权数）。</p>
+</section>
+<section id="世界主要证券交易所的股票价格指数" class="slide level2">
+<h2>世界主要证券交易所的股票价格指数</h2>
+<p>世界各国主要证券交易所都编制并发布自己的股票价格指数，主要有：</p>
+<ul>
+<li><strong>美国</strong>的<strong>道·琼斯指数</strong>和<strong>标准普尔指数</strong>；</li>
+<li>伦敦<strong>金融时报 FTSE 指数</strong>；</li>
+<li>法兰克福 <strong>DAX 指数</strong>；</li>
+<li>巴黎 <strong>CAC 指数</strong>；</li>
+<li><strong>瑞士的苏黎士 SMI 指数</strong>；</li>
+<li>日本的<strong>日京指数</strong>；</li>
+<li><strong>香港的恒生指数</strong>。</li>
+</ul>
+<p>我国上海和深圳两个证券交易所：</p>
+<ul>
+<li><strong>深交所</strong>编制<strong>成分股指数</strong>和<strong>综合指数</strong>；</li>
+<li><strong>上交所</strong>编制<strong>综合指数</strong>和 <strong>180 指数</strong>。</li>
+</ul>
+</section>
+<section id="上证-180-指数" class="slide level2">
+<h2>上证 180 指数</h2>
+<p><strong>由来</strong>：上证 180 指数（又称上证成份指数）是上海证券交易所对原<strong>上证 30 指数</strong>进行了调整并更名而成的。其样本股是在所有 <strong>A 股股票</strong>中抽取最具市场代表性的 <strong>180 种</strong>样本股票，自 <strong>2002 年 7 月 1 日</strong>起正式发布。</p>
+<p><strong>编制目的</strong>：作为上证指数系列核心的上证 180 指数，其编制方案的目的在于建立一个反映上海证券市场的概貌和运行状况、具有可操作性和投资性、能够作为投资评价尺度及金融衍生产品基础的<strong>基准指数</strong>。</p>
+</section>
+<section id="道琼斯股票指数" class="slide level2">
+<h2>道·琼斯股票指数</h2>
+<p><strong>1. 基准日的确定</strong></p>
+<p>著名的道·琼斯股票指数是以 <strong>1928 年 10 月 1 日</strong>为基数：因为这一天收盘时的道·琼斯股票价格平均指数恰好约为 <strong>100 美元</strong>，所以就将其定为<strong>基准日</strong>。</p>
+<p><strong>2. 成分股构成</strong></p>
+<p>道·琼斯股票价格平均指数编入股票共 <strong>65 种</strong>，包括 <strong>30 种工业股</strong>、<strong>20 种运输股</strong>、<strong>15 种公用事业股</strong>：</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>股票类别</th>
+<th>种数</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>工业股</td>
+<td>30</td>
+</tr>
+<tr class="even">
+<td>运输股</td>
+<td>20</td>
+</tr>
+<tr class="odd">
+<td>公用事业股</td>
+<td>15</td>
+</tr>
+<tr class="even">
+<td>合计</td>
+<td>65</td>
+</tr>
+</tbody>
+</table>
+<p><strong>3. 道·琼斯中国股票指数</strong></p>
+<p>从 <strong>1996 年 5 月 25 日</strong>开始，还针对我国的股票市场编制了<strong>道·琼斯中国股票指数</strong>。</p>
+<p>截至 <strong>1998 年 4 月 1 日</strong>，沪深两市共有 <strong>88 支</strong>股票作为其成分股入选，故称为<strong>道·琼斯中国 88 股票指数</strong>。</p>
+</section>
+<section id="主要股价指数的样本范围与基期比较" class="slide level2">
+<h2>主要股价指数的样本范围与基期比较</h2>
+<p><strong>不同股价指数的样本范围和基期日期的选定都不同。</strong>以下用三大典型指数说明：</p>
+<p><strong>1. 美国标准普尔指数</strong></p>
+<p>样本范围包括 <strong>500 种</strong>股票，其中：</p>
+<ul>
+<li>工业股票 <strong>400 种</strong>；</li>
+<li>公用事业股票 <strong>40 种</strong>；</li>
+<li>金融业股票 <strong>40 种</strong>；</li>
+<li>运输业股票 <strong>20 种</strong>。</li>
+</ul>
+<p>基期选择 <strong>1941 年～1943 年</strong>。</p>
+<p><strong>2. 香港恒生指数</strong></p>
+<p>选择了 <strong>33 种</strong>具有代表性的股票（成分股）为指数计算对象，其中：</p>
+<ul>
+<li>金融业 <strong>4 种</strong>；</li>
+<li>公用事业 <strong>6 种</strong>；</li>
+<li>地产业 <strong>9 种</strong>；</li>
+<li>其他行业 <strong>14 种</strong>。</li>
+</ul>
+<p>基期选择 <strong>1964 年 7 月 31 日</strong>。</p>
+<p><strong>3. 我国上海证券交易所股票价格综合指数</strong></p>
+<p>包括<strong>全部上市股票</strong>，基期为 <strong>1990 年 12 月 19 日</strong>。</p>
+<p><strong>小结对照表</strong></p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>指数名称</th>
+<th>样本范围</th>
+<th>基期</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>美国标准普尔指数</td>
+<td>500 种股票（工业 400、公用事业 40、金融业 40、运输业 20）</td>
+<td>1941 年～1943 年</td>
+</tr>
+<tr class="even">
+<td>香港恒生指数</td>
+<td>33 种成分股（金融业 4、公用事业 6、地产业 9、其他行业 14）</td>
+<td>1964 年 7 月 31 日</td>
+</tr>
+<tr class="odd">
+<td>上交所股票价格综合指数</td>
+<td>全部上市股票</td>
+<td>1990 年 12 月 19 日</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="本章知识点清单" class="slide level2">
+<h2>本章知识点清单</h2>
+<p><strong>第一节 统计指数及其种类</strong></p>
+<ul>
+<li><p>指数起源于 18 世纪欧洲的物价波动研究，现已扩展到产量、成本、劳动生产率等领域，成为社会经济发展的”晴雨表”。</p></li>
+<li><p>指数的广义概念：进行比较分析的相对指标；狭义概念：反映不能直接相加的复杂社会经济现象总体数量综合变动程度的相对数。</p></li>
+<li><p>个体指数（<span class="math inline">\(K_p = p_1/p_0\)</span>、<span class="math inline">\(K_q = q_1/q_0\)</span>）反映单一项目变动；复杂现象总体不能直接加总对比，反映其综合变动的指数为总指数。</p></li>
+<li><p>统计指数分析着眼于多个复杂现象，时间数列分析着眼于单个个体现象。</p></li>
+<li><p>狭义指数的三个特点：相对性、综合性、平均性。</p></li>
+<li><p>指数的两大作用：综合比较、因素分析。</p></li>
+<li><p>指数的三种分类：按对象范围分（个体指数、总指数、类指数）；按指数化指标性质分（数量指标指数、质量指标指数）；按基期分（环比指数、定基指数），个体指数满足”定基指数＝环比指数连乘积”。</p></li>
+<li><p>常用符号：<span class="math inline">\(q\)</span>（数量指标）、<span class="math inline">\(p\)</span>（质量指标）、1（报告期）、0（基期）、<span class="math inline">\(K\)</span>（个体指数）、<span class="math inline">\(\bar{K}\)</span>（总指数）。</p></li>
+<li><p>指数编制的三个基本问题：选择项目（代表规格品）、确定权数（利用已有信息构造或主观设定）、选择计算方法——第五节 CPI 编制步骤是其完整实践。</p></li>
+<li><p>总指数的两条编制途径：综合指数（先综合、后对比）与平均指数（先对比、后平均）。</p></li>
+</ul>
+<p><strong>第二节 综合指数</strong></p>
+<ul>
+<li><p>综合指数是由两个总量指标对比形成的指数，编制时将其他因素固定，仅观察指数化指标的变动。</p></li>
+<li><p>编制原理：引入同度量因素解决不能加总问题，并将其固定在某一时期。</p></li>
+<li><p>同度量因素：把不同度量现象过渡成可同度量现象的媒介因素；指数化指标：被研究的指标。</p></li>
+<li><p>拉氏指数（同度量因素固定基期）：<span class="math inline">\(L_p = \frac{\sum p_1 q_0}{\sum p_0 q_0}\)</span>、<span class="math inline">\(L_q = \frac{\sum q_1 p_0}{\sum q_0 p_0}\)</span>；四商品例：<span class="math inline">\(113.15\%\)</span>、<span class="math inline">\(106.99\%\)</span>。</p></li>
+<li><p>派氏指数（同度量因素固定报告期）：<span class="math inline">\(P_p = \frac{\sum p_1 q_1}{\sum p_0 q_1}\)</span>、<span class="math inline">\(P_q = \frac{\sum q_1 p_1}{\sum q_0 p_1}\)</span>；四商品例：<span class="math inline">\(111.55\%\)</span>、<span class="math inline">\(105.48\%\)</span>。</p></li>
+<li><p>历史注记：拉氏指数由拉斯贝尔斯（Laspeyres，1864）提出，派氏指数由帕舍（Paasche，1874）提出；Paasche 为规范拼写（双 a 双 s），注意甄别”帕煦（Pasche）“等误拼。</p></li>
+<li><p>一般选择原则：数量指标指数用拉氏（基期质量指标作同度量因素），质量指标指数用派氏（报告期数量指标作同度量因素）。</p></li>
+<li><p>其他类型：马—埃公式（权数取两期平均）、理想指数/费雪公式（拉氏与派氏的几何平均）、杨格公式（固定权数，我国工业生产指数采用不变价格编制）。</p></li>
+<li><p>数量指标指数编制原则：<span class="math inline">\(I_q = \frac{\sum p_0 q_1}{\sum p_0 q_0}\)</span>，同度量因素具有同度量、固定权数、权数三重作用；三商品销售量例：<span class="math inline">\(15880/12670 = 125.34\%\)</span>，影响绝对额 3210 元。</p></li>
+<li><p>质量指标指数编制原则：<span class="math inline">\(I_p = \frac{\sum q_1 p_1}{\sum q_1 p_0}\)</span>；三商品价格例：<span class="math inline">\(17160/15880 = 108.06\%\)</span>，影响绝对额 1280 元。</p></li>
+</ul>
+<p><strong>第三节 平均指数</strong></p>
+<ul>
+<li><p>平均指数是对个体指数加权平均求总指数的方法，程序为”先对比、后平均”。</p></li>
+<li><p>计算形式有算术平均与调和平均两种；基本公式 <span class="math inline">\(I = \frac{\sum k \cdot pq}{\sum pq}\)</span>。</p></li>
+<li><p>两个主要问题：平均方法的选择与权数的确定（基期总额、报告期总额、固定权数）。</p></li>
+<li><p>加权算术平均法指数以 <span class="math inline">\(q_0p_0\)</span> 为权数，是综合指数的变形，多用于数量指标指数；三产品产量例：<span class="math inline">\(387/370 = 104.59\%\)</span>。</p></li>
+<li><p>调和平均法指数以 <span class="math inline">\(q_1p_1\)</span> 为权数，多用于质量指标指数；三产品单位成本例：<span class="math inline">\(420/365.60 = 114.88\%\)</span>。</p></li>
+<li><p>权数双下标记号：<span class="math inline">\(f_{00}=q_0p_0\)</span>、<span class="math inline">\(f_{01}=q_0p_1\)</span>、<span class="math inline">\(f_{10}=q_1p_0\)</span>、<span class="math inline">\(f_{11}=q_1p_1\)</span>；个体指数 <span class="math inline">\(k_q=q_1/q_0\)</span>、<span class="math inline">\(k_p=p_1/p_0\)</span>。</p></li>
+<li><p>资料条件 × 平均形式 × 权数匹配表（八情景 A–H）：已知权数在目标综合指数的<strong>分母</strong> → 加权算术平均（A：<span class="math inline">\(f_{00}+k_q\)</span> 得 <span class="math inline">\(L_q\)</span>；B：<span class="math inline">\(f_{00}+k_p\)</span> 得 <span class="math inline">\(L_p\)</span>；C：<span class="math inline">\(f_{01}+k_q\)</span> 得 <span class="math inline">\(P_q\)</span>；D：<span class="math inline">\(f_{10}+k_p\)</span> 得 <span class="math inline">\(P_p\)</span>）；已知权数在<strong>分子</strong> → 加权调和平均（E：<span class="math inline">\(f_{10}+k_q\)</span> 得 <span class="math inline">\(L_q\)</span>；F：<span class="math inline">\(f_{01}+k_p\)</span> 得 <span class="math inline">\(L_p\)</span>；G：<span class="math inline">\(f_{11}+k_q\)</span> 得 <span class="math inline">\(P_q\)</span>；H：<span class="math inline">\(f_{11}+k_p\)</span> 得 <span class="math inline">\(P_p\)</span>）。</p></li>
+<li><p>情景变式（三商品商场数据）：情景 A 得 <span class="math inline">\(15880/12670=125.34\%\)</span>＝第二节拉氏销售量指数，情景 H 得 <span class="math inline">\(17160/15880=108.06\%\)</span>＝派氏价格指数——平均指数是综合指数的变形、殊途同归；粮油数据情景 B 得拉氏价格指数 <span class="math inline">\(690750/671700=102.84\%&gt;\)</span> 派氏 <span class="math inline">\(102.44\%\)</span>（涨价粳米权重由 46.4% 降至 45.1%、降价标准粉权重由 51.4% 升至 53.1%），说明权数口径本身影响测算结果。</p></li>
+<li><p>固定权数平均法指数 <span class="math inline">\(I_q = \frac{\sum I_q w}{\sum w}\)</span>，权数为比重形式且长期固定，具有独立意义。</p></li>
+<li><p>平均指数与综合指数的区别：编制思想（先对比后综合 vs 先综合后对比）、资料条件（全面与非全面 vs 全面）、分析作用（一般只能相对分析 vs 可相对与绝对分析）。</p></li>
+</ul>
+<p><strong>第四节 指数体系与因素分析</strong></p>
+<ul>
+<li><p>指数体系：经济上有联系、数量上保持对等关系的指数构成的有机整体（销售额指数＝销售量指数×价格指数等）。</p></li>
+<li><p>指数体系的相对数关系（对象指数＝因素指数之积）与绝对数关系（总差额＝各因素影响差额之和）。</p></li>
+<li><p>利用指数体系可进行指数间的相互推算（如物价指数 <span class="math inline">\(=100\% \div 93\% = 107.5\%\)</span>；劳动生产率提高 <span class="math inline">\(=124\% \div 117\% - 1 = 5.98\%\)</span>）。</p></li>
+<li><p>因素分析：利用指数体系分解总体总变动，测定各因素的影响程度和影响数额。</p></li>
+<li><p>四步解题模板：建立指数体系（确定分解公式）→ 计算总变动指数与各因素指数 → 相对数分解验证 → 绝对数分解验证；本节三类因素分析例题均按此四步展开。</p></li>
+<li><p>多因素分析即”连锁替代法”：四因素链式通式 <span class="math inline">\(K_{ABCD}=K_A \times K_B \times K_C \times K_D\)</span>，每项仅将一个因素替换为报告期，相邻两式分子分母只差一个因素、链式相乘中间项全部约去；原材料 <span class="math inline">\(q \times m \times p\)</span> 三因素例为通式特例。</p></li>
+<li><p>总量指标两因素分析：三产品总成本例（<span class="math inline">\(109.76\% = 96.04\% \times 114.29\%\)</span>，<span class="math inline">\(4100 = -1900 + 6000\)</span>）；粮油市场例（<span class="math inline">\(132.02\% = 102.44\% \times 128.88\%\)</span>，<span class="math inline">\(215100 = 21120 + 193980\)</span>）。</p></li>
+<li><p>多因素分析步骤：数量指标在前、质量指标在后排列；两两相乘有经济意义；测定某因素时其余因素固定（以前因素固定报告期、以后因素固定基期）。</p></li>
+<li><p>原材料支出额多因素分析：<span class="math inline">\(\frac{\sum q_1 m_1 p_1}{\sum q_0 m_0 p_0} = \frac{\sum q_1 m_0 p_0}{\sum q_0 m_0 p_0} \times \frac{\sum q_1 m_1 p_0}{\sum q_1 m_0 p_0} \times \frac{\sum q_1 m_1 p_1}{\sum q_1 m_1 p_0}\)</span>，例中 <span class="math inline">\(108.53\% = 109.17\% \times 88.37\% \times 112.50\%\)</span>，<span class="math inline">\(2420 = 2600 - 3600 + 3420\)</span> 万元。</p></li>
+<li><p>平均指标变动的两因素：各组水平 <span class="math inline">\(x\)</span> 与各组结构 <span class="math inline">\(f/\sum f\)</span>；平均指标指数（总平均数指数）<span class="math inline">\(K = \bar{X}_1/\bar{X}_0\)</span>。</p></li>
+<li><p>平均指标指数体系：可变构成指数＝结构变动影响指数×固定构成指数；其中 <span class="math inline">\(\bar{X}_n = \frac{\sum x_0 f_1}{\sum f_1}\)</span> 为假定平均数。</p></li>
+<li><p>平均指标指数术语对照：可变构成＝总变动（<span class="math inline">\(I_{Xf}\)</span>）、结构变动影响＝结构变动（<span class="math inline">\(I_f\)</span>）、固定构成＝组水平变动（<span class="math inline">\(I_X\)</span>），阅读不同教材时按此换算。</p></li>
+<li><p>分析步骤：计算三个平均指标（<span class="math inline">\(\bar{x}_1\)</span>、<span class="math inline">\(\bar{x}_n\)</span>、<span class="math inline">\(\bar{x}_0\)</span>）→ 可变构成指数 → 固定构成指数 → 结构变动指数 → 检验相对数与绝对数关系。</p></li>
+<li><p>劳动生产率例：<span class="math inline">\(109.55\% = 112.35\% \times 97.51\%\)</span>，<span class="math inline">\(3.73 = 4.702 - 0.972\)</span> 万元/人；平均工资例：<span class="math inline">\(109.84\% = 98.40\% \times 111.63\%\)</span>，<span class="math inline">\(40.48 = -6.57 + 47.05\)</span> 元。</p></li>
+</ul>
+<p><strong>第五节 几种常见的经济指数</strong></p>
+<ul>
+<li><p>居民消费价格指数（CPI）：度量一组代表性消费品及服务项目价格水平变动，是反映通货膨胀（CPI&gt;3%）或严重通货膨胀（CPI&gt;5%）的常用指标。</p></li>
+<li><p>CPI 编制步骤：选调查地区和调查点→分类选代表品→收集价格→确定权数（按消费构成、相对固定、每年调整）→逐层计算指数（代表品—细类—小类—中类—大类—总指数）。</p></li>
+<li><p>中国 CPI 八大类权数：食品类 31.79%、居住 17.22%、娱乐教育文化用品及服务 13.75%、交通和通信 9.95%、医疗保健及个人用品 9.64%、服装 8.51%、家庭设备用品及服务 5.64%、烟酒及用品 3.49%。</p></li>
+<li><p>CPI 基期轮换：逢 0 逢 5 年度更换基期，与五年规划周期一致；2021 年起以 2020 年为基期。</p></li>
+<li><p>CPI 应用：通货膨胀率、货币购买力指数（CPI 的倒数）、实际工资（名义工资÷CPI）。</p></li>
+<li><p>CPI 分层加权计算案例：代表品个体指数 → 细粮（面粉 40%＋大米 60%＝103.3%）→ 粮食（细粮 65%＋粗粮 35%＝102.7%）→ 食品（粮食 35%＋副食品 45%＋其他食品 20%＝103.1%），每层均为固定权数算术平均 <span class="math inline">\(I=\sum kw/\sum w\)</span>，无需销售量资料；实际编制中基本分类用几何平均、小类以上才用固定权数算术平均。</p></li>
+<li><p>CPI 平减两步法：换基 <span class="math inline">\(CPI^{(6)}_t = 100 \times CPI_t/CPI_6\)</span> → 实际工资＝名义工资÷<span class="math inline">\(CPI^{(6)}_t/100\)</span>；换基 CPI&lt;100 的月份物价水平低于基准月，实际工资高于名义（购买力指数&gt;100%）；案例中全年名义增长 7.3%、实际增长 5.8%。</p></li>
+<li><p>实际数据锚点：2024 年我国 CPI 全年上涨 0.2%，2025 年总体持平（2 月同比 −0.7%、9 月同比 −0.3%，其中食品 −4.4%）——低通胀环境下食品分项对总指数方向影响突出。</p></li>
+<li><p>生产价格指数（PPI）：测量初级市场（非零售首次交易）货物价格变动，反映消费价格和生活费用未来趋势，按月公布。</p></li>
+<li><p>股票价格指数：反映多种股票价格变动趋势的相对数，以”点”为单位，以发行量为权数加权综合（<span class="math inline">\(I_p = \frac{\sum p_{1i}q_i}{\sum p_{0i}q_i}\)</span>）。</p></li>
+<li><p>主要股价指数：道·琼斯指数（基准日 1928 年 10 月 1 日，65 种成分股）、标准普尔指数（500 种，基期 1941—1943 年）、香港恒生指数（33 种成分股，基期 1964 年 7 月 31 日）、上证综指（全部上市股票，基期 1990 年 12 月 19 日）、上证 180 指数（2002 年 7 月 1 日发布，由上证 30 指数调整更名而来）。</p></li>
+</ul>
+</section>
+<section id="r-实践-课后练习甲乙丙三种商品的指数体系" class="slide level2 r-demo">
+<h2>R 实践 · 课后练习：甲、乙、丙三种商品的指数体系</h2>
+<p>上一页练习表：基期、报告期的销售量和价格都已给出。三个和式就够写出相对数和绝对数。</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a aria-label="1"></a>ex <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb12-2"><a aria-label="2"></a>  <span class="at">item =</span> <span class="fu">c</span>(<span class="st">"甲"</span>, <span class="st">"乙"</span>, <span class="st">"丙"</span>),</span>
+<span id="cb12-3"><a aria-label="3"></a>  <span class="at">q0 =</span> <span class="fu">c</span>(<span class="dv">120</span>, <span class="dv">1000</span>, <span class="dv">60</span>),  <span class="at">q1 =</span> <span class="fu">c</span>(<span class="dv">100</span>, <span class="dv">1200</span>, <span class="dv">100</span>),</span>
+<span id="cb12-4"><a aria-label="4"></a>  <span class="at">p0 =</span> <span class="fu">c</span>(<span class="dv">20</span>, <span class="dv">4</span>, <span class="dv">290</span>),     <span class="at">p1 =</span> <span class="fu">c</span>(<span class="dv">25</span>, <span class="dv">5</span>, <span class="dv">300</span>)</span>
+<span id="cb12-5"><a aria-label="5"></a>)</span>
+<span id="cb12-6"><a aria-label="6"></a>pq0 <span class="ot">&lt;-</span> <span class="fu">sum</span>(ex<span class="sc">$</span>p0 <span class="sc">*</span> ex<span class="sc">$</span>q0)     <span class="co"># 23800</span></span>
+<span id="cb12-7"><a aria-label="7"></a>pq1 <span class="ot">&lt;-</span> <span class="fu">sum</span>(ex<span class="sc">$</span>p1 <span class="sc">*</span> ex<span class="sc">$</span>q1)     <span class="co"># 38500</span></span>
+<span id="cb12-8"><a aria-label="8"></a>p0q1 <span class="ot">&lt;-</span> <span class="fu">sum</span>(ex<span class="sc">$</span>p0 <span class="sc">*</span> ex<span class="sc">$</span>q1)    <span class="co"># 35800</span></span>
+<span id="cb12-9"><a aria-label="9"></a><span class="fu">round</span>(<span class="fu">c</span>(销售额指数 <span class="ot">=</span> pq1 <span class="sc">/</span> pq0,</span>
+<span id="cb12-10"><a aria-label="10"></a>        价格指数_派氏 <span class="ot">=</span> pq1 <span class="sc">/</span> p0q1,</span>
+<span id="cb12-11"><a aria-label="11"></a>        销售量指数_拉氏 <span class="ot">=</span> p0q1 <span class="sc">/</span> pq0) <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>)</span>
+<span id="cb12-12"><a aria-label="12"></a><span class="co">#&gt;      销售额指数   价格指数_派氏 销售量指数_拉氏 </span></span>
+<span id="cb12-13"><a aria-label="13"></a><span class="co">#&gt;          161.76          107.54          150.42</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a aria-label="1"></a><span class="fu">data.frame</span>(</span>
+<span id="cb13-2"><a aria-label="2"></a>  分解 <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"销售额总变动"</span>, <span class="st">"其中：价格变动"</span>, <span class="st">"其中：销售量变动"</span>),</span>
+<span id="cb13-3"><a aria-label="3"></a>  绝对额 <span class="ot">=</span> <span class="fu">c</span>(pq1 <span class="sc">-</span> pq0, pq1 <span class="sc">-</span> p0q1, p0q1 <span class="sc">-</span> pq0)</span>
+<span id="cb13-4"><a aria-label="4"></a>)</span>
+<span id="cb13-5"><a aria-label="5"></a><span class="co">#&gt;               分解 绝对额</span></span>
+<span id="cb13-6"><a aria-label="6"></a><span class="co">#&gt; 1     销售额总变动  14700</span></span>
+<span id="cb13-7"><a aria-label="7"></a><span class="co">#&gt; 2   其中：价格变动   2700</span></span>
+<span id="cb13-8"><a aria-label="8"></a><span class="co">#&gt; 3 其中：销售量变动  12000</span></span>
+<span id="cb13-9"><a aria-label="9"></a><span class="co"># 14700 = 2700 + 12000</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div title="核对">
+<div class="callout callout-tip callout-titled callout-style-simple">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>核对</strong></p>
+</div>
+<div class="callout-content">
+<p>销售额指数约 <strong>161.76%</strong>，等于派氏价格指数 <strong>107.54%</strong> 与拉氏销售量指数 <strong>150.42%</strong> 的乘积。绝对额上，价格使销售额增加 2700 元，销售量使销售额增加 12000 元。</p>
+</div>
+</div>
+</div>
+</div>
+
+
+</section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<div class="footer footer-default">
+
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="site_libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="site_libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="site_libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="site_libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="site_libs/revealjs/plugin/reveal-chalkboard/plugin.js"></script>
+  <script src="site_libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="site_libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="site_libs/revealjs/plugin/search/search.js"></script>
+  <script src="site_libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="site_libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': true,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"8\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'chalkboard': {"buttons":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealChalkboard, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    
+
+    <script>
+
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+
+      // slide changes (different for each slide format).
+
+      (function () {
+
+        // dispatch for htmlwidgets
+
+        function fireSlideEnter() {
+
+          const event = window.document.createEvent("Event");
+
+          event.initEvent("slideenter", true, true);
+
+          window.document.dispatchEvent(event);
+
+        }
+
+    
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+
+          fireSlideEnter();
+
+    
+
+          // dispatch for shiny
+
+          if (window.jQuery) {
+
+            if (previousSlide) {
+
+              window.jQuery(previousSlide).trigger("hidden");
+
+            }
+
+            if (currentSlide) {
+
+              window.jQuery(currentSlide).trigger("shown");
+
+            }
+
+          }
+
+        }
+
+    
+
+        // hookup for slidy
+
+        if (window.w3c_slidy) {
+
+          window.w3c_slidy.add_observer(function (slide_num) {
+
+            // slide_num starts at position 1
+
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+
+          });
+
+        }
+
+    
+
+      })();
+
+    </script>
+
+    
+
+    <script id="quarto-html-after-body" type="application/javascript">
+      window.document.addEventListener("DOMContentLoaded", function (event) {
+        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+        tabsets.forEach(function(tabset) {
+          const tabby = new Tabby('#' + tabset.id);
+        });
+        const isCodeAnnotation = (el) => {
+          for (const clz of el.classList) {
+            if (clz.startsWith('code-annotation-')) {                     
+              return true;
+            }
+          }
+          return false;
+        }
+        const onCopySuccess = function(e) {
+          // button target
+          const button = e.trigger;
+          // don't keep focus
+          button.blur();
+          // flash "checked"
+          button.classList.add('code-copy-button-checked');
+          var currentTitle = button.getAttribute("title");
+          button.setAttribute("title", "已复制");
+          let tooltip;
+          if (window.bootstrap) {
+            button.setAttribute("data-bs-toggle", "tooltip");
+            button.setAttribute("data-bs-placement", "left");
+            button.setAttribute("data-bs-title", "已复制");
+            tooltip = new bootstrap.Tooltip(button, 
+              { trigger: "manual", 
+                customClass: "code-copy-button-tooltip",
+                offset: [0, -8]});
+            tooltip.show();    
+          }
+          setTimeout(function() {
+            if (tooltip) {
+              tooltip.hide();
+              button.removeAttribute("data-bs-title");
+              button.removeAttribute("data-bs-toggle");
+              button.removeAttribute("data-bs-placement");
+            }
+            button.setAttribute("title", currentTitle);
+            button.classList.remove('code-copy-button-checked');
+          }, 1000);
+          // clear code selection
+          e.clearSelection();
+        }
+        const getTextToCopy = function(trigger) {
+          const outerScaffold = trigger.parentElement.cloneNode(true);
+          const codeEl = outerScaffold.querySelector('code');
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+        }
+        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+          text: getTextToCopy
+        });
+        clipboard.on('success', onCopySuccess);
+        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+            text: getTextToCopy,
+            container: window.document.getElementById('quarto-embedded-source-code-modal')
+          });
+          clipboardModal.on('success', onCopySuccess);
+        }
+          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+          var mailtoRegex = new RegExp(/^mailto:/);
+            var filterRegex = new RegExp('/' + window.location.host + '/');
+          var isInternal = (href) => {
+              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+          }
+          // Inspect non-navigation links and adorn them if external
+         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+          for (var i=0; i<links.length; i++) {
+            const link = links[i];
+            if (!isInternal(link.href)) {
+              // undo the damage that might have been done by quarto-nav.js in the case of
+              // links that we want to consider external
+              if (link.dataset.originalHref !== undefined) {
+                link.href = link.dataset.originalHref;
+              }
+            }
+          }
+        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+          const config = {
+            allowHTML: true,
+            maxWidth: 500,
+            delay: 100,
+            arrow: false,
+            appendTo: function(el) {
+                return el.closest('section.slide') || el.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'light-border',
+            placement: 'bottom-start',
+          };
+          if (contentFn) {
+            config.content = contentFn;
+          }
+          if (onTriggerFn) {
+            config.onTrigger = onTriggerFn;
+          }
+          if (onUntriggerFn) {
+            config.onUntrigger = onUntriggerFn;
+          }
+            config['offset'] = [0,0];
+            config['maxWidth'] = 700;
+          window.tippy(el, config); 
+        }
+        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+        for (var i=0; i<noterefs.length; i++) {
+          const ref = noterefs[i];
+          tippyHover(ref, function() {
+            // use id or data attribute instead here
+            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+            try { href = new URL(href).hash; } catch {}
+            const id = href.replace(/^#\/?/, "");
+            const note = window.document.getElementById(id);
+            if (note) {
+              return note.innerHTML;
+            } else {
+              return "";
+            }
+          });
+        }
+        const findCites = (el) => {
+          const parentEl = el.parentElement;
+          if (parentEl) {
+            const cites = parentEl.dataset.cites;
+            if (cites) {
+              return {
+                el,
+                cites: cites.split(' ')
+              };
+            } else {
+              return findCites(el.parentElement)
+            }
+          } else {
+            return undefined;
+          }
+        };
+        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+        for (var i=0; i<bibliorefs.length; i++) {
+          const ref = bibliorefs[i];
+          const citeInfo = findCites(ref);
+          if (citeInfo) {
+            tippyHover(citeInfo.el, function() {
+              var popup = window.document.createElement('div');
+              citeInfo.cites.forEach(function(cite) {
+                var citeDiv = window.document.createElement('div');
+                citeDiv.classList.add('hanging-indent');
+                citeDiv.classList.add('csl-entry');
+                var biblioDiv = window.document.getElementById('ref-' + cite);
+                if (biblioDiv) {
+                  citeDiv.innerHTML = biblioDiv.innerHTML;
+                }
+                popup.appendChild(citeDiv);
+              });
+              return popup.innerHTML;
+            });
+          }
+        }
+      });
+      </script>
+    
+
+</body></html>

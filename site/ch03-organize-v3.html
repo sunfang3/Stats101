@@ -1,0 +1,4210 @@
+<!DOCTYPE html>
+<html lang="zh-Hans"><head>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-html/tabby.min.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.10.18">
+
+  <meta name="author" content="孙方 · 山东农业大学经济管理学院">
+  <title>统计学原理 · R 语言交互课件（v3 提升版） – 第三章 统计数据整理</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="site_libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="site_libs/revealjs/dist/reveal.css">
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="site_libs/revealjs/dist/theme/quarto-8879e1741d0e5dc2195ca89cb079d87b.css">
+  <link href="site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="site_libs/revealjs/plugin/reveal-chalkboard/font-awesome/css/all.css" rel="stylesheet">
+  <link href="site_libs/revealjs/plugin/reveal-chalkboard/style.css" rel="stylesheet">
+  <link href="site_libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+  <link href="site_libs/htmltools-fill-0.5.9/fill.css" rel="stylesheet">
+
+  <script src="site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+
+  <script src="site_libs/plotly-binding-4.12.1/plotly.js"></script>
+
+  <script src="site_libs/typedarray-0.1/typedarray.min.js"></script>
+
+  <script src="site_libs/jquery-3.5.1/jquery.min.js"></script>
+
+  <link href="site_libs/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet">
+
+  <script src="site_libs/crosstalk-1.2.2/js/crosstalk.min.js"></script>
+
+  <link href="site_libs/plotly-htmlwidgets-css-2.25.2/plotly-htmlwidgets.css" rel="stylesheet">
+
+  <script src="site_libs/plotly-main-2.25.2/plotly-latest.min.js"></script>
+
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">第三章 统计数据整理</h1>
+  <p class="subtitle">《统计学原理》R 语言交互课件</p>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+孙方 · 山东农业大学经济管理学院
+</div>
+</div>
+</div>
+
+</section>
+<section class="slide level2">
+
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a aria-label="1"></a><span class="co"># 《统计学原理》R 课件 · 公共配置</span></span>
+<span id="cb1-2"><a aria-label="2"></a><span class="co"># 每个章节 qmd 通过 ```{r, file="_setup.R"} 方式引入</span></span>
+<span id="cb1-3"><a aria-label="3"></a></span>
+<span id="cb1-4"><a aria-label="4"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(</span>
+<span id="cb1-5"><a aria-label="5"></a>  <span class="at">comment =</span> <span class="st">"#&gt;"</span>,</span>
+<span id="cb1-6"><a aria-label="6"></a>  <span class="at">collapse =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb1-7"><a aria-label="7"></a>  <span class="at">out.width =</span> <span class="st">"88%"</span>,</span>
+<span id="cb1-8"><a aria-label="8"></a>  <span class="at">fig.align =</span> <span class="st">"center"</span>,</span>
+<span id="cb1-9"><a aria-label="9"></a>  <span class="at">fig.width =</span> <span class="dv">8</span>,</span>
+<span id="cb1-10"><a aria-label="10"></a>  <span class="at">fig.height =</span> <span class="dv">5</span>,</span>
+<span id="cb1-11"><a aria-label="11"></a>  <span class="at">fig.retina =</span> <span class="dv">2</span>,</span>
+<span id="cb1-12"><a aria-label="12"></a>  <span class="at">dev.args =</span> <span class="fu">list</span>(<span class="at">family =</span> <span class="st">"sans"</span>)</span>
+<span id="cb1-13"><a aria-label="13"></a>)</span>
+<span id="cb1-14"><a aria-label="14"></a></span>
+<span id="cb1-15"><a aria-label="15"></a><span class="co"># 中文友好的 ggplot 主题</span></span>
+<span id="cb1-16"><a aria-label="16"></a><span class="cf">if</span> (<span class="fu">requireNamespace</span>(<span class="st">"ggplot2"</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>)) {</span>
+<span id="cb1-17"><a aria-label="17"></a>  ggplot2<span class="sc">::</span><span class="fu">theme_set</span>(</span>
+<span id="cb1-18"><a aria-label="18"></a>    ggplot2<span class="sc">::</span><span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>) <span class="sc">+</span></span>
+<span id="cb1-19"><a aria-label="19"></a>      ggplot2<span class="sc">::</span><span class="fu">theme</span>(</span>
+<span id="cb1-20"><a aria-label="20"></a>        <span class="at">plot.title =</span> ggplot2<span class="sc">::</span><span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb1-21"><a aria-label="21"></a>        <span class="at">panel.grid.minor =</span> ggplot2<span class="sc">::</span><span class="fu">element_blank</span>()</span>
+<span id="cb1-22"><a aria-label="22"></a>      )</span>
+<span id="cb1-23"><a aria-label="23"></a>  )</span>
+<span id="cb1-24"><a aria-label="24"></a>}</span>
+<span id="cb1-25"><a aria-label="25"></a></span>
+<span id="cb1-26"><a aria-label="26"></a><span class="co"># 讲义用统一调色板</span></span>
+<span id="cb1-27"><a aria-label="27"></a>stat_pal <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"#1a6b54"</span>, <span class="st">"#d97706"</span>, <span class="st">"#2563eb"</span>, <span class="st">"#c2410c"</span>, <span class="st">"#7c3aed"</span>, <span class="st">"#0891b2"</span>)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="第一节-统计数据整理的基本问题" class="slide level2">
+<h2>第一节 统计数据整理的基本问题</h2>
+<p>本节从统计工作的整体流程出发，界定统计整理的概念与地位，说明统计整理的程序，并介绍正式分组汇总之前的数据预处理环节——审核、筛选与排序。</p>
+</section>
+<section id="统计整理的概念" class="slide level2">
+<h2>统计整理的概念</h2>
+<p>（课本引例 P51，第二版）</p>
+<p><strong>统计整理</strong>是指根据统计研究的目的，将统计调查所得的原始资料（也称<strong>初级资料</strong>）进行科学的<strong>分类和汇总</strong>；或对已经加工的综合资料（也称<strong>次级资料</strong>）进行再加工，为统计分析准备<strong>系统化的、条理化的</strong>综合资料的工作过程。</p>
+<ul>
+<li>统计整理是<strong>统计调查的继续</strong>、<strong>统计分析的前提</strong>。</li>
+<li>统计整理的方法是<strong>分组、汇总和编表</strong>。</li>
+</ul>
+</section>
+<section id="引例两个家族两百年繁衍发展的归类整理" class="slide level2">
+<h2>引例：两个家族两百年繁衍发展的归类整理</h2>
+<p>美国学者阿尔伯特·爱德华·温希普（Albert Edward Winship）在 1900 年做了一项统计学研究，比较两个家族两百年的情况，写成《Jukes-Edwards》一书，追踪了两个家族近 200 年的繁衍发展：一个家族从<strong>爱德华兹（Edwards）</strong>开始，他是虔诚的传道人，生于 1703 年；另一个家族从<strong>马克·尤克斯（Max Jukes）</strong>开始，尤克斯是个无神论者，生于 1700 年。</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>（一）爱德华兹家族</th>
+<th>（二）马克·尤克斯家族</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>100位大学教授</td>
+<td>310名流氓</td>
+</tr>
+<tr class="even">
+<td>14位大学校长</td>
+<td>440名患性病</td>
+</tr>
+<tr class="odd">
+<td>70位律师</td>
+<td>130名坐牢13年以上</td>
+</tr>
+<tr class="even">
+<td>30位法官</td>
+<td>7名杀人犯</td>
+</tr>
+<tr class="odd">
+<td>60位医生</td>
+<td>100名酒徒</td>
+</tr>
+<tr class="even">
+<td>60位作家</td>
+<td>60名小偷</td>
+</tr>
+<tr class="odd">
+<td>300位牧师、神学家</td>
+<td>190名妓女</td>
+</tr>
+<tr class="even">
+<td>3位议员</td>
+<td>20名商人（其中有10名是在监狱学会经商）</td>
+</tr>
+<tr class="odd">
+<td>1位副总统</td>
+<td></td>
+</tr>
+<tr class="even">
+<td><strong>总数（人）：1394</strong></td>
+<td><strong>总数（人）：903</strong></td>
+</tr>
+</tbody>
+</table>
+<p>资料来源：《经典统计故事》</p>
+<p>收集 200 年的数据不易，归类整理方法可行，说明信仰的力量有一定意义。但案例也有局限性，因为”个案不能说明全部问题”——做统计分析要有对照组，但仅仅用两个家族个案进行对照略显不充分。这个引例提示我们：资料搜集之后，必须经过<strong>归类整理</strong>才能显现出有意义的结论。</p>
+</section>
+<section id="统计整理的程序" class="slide level2 scrollable">
+<h2>统计整理的程序</h2>
+<p>统计数据整理需要按照以下六个步骤依次进行：</p>
+<ol type="1">
+<li><strong>设计和编制统计资料的整理方案</strong>；</li>
+<li><strong>对原始资料进行审核</strong>；</li>
+<li><strong>用一定的组织形式和方法，对原始资料进行分组、汇总和计算</strong>；</li>
+<li><strong>对整理好的资料再一次进行审核</strong>，改正在汇总过程中发生的各种差错；</li>
+<li><strong>编制统计图表</strong>；</li>
+<li><strong>统计数据的积累和保管</strong>。</li>
+</ol>
+<p>其中，第 4 步的再次审核是质量把关环节，确保汇总过程中产生的差错得以纠正。</p>
+</section>
+<section id="统计数据的预处理审核筛选与排序" class="slide level2 scrollable">
+<h2>统计数据的预处理：审核、筛选与排序</h2>
+<p>统计数据在整理分析之前需要进行预处理，包括<strong>审核、筛选与排序</strong>三个环节。</p>
+<p><strong>（一）原始数据的审核</strong></p>
+<ul>
+<li><strong>1．完整性审核</strong>：检查应调查的<strong>单位或个体是否有遗漏</strong>；检查所有的调查项目或指标<strong>是否填写齐全</strong>。完整性审核解决”全不全”的问题。</li>
+<li><strong>2．准确性审核</strong>：检查数据是否真实反映客观实际情况，内容是否<strong>符合实际</strong>；检查数据是否有<strong>错误</strong>，计算是否正确等。<strong>审核方法：逻辑检查、计算检查</strong>。准确性审核解决”对不对”的问题——逻辑检查用于发现数据之间的矛盾，计算检查用于核对汇总、运算结果的正确性。</li>
+</ul>
+<p><strong>（二）二手数据的审核</strong></p>
+<p>使用他人收集的数据时，应从以下方面审核：</p>
+<ol type="1">
+<li><strong>适用性审核</strong>：弄清楚数据的来源、数据的口径以及有关的背景材料，确定数据是否符合自己分析研究的需要；</li>
+<li><strong>时效性审核</strong>：尽可能使用最新的数据；</li>
+<li><strong>确认是否必要做进一步的加工整理</strong>：审核后判断二手数据是否需要进一步的加工整理才能满足研究需要。</li>
+</ol>
+<p><strong>（三）数据的筛选</strong></p>
+<p>当数据中的错误不能予以纠正，或者有些数据不符合调查的要求而又无法弥补时，需要对数据进行筛选。数据筛选的内容包括两个方面：</p>
+<ul>
+<li><strong>剔除无效数据</strong>：将某些不符合要求的数据或有明显错误的数据予以剔除；</li>
+<li><strong>筛选符合条件的数据</strong>：将符合某种特定条件的数据筛选出来，而不符合特定条件的数据予以剔除。</li>
+</ul>
+</section>
+<section id="统计数据的预处理审核筛选与排序续" class="slide level2 scrollable">
+<h2>统计数据的预处理：审核、筛选与排序（续）</h2>
+<p>数据筛选是数据审核之后的进一步处理手段。当审核中发现的错误无法纠正、缺失信息无法弥补时，只能通过筛选将其剔除，以保证后续统计分析所依据数据的质量。</p>
+<p><strong>（四）数据的排序</strong></p>
+<ol type="1">
+<li><strong>排序的目的</strong>：按一定顺序将数据排列，以发现一些明显的特征或趋势，找到解决问题的线索。</li>
+<li><strong>排序的作用</strong>：排序有助于对数据检查纠错，以及为重新归类或分组等提供依据。</li>
+<li><strong>排序本身作为分析目的</strong>：在某些场合，排序本身就是分析的目的之一。例如：世界500强企业排行榜、纳税大户排行榜。</li>
+<li><strong>排序的实现</strong>：排序可借助于计算机完成，分为升序和降序两种方式。</li>
+</ol>
+</section>
+<section id="数据预处理的软件操作数据透视表与清洗函数拓展" class="slide level2 scrollable">
+<h2>数据预处理的软件操作：数据透视表与清洗函数（拓展）</h2>
+<p>上面对审核、筛选、排序的介绍是概念层面的。在实际工作中，这些操作主要借助软件完成。下面以 Excel 为主作一操作层速览，并给出 R 的一句话对照，供上机时参考。</p>
+<p><strong>（一）数据透视表（pivot table）</strong></p>
+<p>数据透视表的作用有三：从复杂的数据中提取有用的信息；按使用者的习惯或分析要求对数据表的重要信息进行汇总和作图；形成一个符合需要的交叉表（列联表）。注意：在利用数据透视表时，数据源表中的<strong>首行必须有列标题</strong>。</p>
+<p>用 Excel 创建数据透视表的主要步骤（六步）：</p>
+<ol type="1">
+<li>在 Excel 工作表中建立数据清单；</li>
+<li>选中数据清单中的任意单元格，选择【数据】菜单中的【数据透视表和数据透视图】；</li>
+<li>确定数据源区域；</li>
+<li>在【向导—3 步骤之 3】中选择数据透视表的输出位置，然后选择【布局】；</li>
+<li>在【向导—布局】对话框中，依次将”分类变量”拖至左边的<strong>“行”区域</strong>、上边的<strong>“列”区域</strong>，将需要汇总的”变量”拖至<strong>“数据”区域</strong>；</li>
+<li>单击【确定】自动返回【向导—3 步骤之 3】对话框，再单击【完成】，即可输出数据透视表。</li>
+</ol>
+<p><strong>（二）常用的数据清洗函数（Excel）</strong></p>
+</section>
+<section id="数据预处理的软件操作数据透视表与清洗函数拓展续" class="slide level2">
+<h2>数据预处理的软件操作：数据透视表与清洗函数（拓展）（续）</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>清洗任务</th>
+<th>Excel 操作/函数</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>提取文本字符</td>
+<td><code>=LEFT(text, [num_chars])</code> 从左侧；<code>=RIGHT(...)</code> 从右侧；<code>=MID(text, start_num, num_chars)</code> 从指定位置</td>
+</tr>
+<tr class="even">
+<td>统一大小写</td>
+<td><code>=LOWER(text)</code> 全部小写；<code>=UPPER(text)</code> 全部大写；<code>=PROPER(text)</code> 首字母大写</td>
+</tr>
+<tr class="odd">
+<td>清除空格</td>
+<td><code>=TRIM(text)</code> 删除首尾及多余空格</td>
+</tr>
+<tr class="even">
+<td>清除非打印字符</td>
+<td><code>=CLEAN(text)</code></td>
+</tr>
+<tr class="odd">
+<td>合并文本内容</td>
+<td><code>=[单元格1]&amp;[单元格2]</code></td>
+</tr>
+<tr class="even">
+<td>删除重复值</td>
+<td>【数据】→【删除重复项】</td>
+</tr>
+<tr class="odd">
+<td>查找/替换</td>
+<td>【开始】→【查找和选择】（可配合通配符批量纠正录入错误）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>（三）R 的一句话对照</strong></p>
+<p>上述清洗动作在 R 的 dplyr/tidyverse 体系中可写成一条管道，例如”去掉缺失值 → 去重 → 去除姓名首尾空格”：</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a aria-label="1"></a>df <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(x)) <span class="sc">%&gt;%</span> <span class="fu">distinct</span>() <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">name =</span> <span class="fu">trimws</span>(name))</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<p>概念（审核、筛选、排序）先行、操作（透视表、清洗函数）随后，是本章与后续软件实践衔接的基本路径；具体上机演练见配套实践材料。</p>
+</section>
+<section id="第二节-统计分组" class="slide level2">
+<h2>第二节 统计分组</h2>
+<p>分组是统计整理的核心方法。本节依次讨论统计分组的概念、作用、原则与种类，并重点讲授统计分组的方法——分组标志的选择、组数与组限的确定、等距与异距的处理以及组中值的计算。</p>
+</section>
+<section id="统计分组的概念" class="slide level2">
+<h2>统计分组的概念</h2>
+<p>统计分组是根据统计研究的目的和研究对象的特点，将统计总体各个单位按照<strong>某一个标志</strong>划分为若干性质不同的部分或组。</p>
+<p>即对总体实行<strong>异质分解</strong>，对总体单位实行<strong>同质组合</strong>。</p>
+</section>
+<section id="统计分组的作用" class="slide level2">
+<h2>统计分组的作用</h2>
+<p>总体中混杂的各类单位在分组之前彼此混同，经过统计分组后被划分为若干性质不同的组，各组单位数占总体的比重即可计算出来（示意图中为 25%、33%、42%）。</p>
+<p><strong>（1）划分现象类型。</strong> 例如按所有制性质划分，我国现有 8 种经济类型：</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>序号</th>
+<th>经济类型</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>国有经济</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>集体经济</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>私营经济</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>个体经济</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>联营经济</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>股份制经济</td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td>外商投资经济</td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td>港澳台投资经济</td>
+</tr>
+</tbody>
+</table>
+<p><em>（图示说明：示意图对比分组前后：混合总体被划分为三组并标注各组比重（25%、33%、42%），直观展示统计分组划分现象类型的作用。）</em></p>
+<p><strong>（2）研究总体结构。</strong> 分组后可以反映总体内部构成及其变化。例如，上海市按 GDP 计算的三次产业结构（%）：</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>项目</th>
+<th>1980年</th>
+<th>1990年</th>
+<th>1996年</th>
+<th>1997年</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>GDP</td>
+<td>100</td>
+<td>100</td>
+<td>100</td>
+<td>100</td>
+</tr>
+<tr class="even">
+<td>第一产业</td>
+<td>3.2</td>
+<td>4.3</td>
+<td>2.5</td>
+<td>2.3</td>
+</tr>
+<tr class="odd">
+<td>第二产业</td>
+<td>75.7</td>
+<td>63.8</td>
+<td>54.5</td>
+<td>52.2</td>
+</tr>
+<tr class="even">
+<td>第三产业</td>
+<td>21.1</td>
+<td>31.9</td>
+<td>43.0</td>
+<td>45.5</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="统计分组的作用续" class="slide level2">
+<h2>统计分组的作用（续）</h2>
+<p>从表中可以看出，第一、第二产业比重不断下降，第三产业比重持续上升，反映上海产业结构的高级化趋势。</p>
+<p><strong>（3）研究现象之间的依存关系。</strong> 例如，某地农民家庭按收入分组的恩格尔系数：</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>按收入分组（元）</th>
+<th>&lt;200</th>
+<th>&lt;300</th>
+<th>&lt;400</th>
+<th>&lt;500</th>
+<th>&lt;600</th>
+<th>&lt;800</th>
+<th>&lt;1000</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>恩格尔系数（%）</td>
+<td>64.9</td>
+<td>60.2</td>
+<td>56.7</td>
+<td>54.4</td>
+<td>50.5</td>
+<td>49.9</td>
+<td>43.6</td>
+</tr>
+</tbody>
+</table>
+<p>表中数据显示：随着收入水平的提高，恩格尔系数（食品支出占消费支出的比重）不断下降，说明收入水平与消费结构之间存在明显的依存关系。</p>
+</section>
+<section id="统计分组的原则穷尽与互斥" class="slide level2">
+<h2>统计分组的原则：穷尽与互斥</h2>
+<ul>
+<li><strong>穷尽原则</strong>——即应使总体中的每一单位都应有组可归。</li>
+<li><strong>互斥原则</strong>——即总体中任一单位只能归入某一组。</li>
+</ul>
+</section>
+<section id="统计分组的种类与分组体系" class="slide level2">
+<h2>统计分组的种类与分组体系</h2>
+<p><strong>1、按采用分组标志的多少</strong></p>
+<ul>
+<li><strong>简单分组</strong>——对总体各单位只采用一个标志进行分组，许多简单分组从不同角度说明同一个总体，就构成了一个平行的分组体系；</li>
+<li><strong>复合分组</strong>——对总体各单位同时采用两个或两个以上的标志进行层叠分组。</li>
+</ul>
+<p><strong>2、按分组标志的性质不同</strong></p>
+<ul>
+<li><strong>品质分组（属性分组）</strong>——按品质标志进行的分组；</li>
+<li><strong>数量分组（变量分组）</strong>——按数量标志进行的分组。</li>
+</ul>
+<p><strong>3、按分组的作用和任务不同</strong></p>
+<ul>
+<li><strong>类型分组</strong>——将复杂现象分为若干性质不同部分的分组；</li>
+<li><strong>结构分组</strong>——在总体分组基础上计算出各组占总体的比重；</li>
+<li><strong>分析分组</strong>——分析现象间依存关系的分组。</li>
+</ul>
+<p><strong>统计分组体系</strong>：统计分组后所形成的一系列互相联系、互相补充的组的整体，称为分组体系，分为<strong>平行分组体系</strong>与<strong>复合分组体系</strong>两类。</p>
+<p><strong>一、平行分组体系</strong>：对同一总体分别按若干个标志独立分组，各分组相互平行、互不交叉。例如按年龄、性别、文化程度分组：</p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>分组标志</th>
+<th>组别</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>按年龄分组</td>
+<td>未成年组、青年组、中年组、老年组</td>
+</tr>
+<tr class="even">
+<td>按性别分组</td>
+<td>男子组、女子组</td>
+</tr>
+<tr class="odd">
+<td>按文化程度分组</td>
+<td>博士研究生毕业、硕士研究生毕业、大学本科毕业、大专毕业、中专或技工、高中、初中、小学、文盲</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="统计分组的种类与分组体系续" class="slide level2">
+<h2>统计分组的种类与分组体系（续）</h2>
+<p><strong>二、复合分组体系</strong>：将两个或多个分组标志层叠起来，对总体进行逐层划分。例如我国高等学校在校学生的复合分组体系：</p>
+<ul>
+<li><strong>理科组</strong>
+<ul>
+<li>研究生组：男生组、女生组</li>
+<li>本科组：男生组、女生组</li>
+<li>专科组：男生组、女生组</li>
+</ul></li>
+<li><strong>文科组</strong>
+<ul>
+<li>研究生组：男生组、女生组</li>
+<li>本科组：男生组、女生组</li>
+<li>专科组：男生组、女生组</li>
+</ul></li>
+</ul>
+<blockquote>
+<p>教学提示：平行分组体系是”并列式”的多标志分组，每组只反映一个标志的差异；复合分组体系是”嵌套式”分组，能同时反映多个标志共同作用下的总体内部结构，但分组数目会随标志个数成倍增加，应注意标志不宜过多。</p>
+</blockquote>
+<p><img data-src="images/ch03/pic/ch03_s016_02.jpg" class="fig-orig"></p>
+<p><img data-src="images/ch03/pic/ch03_s016_03.jpg" class="fig-orig"></p>
+</section>
+<section id="统计分组的方法分组标志的选择" class="slide level2">
+<h2>统计分组的方法：分组标志的选择</h2>
+<p>统计分组的关键是正确地选择<strong>分组标志</strong>和划分<strong>各组界限</strong>。分组标志的选择应遵循以下原则：</p>
+<p><strong>① 必须根据研究目的选择分组标志。</strong> 例如：研究人口的年龄构成时，就应该按”年龄”分组；研究各类型的工业企业在工业生产中的地位和作用时，就应该按”经济类型”分组，等等。</p>
+<p><strong>② 必须选择能够反映现象本质特征的标志。</strong> e.g.&nbsp;居民收入水平（P61）→ 家庭总/人均（可支配）收入。</p>
+<p><strong>③ 必须选择符合历史条件和具体情况（的标志）。</strong> e.g.&nbsp;企业规模大小（P61）——职工数、固定资产价值、企业总产出、销售总额；劳动密集型 &amp; 资本密集型。</p>
+</section>
+<section id="品质标志分组的组数与组限" class="slide level2">
+<h2>品质标志分组的组数与组限</h2>
+<p>按品质标志分组时，分组标志一旦确定，组数、组名就随之确定，<strong>组数 = 分组标志表现数</strong>。例如：按”性别”这一品质标志分组，性别只有男、女两种表现，故组数为 2 组。</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>按性别分组</th>
+<th>人数（人）（频数）</th>
+<th>比率（%）（频率）</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>男职工</td>
+<td>253</td>
+<td>68.75</td>
+</tr>
+<tr class="even">
+<td>女职工</td>
+<td>115</td>
+<td>31.25</td>
+</tr>
+<tr class="odd">
+<td>合计</td>
+<td>368</td>
+<td>100.00</td>
+</tr>
+</tbody>
+</table>
+<p>该表展示了品质标志分组的典型结果——组数固定（男、女两组），各组的频数（人数）与频率（比率）之和分别等于总体总量 368 人和 100%。</p>
+</section>
+<section id="数量标志分组单项式分组" class="slide level2">
+<h2>数量标志分组：单项式分组</h2>
+<p>按数量标志分组时，应按照研究目的及研究对象的特点确定相应的组数，划分相应的组限（相邻两组界限）。</p>
+<p><strong>单项式分组</strong>是将某一变量的<strong>每一个变量值</strong>作为一组，组数及组限是明确的，<strong>组数 = 变量值的个数</strong>。</p>
+<p><strong>示例：某厂职工家庭人口分组统计</strong>（家庭人口这一变量共有 6 个变量值（1~6 人），故组数为 6 组，每个变量值各占一组，属于典型的单项式分组）：</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>按家庭人口分组</th>
+<th>职工户数（频数）</th>
+<th>比率（%）（频率）</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>7</td>
+<td>2.9</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>38</td>
+<td>15.2</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>105</td>
+<td>41.3</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>54</td>
+<td>20.5</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>31</td>
+<td>12.1</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>20</td>
+<td>8.0</td>
+</tr>
+<tr class="odd">
+<td>合计</td>
+<td>255</td>
+<td>100</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="组距式分组组数组限与组距" class="slide level2 scrollable">
+<h2>组距式分组：组数、组限与组距</h2>
+<p>组距式分组是将<strong>某一变量的某一取值区间</strong>作为一组，其组数的确定与组限的划分比较复杂。总的来说，应根据统计研究的目的和研究对象的特点确定。</p>
+<p><strong>A. 组数</strong>：依经验确定，一般分为 3～7 组。</p>
+<blockquote>
+<p><strong>注（组数经验口径）</strong>：关于组数的经验范围，不同教材表述不一——本讲义与指定教材采用”一般 3～7 组”，并配合下文的 Sturges 公式确定组数；另有教材（如胡华平课件第03章 p80）建议组数取 5≤K≤15。两者并不矛盾：组数的确定应以<strong>能够显示数据的分布特征和规律</strong>为目的，样本量越大、组数可相应增多。本课程作业与考试以”<strong>3～7 组 + Sturges 公式</strong>”为主线口径。</p>
+</blockquote>
+<p><strong>B. 组限</strong>：依不同变量类型确定。原则：</p>
+<ol type="1">
+<li><strong>连续型变量</strong>——相邻两组的上、下限采用<strong>同限</strong>，且遵循”下闭上开”（即上限不在内）的原则；</li>
+<li><strong>离散型变量</strong>——相邻两组的上、下限采用<strong>异限</strong>，且采用差数为”1”的形式。</li>
+</ol>
+<p><strong>C. 组距</strong>：表示各组标志值变动的范围。必须考虑原始资料的分布状况和集中程度。</p>
+</section>
+<section id="连续组距式分组间断组距式分组与开口组" class="slide level2">
+<h2>连续组距式分组、间断组距式分组与开口组</h2>
+<p><strong>（1）上下组限重叠（连续组距式分组）。</strong> 连续组距式分组中，相邻两组的组限上下重叠（“不漏”）。归属规则为：<strong>上组限不在内</strong>（上限不包括界限值），<strong>下限包括界限值</strong>。例如：身高 150 cm 不应放在第 1 组（145～150），而应放在第 2 组（150～155）。</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>按身高分组（cm）</th>
+<th>频数（人）</th>
+<th>频率（%）</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>145～150</td>
+<td>3</td>
+<td>6</td>
+</tr>
+<tr class="even">
+<td>150～155</td>
+<td>5</td>
+<td>10</td>
+</tr>
+<tr class="odd">
+<td>155～160</td>
+<td>8</td>
+<td>16</td>
+</tr>
+<tr class="even">
+<td>160～165</td>
+<td>14</td>
+<td>28</td>
+</tr>
+<tr class="odd">
+<td>165～170</td>
+<td>10</td>
+<td>20</td>
+</tr>
+<tr class="even">
+<td>170～175</td>
+<td>6</td>
+<td>12</td>
+</tr>
+<tr class="odd">
+<td>175～180</td>
+<td>4</td>
+<td>8</td>
+</tr>
+<tr class="even">
+<td>合计</td>
+<td>50</td>
+<td>100</td>
+</tr>
+</tbody>
+</table>
+<p>要点：各组频数之和等于总人数 50 人，各组频率之和为 100%。上下组限重叠保证分组”不漏”，边界值按”上限不在内”原则归入后一组。</p>
+<p><strong>（2）上下组限间断（间断组距式分组）。</strong> 组距式分组要求”不重不漏”。当相邻组的上下组限间断（即本组上限与下一组下限之间留有空隙）时，称为<strong>间断组距式分组</strong>，适用于<strong>离散型变量</strong>。由于零件数是离散型变量，各取值为整数，故可采用组限间断的方式分组，既保证每个数据都能归入唯一一组（不重），又能覆盖全部数据（不漏）。</p>
+</section>
+<section id="连续组距式分组间断组距式分组与开口组续" class="slide level2">
+<h2>连续组距式分组、间断组距式分组与开口组（续）</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>按零件数分组</th>
+<th>频数（人）</th>
+<th>频率（%）</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>105~109</td>
+<td>3</td>
+<td>6</td>
+</tr>
+<tr class="even">
+<td>110~114</td>
+<td>5</td>
+<td>10</td>
+</tr>
+<tr class="odd">
+<td>115~119</td>
+<td>8</td>
+<td>16</td>
+</tr>
+<tr class="even">
+<td>120~124</td>
+<td>14</td>
+<td>28</td>
+</tr>
+<tr class="odd">
+<td>125~129</td>
+<td>10</td>
+<td>20</td>
+</tr>
+<tr class="even">
+<td>130~134</td>
+<td>6</td>
+<td>12</td>
+</tr>
+<tr class="odd">
+<td>135~139</td>
+<td>4</td>
+<td>8</td>
+</tr>
+<tr class="even">
+<td>合计</td>
+<td>50</td>
+<td>100</td>
+</tr>
+</tbody>
+</table>
+<p><strong>（3）开口组。</strong> 为避免出现空白组（即没有变量值的组）或个别极端值被漏掉，可采用<strong>开口组</strong>形式：首组”110以下”缺下限、末组”135以上”缺上限，中间各组组距为 5（如 110<sub>114、115</sub>119 等）。</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>按零件数分组</th>
+<th>频数（人）</th>
+<th>频率（%）</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>110以下</td>
+<td>3</td>
+<td>6</td>
+</tr>
+<tr class="even">
+<td>110~114</td>
+<td>5</td>
+<td>10</td>
+</tr>
+<tr class="odd">
+<td>115~119</td>
+<td>8</td>
+<td>16</td>
+</tr>
+<tr class="even">
+<td>120~124</td>
+<td>14</td>
+<td>28</td>
+</tr>
+<tr class="odd">
+<td>125~129</td>
+<td>10</td>
+<td>20</td>
+</tr>
+<tr class="even">
+<td>130~134</td>
+<td>6</td>
+<td>12</td>
+</tr>
+<tr class="odd">
+<td>135以上</td>
+<td>4</td>
+<td>8</td>
+</tr>
+<tr class="even">
+<td>合计</td>
+<td>50</td>
+<td>100</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="组距式分组的步骤与例题50-名工人日加工零件数的分组" class="slide level2">
+<h2>组距式分组的步骤与例题：50 名工人日加工零件数的分组</h2>
+<p>对原始数据进行组距式分组时，应按以下四个步骤进行：</p>
+<ul>
+<li><strong>A. 排序</strong>：将原始数据按大小顺序排列。</li>
+<li><strong>B. 确定组数</strong>：组数的确定应以能够显示数据的分布特征和规律为目的。在实际分组时，可按经验公式（Sturges 公式）来确定组数 <span class="math inline">\(K\)</span>：</li>
+</ul>
+<p><span class="math display">\[K = 1 + \frac{\lg(n)}{\lg(2)} = 1 + 3.322\,\lg n\]</span></p>
+<p>其中 <span class="math inline">\(n\)</span> 为数据的个数。</p>
+<ul>
+<li><strong>C. 确定各组的组距</strong>：组距是一个组的上限与下限之差，可根据全部数据的最大值和最小值及所分的组数来确定，即：</li>
+</ul>
+<p><span class="math display">\[\text{组距} = (\text{最大值} - \text{最小值}) \div \text{组数}\]</span></p>
+<ul>
+<li><strong>D. 根据分组整理成频数分布表</strong>。</li>
+</ul>
+<p><strong>例：某生产车间 50 名工人日加工零件数（单位：个）</strong></p>
+</section>
+<section id="组距式分组的步骤与例题50-名工人日加工零件数的分组续" class="slide level2 scrollable">
+<h2>组距式分组的步骤与例题：50 名工人日加工零件数的分组（续）</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>117</th>
+<th>122</th>
+<th>124</th>
+<th>129</th>
+<th>139</th>
+<th>107</th>
+<th>117</th>
+<th>130</th>
+<th>122</th>
+<th>125</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>108</td>
+<td>131</td>
+<td>125</td>
+<td>117</td>
+<td>122</td>
+<td>133</td>
+<td>126</td>
+<td>122</td>
+<td>118</td>
+<td>108</td>
+</tr>
+<tr class="even">
+<td>110</td>
+<td>118</td>
+<td>123</td>
+<td>126</td>
+<td>133</td>
+<td>134</td>
+<td>127</td>
+<td>123</td>
+<td>118</td>
+<td>112</td>
+</tr>
+<tr class="odd">
+<td>112</td>
+<td>134</td>
+<td>127</td>
+<td>123</td>
+<td>119</td>
+<td>113</td>
+<td>120</td>
+<td>123</td>
+<td>127</td>
+<td>135</td>
+</tr>
+<tr class="even">
+<td>137</td>
+<td>114</td>
+<td>120</td>
+<td>128</td>
+<td>124</td>
+<td>115</td>
+<td>139</td>
+<td>128</td>
+<td>124</td>
+<td>121</td>
+</tr>
+</tbody>
+</table>
+<p>分组步骤：</p>
+<ol type="1">
+<li><strong>排序</strong>：将全部数据按大小顺序排列，结果如下（每行 10 个，共 50 个数据）：</li>
+</ol>
+</section>
+<section id="组距式分组的步骤与例题50-名工人日加工零件数的分组续-1" class="slide level2 scrollable">
+<h2>组距式分组的步骤与例题：50 名工人日加工零件数的分组（续）</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>107</th>
+<th>108</th>
+<th>108</th>
+<th>110</th>
+<th>112</th>
+<th>112</th>
+<th>113</th>
+<th>114</th>
+<th>115</th>
+<th>117</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>117</td>
+<td>117</td>
+<td>118</td>
+<td>118</td>
+<td>118</td>
+<td>119</td>
+<td>120</td>
+<td>120</td>
+<td>121</td>
+<td>122</td>
+</tr>
+<tr class="even">
+<td>122</td>
+<td>122</td>
+<td>122</td>
+<td>123</td>
+<td>123</td>
+<td>123</td>
+<td>123</td>
+<td>124</td>
+<td>124</td>
+<td>124</td>
+</tr>
+<tr class="odd">
+<td>125</td>
+<td>125</td>
+<td>126</td>
+<td>126</td>
+<td>127</td>
+<td>127</td>
+<td>127</td>
+<td>128</td>
+<td>128</td>
+<td>129</td>
+</tr>
+<tr class="even">
+<td>130</td>
+<td>131</td>
+<td>133</td>
+<td>133</td>
+<td>134</td>
+<td>134</td>
+<td>135</td>
+<td>137</td>
+<td>139</td>
+<td>139</td>
+</tr>
+</tbody>
+</table>
+<ol start="2" type="1">
+<li><strong>确定组数</strong>：按 Sturges 经验公式：</li>
+</ol>
+<p><span class="math display">\[K = 1 + \frac{\lg 50}{\lg 2} \approx 7\]</span></p>
+<ol start="3" type="1">
+<li><strong>确定组距</strong>：数据全距（极差）为 <span class="math inline">\(139 - 107 = 32\)</span>，故</li>
+</ol>
+<p><span class="math display">\[\text{组距} = \frac{139 - 107}{7} = 4.6\]</span></p>
+<p><strong>注意</strong>：组距取 5 或 10 的倍数，而且第一组的下限应低于最小变量值，最后一组的上限应高于最大变量值，因此组距可取 5。</p>
+<ol start="4" type="1">
+<li><strong>依据分组整理成频数分布表</strong>：</li>
+</ol>
+</section>
+<section id="组距式分组的步骤与例题50-名工人日加工零件数的分组续-2" class="slide level2">
+<h2>组距式分组的步骤与例题：50 名工人日加工零件数的分组（续）</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>按零件数分组（个）</th>
+<th>频数（人）</th>
+<th>频率（%）</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>105～110</td>
+<td>3</td>
+<td>6</td>
+</tr>
+<tr class="even">
+<td>110～115</td>
+<td>5</td>
+<td>10</td>
+</tr>
+<tr class="odd">
+<td>115～120</td>
+<td>8</td>
+<td>16</td>
+</tr>
+<tr class="even">
+<td>120～125</td>
+<td>14</td>
+<td>28</td>
+</tr>
+<tr class="odd">
+<td>125～130</td>
+<td>10</td>
+<td>20</td>
+</tr>
+<tr class="even">
+<td>130～135</td>
+<td>6</td>
+<td>12</td>
+</tr>
+<tr class="odd">
+<td>135～140</td>
+<td>4</td>
+<td>8</td>
+</tr>
+<tr class="even">
+<td>合计</td>
+<td>50</td>
+<td>100</td>
+</tr>
+</tbody>
+</table>
+<p>频率 = 频数 / 总频数 × 100%，例如 120～125 组的频率为 14/50 = 28%。各组频率之和应等于 100%。</p>
+</section>
+<section id="等距分组与异距分组" class="slide level2">
+<h2>等距分组与异距分组</h2>
+<p><strong>等距分组</strong>：标志值在各组保持相等的组距，即各组的标志值变动都限于相同的范围。</p>
+<p><strong>必须采用异距分组的情况：</strong></p>
+<ul>
+<li><strong>第一，标志值分布很不均匀的场合</strong>：分布密集的区域使用较短的分组，分布稀少的部分使用较长的分组。例如：学生成绩如果密集于 60-80 分或 70-90 分之间，其他部分分布稀少，若以 10 分为组距进行等距式分组，无法显示出分布规律性。</li>
+<li><strong>第二，标志值相等的量具有不同意义的场合</strong>。同样是”一个月”，对于新生儿和对成年人意义不一样，此时应采用异距分组：1岁以下按月分组；1–10岁按年分组；11–20岁按5年分组；21岁以上按10年或20年分组。</li>
+<li><strong>第三，标志值按一定比例发展变化的场合</strong>。例如超市的月销售额从 5 万元至 5 千万元，可采取公比为 10 的不等距分组：5万元–50万元；50–500万元；500万元–5000万元。</li>
+</ul>
+<p><strong>等距分组与不等距分组的区别：</strong></p>
+<ul>
+<li><strong>等距分组</strong>：各组频数的分布不受组距大小的影响，可直接根据绝对频数来观察频数分布的特征和规律；</li>
+<li><strong>不等距分组</strong>：各组频数的分布受组距大小不同的影响，各组绝对频数的多少不能反映频数分布的实际状况，需要用频数密度反映频数分布的实际状况，即：</li>
+</ul>
+<p><span class="math display">\[\text{频数密度} = \frac{\text{频数}}{\text{组距}}\]</span></p>
+</section>
+<section id="r-实践-从原始数据到频数分布表全流程" class="slide level2 r-demo">
+<h2>R 实践 · 从原始数据到频数分布表（全流程）</h2>
+<div title="三步走">
+<div class="callout callout-tip callout-titled callout-style-simple">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>三步走</strong></p>
+</div>
+<div class="callout-content">
+<p>排序 → 定组数组距（Sturges 公式）→ <code>cut()</code> 分组 + <code>table()</code> 计数。原课件整页的手工整理，R 三个函数完成。</p>
+</div>
+</div>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a aria-label="1"></a><span class="co"># 50 名工人日加工零件数原始数据</span></span>
+<span id="cb3-2"><a aria-label="2"></a>parts <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">117</span>,<span class="dv">108</span>,<span class="dv">110</span>,<span class="dv">112</span>,<span class="dv">137</span>, <span class="dv">122</span>,<span class="dv">131</span>,<span class="dv">118</span>,<span class="dv">134</span>,<span class="dv">114</span>,</span>
+<span id="cb3-3"><a aria-label="3"></a>           <span class="dv">124</span>,<span class="dv">125</span>,<span class="dv">123</span>,<span class="dv">127</span>,<span class="dv">120</span>, <span class="dv">129</span>,<span class="dv">117</span>,<span class="dv">126</span>,<span class="dv">123</span>,<span class="dv">128</span>,</span>
+<span id="cb3-4"><a aria-label="4"></a>           <span class="dv">139</span>,<span class="dv">122</span>,<span class="dv">133</span>,<span class="dv">119</span>,<span class="dv">124</span>, <span class="dv">107</span>,<span class="dv">133</span>,<span class="dv">134</span>,<span class="dv">113</span>,<span class="dv">115</span>,</span>
+<span id="cb3-5"><a aria-label="5"></a>           <span class="dv">117</span>,<span class="dv">126</span>,<span class="dv">127</span>,<span class="dv">120</span>,<span class="dv">139</span>, <span class="dv">130</span>,<span class="dv">122</span>,<span class="dv">123</span>,<span class="dv">123</span>,<span class="dv">128</span>,</span>
+<span id="cb3-6"><a aria-label="6"></a>           <span class="dv">122</span>,<span class="dv">118</span>,<span class="dv">118</span>,<span class="dv">127</span>,<span class="dv">124</span>, <span class="dv">125</span>,<span class="dv">108</span>,<span class="dv">112</span>,<span class="dv">135</span>,<span class="dv">121</span>)</span>
+<span id="cb3-7"><a aria-label="7"></a><span class="fu">sort</span>(parts)                                   <span class="co"># 1. 排序</span></span>
+<span id="cb3-8"><a aria-label="8"></a><span class="co">#&gt;  [1] 107 108 108 110 112 112 113 114 115 117 117 117 118 118 118 119 120 120 121</span></span>
+<span id="cb3-9"><a aria-label="9"></a><span class="co">#&gt; [20] 122 122 122 122 123 123 123 123 124 124 124 125 125 126 126 127 127 127 128</span></span>
+<span id="cb3-10"><a aria-label="10"></a><span class="co">#&gt; [39] 128 129 130 131 133 133 134 134 135 137 139 139</span></span>
+<span id="cb3-11"><a aria-label="11"></a><span class="fu">c</span>(最大值 <span class="ot">=</span> <span class="fu">max</span>(parts), 最小值 <span class="ot">=</span> <span class="fu">min</span>(parts),</span>
+<span id="cb3-12"><a aria-label="12"></a>  组数 <span class="ot">=</span> <span class="fu">ceiling</span>(<span class="dv">1</span> <span class="sc">+</span> <span class="fu">log2</span>(<span class="dv">50</span>)),               <span class="co"># 2. Sturges: K=1+lgN/lg2 ≈ 7</span></span>
+<span id="cb3-13"><a aria-label="13"></a>  组距 <span class="ot">=</span> (<span class="fu">max</span>(parts) <span class="sc">-</span> <span class="fu">min</span>(parts)) <span class="sc">/</span> <span class="dv">7</span>)       <span class="co">#    (139-107)/7 = 4.6 → 取 5</span></span>
+<span id="cb3-14"><a aria-label="14"></a><span class="co">#&gt;     最大值     最小值       组数       组距 </span></span>
+<span id="cb3-15"><a aria-label="15"></a><span class="co">#&gt; 139.000000 107.000000   7.000000   4.571429</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a aria-label="1"></a><span class="co"># 3. 按 105～110、110～115 …分组（上组限 inclusive）</span></span>
+<span id="cb4-2"><a aria-label="2"></a>breaks <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">105</span>, <span class="dv">140</span>, <span class="at">by =</span> <span class="dv">5</span>)</span>
+<span id="cb4-3"><a aria-label="3"></a>grp <span class="ot">&lt;-</span> <span class="fu">cut</span>(parts, <span class="at">breaks =</span> breaks, <span class="at">right =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb4-4"><a aria-label="4"></a>freq <span class="ot">&lt;-</span> <span class="fu">table</span>(grp)</span>
+<span id="cb4-5"><a aria-label="5"></a><span class="fu">data.frame</span>(分组 <span class="ot">=</span> <span class="fu">names</span>(freq), 频数 <span class="ot">=</span> <span class="fu">as.integer</span>(freq),</span>
+<span id="cb4-6"><a aria-label="6"></a>           频率 <span class="ot">=</span> <span class="fu">round</span>(<span class="fu">as.integer</span>(freq) <span class="sc">/</span> <span class="dv">50</span> <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">0</span>))</span>
+<span id="cb4-7"><a aria-label="7"></a><span class="co">#&gt;        分组 频数 频率</span></span>
+<span id="cb4-8"><a aria-label="8"></a><span class="co">#&gt; 1 [105,110)    3    6</span></span>
+<span id="cb4-9"><a aria-label="9"></a><span class="co">#&gt; 2 [110,115)    5   10</span></span>
+<span id="cb4-10"><a aria-label="10"></a><span class="co">#&gt; 3 [115,120)    8   16</span></span>
+<span id="cb4-11"><a aria-label="11"></a><span class="co">#&gt; 4 [120,125)   14   28</span></span>
+<span id="cb4-12"><a aria-label="12"></a><span class="co">#&gt; 5 [125,130)   10   20</span></span>
+<span id="cb4-13"><a aria-label="13"></a><span class="co">#&gt; 6 [130,135)    6   12</span></span>
+<span id="cb4-14"><a aria-label="14"></a><span class="co">#&gt; 7 [135,140)    4    8</span></span>
+<span id="cb4-15"><a aria-label="15"></a><span class="co"># 与原课件结果完全一致：3 5 8 14 10 6 4</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="开口组闭口组与组中值组距的确定" class="slide level2">
+<h2>开口组、闭口组与组中值、组距的确定</h2>
+<p>使用”XX以上”或”XX以下”这类不确定组距的组，称为<strong>开口组</strong>；上下限都确定的组为<strong>闭口组</strong>。</p>
+<p><strong>组中值</strong>是上下限之间的中点数值，用以代表各组标志值的一般水平。计算公式：</p>
+<ul>
+<li>闭口组组中值：</li>
+</ul>
+<p><span class="math display">\[\text{组中值} = \frac{\text{上限} + \text{下限}}{2}\]</span></p>
+<ul>
+<li>缺下限开口组组中值：</li>
+</ul>
+<p><span class="math display">\[\text{组中值} = \text{上限} - \frac{1}{2}\times\text{邻组组距}\]</span></p>
+<ul>
+<li>缺上限开口组组中值：</li>
+</ul>
+<p><span class="math display">\[\text{组中值} = \text{下限} + \frac{1}{2}\times\text{邻组组距}\]</span></p>
+<p>仍以前述某车间 50 名工人日加工零件数分组表（“110以下”至”135以上”，各邻组组距为 5）为例：“110以下”组的组中值 = 110 − 5/2 = 107.5；“135以上”组的组中值 = 135 + 5/2 = 137.5。</p>
+<p><strong>组距</strong>是上下限之间的距离，其计算公式为：</p>
+<ul>
+<li>连续组距分组的组距计算公式：</li>
+</ul>
+<p><span class="math display">\[\text{组距} = \text{本组上限} - \text{本组下限}\]</span></p>
+<ul>
+<li>间断式分组的组距大小计算公式：</li>
+</ul>
+<p><span class="math display">\[\text{组距} = \text{本组上限} - \text{本组下限} + 1\]</span></p>
+<p><strong>例</strong>：某大学新生按年龄分为 17-19 岁、20-22 岁，组距为 3 岁。（间断式分组：19 - 17 + 1 = 3）</p>
+</section>
+<section id="第三节-频数分布" class="slide level2">
+<h2>第三节 频数分布</h2>
+<p>在统计分组的基础上形成频数分布，是统计整理的主要成果。本节介绍频数分布的概念与种类、变量数列的编制方法、累计频数与累计频率，以及洛伦茨曲线与基尼系数。</p>
+</section>
+<section id="频数分布的概念频数与频率" class="slide level2">
+<h2>频数分布的概念：频数与频率</h2>
+<p>在<strong>统计分组</strong>的基础上，将总体中的所有单位按组归类整理，形成总体中各个单位数在各组间的分布，叫做<strong>频（次）数分布</strong>。将各组组别与次数依次编排而形成的数列叫做<strong>次数分布数列</strong>，简称为<strong>分布数列</strong>。</p>
+<p>两个核心概念：</p>
+<ul>
+<li><strong>频数（次数）</strong>——分布在各组的单位数；</li>
+<li><strong>频率（比率）</strong>——各组次数与总次数之比形成的相对数，即：</li>
+</ul>
+<p><span class="math display">\[\text{频率} = \frac{\text{各组次数}}{\text{总次数}}\]</span></p>
+</section>
+<section id="次数分布数列的分类" class="slide level2">
+<h2>次数分布数列的分类</h2>
+<p>分布数列可以分为<strong>品质分布数列</strong>与<strong>变量分布数列</strong>，分别由品质标志分组和数量标志分组形成。其中，<strong>变量分布数列</strong>按变量类型可作如下分类：</p>
+<ul>
+<li><strong>离散型变量数列</strong>
+<ul>
+<li>单项式</li>
+<li>组距式
+<ul>
+<li>等距数列</li>
+<li>不等距数列</li>
+</ul></li>
+</ul></li>
+<li><strong>连续型变量数列</strong>
+<ul>
+<li>等距数列</li>
+<li>不等距数列</li>
+</ul></li>
+</ul>
+<p>离散型变量取值可一一列举，故可用单项式分组（每个变量值为一组）；连续型变量取值连续，只能采用组距式分组，组距可相等（等距数列）也可不相等（不等距数列）。</p>
+<p><em>（图示说明：以树状分类结构图展示变量分布数列按离散型/连续型及单项式、组距式（等距、不等距）的完整分类体系，帮助学生直观理解各类数列的层级关系。）</em></p>
+</section>
+<section id="分布数列的基本形式与构成要素" class="slide level2">
+<h2>分布数列的基本形式与构成要素</h2>
+<p>分布数列由两个要素构成：<strong>分组（各组名称/变量值）</strong> 与 <strong>单位数（频数）</strong>，并可进一步计算 <strong>频率</strong>。基本形式如下：</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>分组</th>
+<th>单位数</th>
+<th>频率（%）</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>…</td>
+<td>…</td>
+<td>…</td>
+</tr>
+<tr class="even">
+<td>合计</td>
+<td>—</td>
+<td>100</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>由「分组」和「单位数」两列构成的部分称为 <strong>频数分布</strong>（频数数列），反映总体单位在各组的分布状况；</li>
+<li>由「分组」和「频率」两列构成的部分称为 <strong>频率分布</strong>（频率数列），反映总体结构，各组频率之和等于 100%。</li>
+</ul>
+<p>即：频率 = (各组单位数 ÷ 总体单位数) × 100%，合计为 100。</p>
+<p>以第二节中”某厂职工人数统计表”（按性别分组）为例，分配数列的构成要素为：<strong>各组名称</strong>（分组标志的具体表现，如”男职工”与”女职工”）、<strong>次数</strong>（频数，即各组职工人数）与<strong>频率</strong>（各组人数占总体人数的比率，如男职工 253/368 = 68.75%、女职工 115/368 = 31.25%，合计 100.00%）。该表直观展示了品质分配数列的三要素。</p>
+</section>
+<section id="变量数列的编制" class="slide level2">
+<h2>变量数列的编制</h2>
+<p><strong>单项式变量数列</strong>就是数列中的每组用一个变量值来表示，每组的标志值是一个值，组数由分组标志值决定。前述”某厂职工家庭人口分组统计”即属此类：变量为”家庭人口”，其取值为离散整数（1~6 人），故每组只用一个变量值表示，组数即由这些不同的标志值个数决定，频数合计为 255 户，频率合计为 100%。</p>
+<p><strong>组距式变量数列</strong>就是数列中的每个组用两个反映一定变化范围的变量值表示，即每个组使用两个变量值限定的区间表示，组数的多少由组距的大小决定。</p>
+<p><strong>示例：50 户居民×月购买消费品支出情况表（单位：元）</strong>（每组由区间（如 800～900）界定，组距为 100 元）：</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>按户月消费品支出额分组（x）</th>
+<th>频数（fᵢ）</th>
+<th>频率（fᵢ/Σfᵢ）</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>800～900</td>
+<td>5</td>
+<td>0.10</td>
+</tr>
+<tr class="even">
+<td>900～1000</td>
+<td>1</td>
+<td>0.02</td>
+</tr>
+<tr class="odd">
+<td>1000～1100</td>
+<td>8</td>
+<td>0.16</td>
+</tr>
+<tr class="even">
+<td>1100～1200</td>
+<td>11</td>
+<td>0.22</td>
+</tr>
+<tr class="odd">
+<td>1200～1300</td>
+<td>11</td>
+<td>0.22</td>
+</tr>
+<tr class="even">
+<td>1300～1400</td>
+<td>7</td>
+<td>0.14</td>
+</tr>
+<tr class="odd">
+<td>1400～1500</td>
+<td>4</td>
+<td>0.08</td>
+</tr>
+<tr class="even">
+<td>1500以上</td>
+<td>3</td>
+<td>0.06</td>
+</tr>
+<tr class="odd">
+<td>合计</td>
+<td>50</td>
+<td>1.00</td>
+</tr>
+</tbody>
+</table>
+<p>频率计算：<span class="math inline">\(f_i/\sum f_i\)</span>，如第一组 <span class="math inline">\(5/50=0.10\)</span>；频数合计为 50，频率合计为 1.00。</p>
+</section>
+<section id="变量数列的编制续" class="slide level2 scrollable">
+<h2>变量数列的编制（续）</h2>
+<p><strong>编制变量数列的具体步骤与方法：</strong></p>
+<ol type="1">
+<li><strong>排序并确定全距</strong>：将调查获得的原始资料按数值大小依次排列起来，并确定最大值、最小值和全距：</li>
+</ol>
+<p><span class="math display">\[R\text{（全距）}= \text{最大值} - \text{最小值}\]</span></p>
+<ol start="2" type="1">
+<li><strong>确定编制数列的类型</strong>：根据资料的性质，确定编制变量数列的类型；</li>
+<li><strong>确定组数和组距</strong>；</li>
+<li><strong>确定各组的单位数，进行具体的编制</strong>；</li>
+<li><strong>绘制次数分布直方图</strong>，观察总体分布特征。</li>
+</ol>
+</section>
+<section id="组距式分布数列实例" class="slide level2">
+<h2>组距式分布数列实例</h2>
+<p><strong>例一：某县人均年收入</strong>（异距分组，各组组距不完全相等，首末两组为开口组）：</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>人均年收入（元）</th>
+<th>人数（千人）</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>2500以下</td>
+<td>32.00</td>
+</tr>
+<tr class="even">
+<td>2500—3000</td>
+<td>88.00</td>
+</tr>
+<tr class="odd">
+<td>3000—3400</td>
+<td>160.00</td>
+</tr>
+<tr class="even">
+<td>3400—4000</td>
+<td>272.00</td>
+</tr>
+<tr class="odd">
+<td>4000—5000</td>
+<td>152.00</td>
+</tr>
+<tr class="even">
+<td>5000以上</td>
+<td>44.00</td>
+</tr>
+<tr class="odd">
+<td>合计</td>
+<td>748.00</td>
+</tr>
+</tbody>
+</table>
+<p>各组人数之和 32+88+160+272+152+44=748（千人），与合计栏一致。人数最多的一组为 3400—4000 元（272 千人），即该数列的众数组。</p>
+<p><strong>例二：某地企业规模分组表</strong>（按职工人数分组，等距分组，组距 100 人，首组与末组均为开口组）：</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>按职工人数分组</th>
+<th>企业个数</th>
+<th>频率(%)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>200人以下</td>
+<td>1</td>
+<td>1.7</td>
+</tr>
+<tr class="even">
+<td>200—299</td>
+<td>3</td>
+<td>5.0</td>
+</tr>
+<tr class="odd">
+<td>300—399</td>
+<td>5</td>
+<td>8.3</td>
+</tr>
+<tr class="even">
+<td>400—499</td>
+<td>16</td>
+<td>26.7</td>
+</tr>
+<tr class="odd">
+<td>500—599</td>
+<td>20</td>
+<td>33.3</td>
+</tr>
+<tr class="even">
+<td>600—699</td>
+<td>9</td>
+<td>15.0</td>
+</tr>
+<tr class="odd">
+<td>700—799</td>
+<td>4</td>
+<td>6.7</td>
+</tr>
+<tr class="even">
+<td>800人以上</td>
+<td>2</td>
+<td>3.3</td>
+</tr>
+<tr class="odd">
+<td>合计</td>
+<td>60</td>
+<td>100.0</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="组距式分布数列实例续" class="slide level2">
+<h2>组距式分布数列实例（续）</h2>
+<p>各组企业个数（频数）之和为 60，各组频率之和为 100.0%，体现了频数与频率的对应关系：频率 = 频数 / 总体单位总数 × 100%。从分布形态看，企业个数集中于 400—599 人之间（合计 36 个，占 60%），分布呈中间多、两头少的钟形特征，近似正态分布形态。</p>
+</section>
+<section id="累计频数与累计频率" class="slide level2">
+<h2>累计频数与累计频率</h2>
+<p><strong>（1）向上累计频数（或频率）分布</strong>：方法是先列出各组的<strong>上限</strong>，然后由标志值低的组向标志值高的组依次累计频数（或频率）。某组<strong>向上累计频数</strong>表明该组<strong>上限以下</strong>的各组单位数之和是多少；某组<strong>向上累计频率</strong>表明该组上限以下的各组单位数之和占总体单位数的比重。</p>
+<p><strong>（2）向下累计频数（或频率）分布</strong>：方法是先列出各组的<strong>下限</strong>，然后由标志值高的组向标志值低的组依次累计频数（或频率）。</p>
+<p>在组距式分组的基础上，可对前述 50 户居民×月购买消费品支出资料分别计算<strong>向上累计</strong>（从低组向高组累计，表明小于某值的频数/频率）和<strong>向下累计</strong>（从高组向低组累计，表明大于等于某值的频数/频率）：</p>
+<p><strong>表2-5 50户居民X月购买消费品支出累计表（向上累计）</strong></p>
+</section>
+<section id="累计频数与累计频率续" class="slide level2">
+<h2>累计频数与累计频率（续）</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>居民户月消费品支出额分组上限</th>
+<th>频数</th>
+<th>累计频数</th>
+<th>频率(%)</th>
+<th>累计频率(%)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>900</td>
+<td>5</td>
+<td>5</td>
+<td>10</td>
+<td>10</td>
+</tr>
+<tr class="even">
+<td>1000</td>
+<td>1</td>
+<td>6</td>
+<td>2</td>
+<td>12</td>
+</tr>
+<tr class="odd">
+<td>1100</td>
+<td>8</td>
+<td>14</td>
+<td>16</td>
+<td>28</td>
+</tr>
+<tr class="even">
+<td>1200</td>
+<td>11</td>
+<td>25</td>
+<td>22</td>
+<td>50</td>
+</tr>
+<tr class="odd">
+<td>1300</td>
+<td>11</td>
+<td>36</td>
+<td>22</td>
+<td>72</td>
+</tr>
+<tr class="even">
+<td>1400</td>
+<td>7</td>
+<td>43</td>
+<td>14</td>
+<td>86</td>
+</tr>
+<tr class="odd">
+<td>1500</td>
+<td>4</td>
+<td>47</td>
+<td>8</td>
+<td>94</td>
+</tr>
+<tr class="even">
+<td>1600</td>
+<td>2</td>
+<td>49</td>
+<td>4</td>
+<td>98</td>
+</tr>
+<tr class="odd">
+<td>1700</td>
+<td>1</td>
+<td>50</td>
+<td>2</td>
+<td>100</td>
+</tr>
+<tr class="even">
+<td>合计</td>
+<td>50</td>
+<td>—</td>
+<td>100</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>向下累计</strong></p>
+</section>
+<section id="累计频数与累计频率续-1" class="slide level2">
+<h2>累计频数与累计频率（续）</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>居民户月消费品支出额分组下限</th>
+<th>频数</th>
+<th>累计频数</th>
+<th>频率(%)</th>
+<th>累计频率(%)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>800</td>
+<td>5</td>
+<td>50</td>
+<td>10</td>
+<td>100</td>
+</tr>
+<tr class="even">
+<td>900</td>
+<td>1</td>
+<td>45</td>
+<td>2</td>
+<td>90</td>
+</tr>
+<tr class="odd">
+<td>1000</td>
+<td>8</td>
+<td>44</td>
+<td>16</td>
+<td>88</td>
+</tr>
+<tr class="even">
+<td>1100</td>
+<td>11</td>
+<td>36</td>
+<td>22</td>
+<td>72</td>
+</tr>
+<tr class="odd">
+<td>1200</td>
+<td>11</td>
+<td>25</td>
+<td>22</td>
+<td>50</td>
+</tr>
+<tr class="even">
+<td>1300</td>
+<td>7</td>
+<td>14</td>
+<td>14</td>
+<td>28</td>
+</tr>
+<tr class="odd">
+<td>1400</td>
+<td>4</td>
+<td>7</td>
+<td>8</td>
+<td>14</td>
+</tr>
+<tr class="even">
+<td>1500</td>
+<td>2</td>
+<td>3</td>
+<td>4</td>
+<td>6</td>
+</tr>
+<tr class="odd">
+<td>1600</td>
+<td>1</td>
+<td>1</td>
+<td>2</td>
+<td>2</td>
+</tr>
+<tr class="even">
+<td>合计</td>
+<td>50</td>
+<td>—</td>
+<td>100</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p>向上累计表明支出低于某上限的居民户数及比重，如支出低于 1300 元的有 36 户，占 72%；向下累计表明支出不低于某下限的户数及比重，如支出在 1200 元及以上的有 25 户，占 50%。</p>
+<p>在频数分布的基础上可进一步绘制<strong>累计分布图</strong>：横轴为居民户月消费支出额（800、900、1000、1100、1200、1300、1400、1500、1600、1700 元），纵轴为累计频数（左轴 0—50 户）与累计频率（右轴 0—1.0），居民户总数为 50 户。从图中可读出：</p>
+</section>
+<section id="累计频数与累计频率续-2" class="slide level2">
+<h2>累计频数与累计频率（续）</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>月消费支出额（元）</th>
+<th>向上累计户数</th>
+<th>向上累计频率</th>
+<th>向下累计户数</th>
+<th>向下累计频率</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1100</td>
+<td>约 38 户</td>
+<td>约 0.76</td>
+<td>约 14 户</td>
+<td>约 0.28</td>
+</tr>
+<tr class="even">
+<td>1400</td>
+<td>约 43 户</td>
+<td>约 0.86</td>
+<td>约 8 户</td>
+<td>约 0.16</td>
+</tr>
+</tbody>
+</table>
+<p>两条累计曲线在图中交叉（约在频数 25、频率 0.5 处）；利用累计分布图可近似确定中位数等分位点位置；向上累计曲线单调上升，向下累计曲线单调下降，二者互补。</p>
+<p><em>（图示说明：以居民户月消费支出额为横轴、累计频数（左轴0—50户）与累计频率（右轴0—1.0）为纵轴，绘制向上累计与向下累计两条曲线，直观展示累计分布的读取方法及其在中位数等分位点估计中的应用。）</em></p>
+</section>
+<section id="累积频数分布图较小制与较大制累积曲线" class="slide level2">
+<h2>累积频数分布图：较小制与较大制累积曲线</h2>
+<p>上一小节的累计分布表可以绘制成专门的<strong>累积频数（频率）分布图</strong>（又称累积曲线）。不同教材对两种累计方向的称谓可对照如下：</p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>本讲义用语</th>
+<th>别称</th>
+<th>含义</th>
+<th>曲线形态</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>向上累计（<strong>较小制累积</strong>）</td>
+<td>向上累积、以下累积</td>
+<td>本组及以下（标志值更小一侧）各组次数/频率的逐级累加</td>
+<td>自左下向右上单调上升</td>
+</tr>
+<tr class="even">
+<td>向下累计（<strong>较大制累积</strong>）</td>
+<td>向下累积、以上累积</td>
+<td>本组及以上（标志值更大一侧）各组次数/频率的逐级累加</td>
+<td>自左上向右下单调下降</td>
+</tr>
+</tbody>
+</table>
+<p>顺序数据同样适用这套术语与图形：例如住房满意度评价从”非常不满意”到”非常满意”逐级累计，即可得各等级以下的户数及其比重，与第四节环形图所用的是同一类资料。</p>
+<p><strong>绘制方法</strong>：以变量值（组距式分组时，向上累计取各组<strong>上限</strong>、向下累计取各组<strong>下限</strong>）为横轴，以累计频数或累计频率为纵轴，将各累计点连线即得。两条曲线互补——任一变量值处的向上累计频数与向下累计频数之和等于总频数。</p>
+<p><strong>读图应用</strong>：</p>
+</section>
+<section id="累积频数分布图较小制与较大制累积曲线续" class="slide level2 scrollable">
+<h2>累积频数分布图：较小制与较大制累积曲线（续）</h2>
+<ol type="1">
+<li>在纵轴累计频率 50% 处画水平线，与向上累计曲线的交点对应的横坐标即<strong>中位数</strong>的近似值。仍以前述 50 户居民月消费支出为例：支出 1200 元处向上累计恰为 25 户、累计频率 50%，故中位数在 1200 元附近；</li>
+<li>两条累计曲线约在累计频率 50% 处交叉，交叉点的横坐标同样是中位数位置的图形化判据；</li>
+<li>向上累计曲线还可读出”低于某一水平的单位数（比重）“，用于合格率、达标率等判断；向下累计曲线则回答”不低于某一水平的有多少”。</li>
+</ol>
+<p><strong>与洛伦茨曲线的关系</strong>：洛伦茨曲线本质上也是一条<strong>向上累计曲线</strong>——把”人口累计百分比”与”收入累计百分比”两列结构累计数据放到同一个百分比坐标系中连缀而成。理解了累积曲线，下一小节的洛伦茨曲线就只是”换了变量与坐标尺度”的同一种思想。</p>
+</section>
+<section id="洛伦茨曲线与基尼系数" class="slide level2 scrollable">
+<h2>洛伦茨曲线与基尼系数</h2>
+<p><strong>洛伦茨曲线的绘制方法。</strong> 累计频数（或频率）分布曲线，又称<strong>洛伦茨曲线图</strong>，可用以研究财富、土地和工资收入的分配是否公平。绘制步骤：</p>
+<ol type="1">
+<li>将<strong>分配的对象</strong>和<strong>接受分配者</strong>的数量均化成<strong>结构相对数</strong>并进行<strong>向上累计</strong>；</li>
+<li><strong>纵轴和横轴均为百分比尺度</strong>：纵轴自下而上，用以测定<strong>分配的对象</strong>（如一国的财富、土地或收入等）；横轴由左向右，用以测定<strong>接受分配者</strong>（如一国的人口）；</li>
+<li>根据计算所得的<strong>分配对象</strong>和<strong>接受分配者</strong>的累计百分数，在图中标出相应的绘示点，连接各点并使之平滑化，所得曲线即为所要求的<strong>洛伦茨曲线</strong>。</li>
+</ol>
+<p><strong>例：某国家收入所得的分配情况（洛伦茨曲线数据）</strong></p>
+</section>
+<section id="洛伦茨曲线与基尼系数续" class="slide level2">
+<h2>洛伦茨曲线与基尼系数（续）</h2>
+<table class="caption-top" style="width:100%;">
+<colgroup>
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>按收入所得水平分组</th>
+<th>人口数（万人）</th>
+<th>结构（%）</th>
+<th>累计的（%）</th>
+<th>月收入额（亿美元）</th>
+<th>结构（%）</th>
+<th>实际情况</th>
+<th>绝对平等</th>
+<th>绝对不平等</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>最低</td>
+<td>128.5</td>
+<td>12.85</td>
+<td>12.85</td>
+<td>1.57</td>
+<td>5</td>
+<td>5</td>
+<td>12.85</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>中下等</td>
+<td>348.0</td>
+<td>34.80</td>
+<td>47.65</td>
+<td>4.08</td>
+<td>13</td>
+<td>18</td>
+<td>47.65</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td>中等</td>
+<td>466.9</td>
+<td>46.69</td>
+<td>94.34</td>
+<td>16.33</td>
+<td>52</td>
+<td>70</td>
+<td>94.34</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>较高</td>
+<td>45.6</td>
+<td>4.56</td>
+<td>98.90</td>
+<td>7.54</td>
+<td>24</td>
+<td>94</td>
+<td>98.90</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td>最高</td>
+<td>11.0</td>
+<td>1.10</td>
+<td>100.0</td>
+<td>1.88</td>
+<td>6</td>
+<td>100</td>
+<td>100.0</td>
+<td>100</td>
+</tr>
+<tr class="even">
+<td>合计</td>
+<td>1000.0</td>
+<td>100.0</td>
+<td>—</td>
+<td>31.40</td>
+<td>100</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p>表中：第（3）栏为累计人口百分比；第（6）栏”实际情况”为累计收入百分比；第（7）栏为绝对平等线下的累计收入；第（8）栏为绝对不平等线下的累计收入。以累计人口百分比为横轴、累计收入百分比为纵轴绘制洛伦茨曲线，与绝对平等线对比即可衡量收入分配的不平等程度。</p>
+</section>
+<section id="洛伦茨曲线与基尼系数续-1" class="slide level2">
+<h2>洛伦茨曲线与基尼系数（续）</h2>
+<p><strong>洛伦兹曲线与基尼系数。</strong> 将人口按收入由低到高排序，以<strong>人口累计百分比</strong>为横轴、<strong>收入累计百分比</strong>为纵轴绘制累计分布图，得到的曲线称为洛伦兹曲线。</p>
+<ul>
+<li><strong>绝对平均线（均等分布线）</strong>：过原点的 45° 对角线，表示收入分配绝对平均，即人口累计 x% 恰好获得收入累计 x%；</li>
+<li>洛伦兹曲线越偏离绝对平均线（越向下弯曲），说明收入分配越不平等。</li>
+</ul>
+<p>设绝对平均线与洛伦兹曲线之间的面积为 A，洛伦兹曲线与右下方边界围成的面积为 B，则：</p>
+<p><span class="math display">\[\text{Gini Coef.} = \frac{A}{A+B}\]</span></p>
+<p>洛伦兹曲线越弯曲，A 越大，基尼系数越大，收入分配越不平等；基尼系数取值范围为 0 到 1 之间，越接近 0 表示分配越平均，越接近 1 表示分配越悬殊。</p>
+<p><em>（图示说明：洛伦兹曲线示意图：以人口累计百分比为横轴、收入累计百分比为纵轴，标出绝对平均线、区域 A 与 B 及公式 A/(A+B)，直观展示基尼系数的几何含义。）</em></p>
+</section>
+<section id="第四节-统计数据的显示" class="slide level2">
+<h2>第四节 统计数据的显示</h2>
+<p>整理好的统计数据需要以统计表和统计图的形式科学地显示出来。本节先讲统计表的定义、结构、分类与编制规则，再系统介绍各类统计图的绘制要点与适用场合。</p>
+</section>
+<section id="统计表的定义" class="slide level2">
+<h2>统计表的定义</h2>
+<ul>
+<li><strong>广义的统计表</strong>：包括统计工作各个阶段中所用的一切表格。例如：调查阶段的调查表、整理阶段的分组表、汇总表等。</li>
+<li><strong>狭义的统计表</strong>：专指分析表和容纳各种统计资料的表格，也就是通常所说的统计表，指整理阶段的统计表。</li>
+</ul>
+</section>
+<section id="统计表的结构" class="slide level2">
+<h2>统计表的结构</h2>
+<p>统计表的结构可以从两个角度来考察。</p>
+<p><strong>（1）从表式上看</strong>：统计表是由纵横交叉的线条组成的一种表格，包括四个部分——<strong>总标题</strong>（置于表上方中央，概括说明全表内容与时间）、<strong>横行标题</strong>（说明表中各组的名称，位于左侧）、<strong>纵栏标题</strong>（说明表中各指标名称，位于表头）、<strong>指标数值</strong>（表中各横行与纵栏交叉处的具体数字）。</p>
+<p><strong>（2）从内容上看</strong>：统计表由<strong>主词栏</strong>和<strong>宾词栏</strong>两个部分组成——<strong>主词栏</strong>是统计表所要说明的总体及其组成部分；<strong>宾词栏</strong>是统计表用来说明总体数量特征的各个统计指标。</p>
+<p><strong>例表：表2-7 全国税收收入及其构成表（1999年）</strong></p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>按税种分组</th>
+<th>1~3月累计税收收入(亿元)</th>
+<th>比上年同期增长(%)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>增值税和消费税收入</td>
+<td>1019.82</td>
+<td>16.4</td>
+</tr>
+<tr class="even">
+<td>营业税收入</td>
+<td>415.37</td>
+<td>9.5</td>
+</tr>
+<tr class="odd">
+<td>个人所得税收入</td>
+<td>96.65</td>
+<td>28.4</td>
+</tr>
+<tr class="even">
+<td>关税收入</td>
+<td>130.99</td>
+<td>144.4</td>
+</tr>
+<tr class="odd">
+<td>其他</td>
+<td>536.74</td>
+<td>17.6</td>
+</tr>
+<tr class="even">
+<td><strong>合计</strong></td>
+<td><strong>2199.57</strong></td>
+<td><strong>19.5</strong></td>
+</tr>
+</tbody>
+</table>
+<p>资料来源：《宏观经济研究》1999.5。</p>
+</section>
+<section id="统计表的结构续" class="slide level2">
+<h2>统计表的结构（续）</h2>
+<p>主词栏（按税种分组的各行）是统计表所要说明的总体及其分组；宾词栏（累计税收收入与增长率两列）是说明总体的统计指标；表中各数值即指标数值，如增值税和消费税收入 1019.82 亿元、增长 16.4%，关税收入增长最快达 144.4%，合计税收收入 2199.57 亿元、比上年同期增长 19.5%。</p>
+<p><strong>例表：表 2-5　1997～1998 年城镇居民家庭抽样调查资料</strong></p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>项目</th>
+<th>单位</th>
+<th>1997 年</th>
+<th>1998 年</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>一、调查户数</td>
+<td>户</td>
+<td>37890</td>
+<td>39080</td>
+</tr>
+<tr class="even">
+<td>二、平均每户家庭人口数</td>
+<td>人</td>
+<td>3.19</td>
+<td>3.16</td>
+</tr>
+<tr class="odd">
+<td>三、平均每户就业人口数</td>
+<td>人</td>
+<td>1.83</td>
+<td>1.80</td>
+</tr>
+<tr class="even">
+<td>四、平均每人全部收入</td>
+<td>元</td>
+<td>5188.54</td>
+<td>5458.34</td>
+</tr>
+<tr class="odd">
+<td>五、平均每人实际支出</td>
+<td>元</td>
+<td>4945.87</td>
+<td>5322.95</td>
+</tr>
+<tr class="even">
+<td>＃消费性支出</td>
+<td>元</td>
+<td>4185.64</td>
+<td>4331.61</td>
+</tr>
+<tr class="odd">
+<td>非消费性支出</td>
+<td>元</td>
+<td>755.94</td>
+<td>987.17</td>
+</tr>
+<tr class="even">
+<td>六、平均每人居住面积</td>
+<td>平方米</td>
+<td>11.90</td>
+<td>12.40</td>
+</tr>
+</tbody>
+</table>
+<p><strong>资料来源</strong>：《中国统计摘要 1999》，中国统计出版社，1999，第 79 页。</p>
+</section>
+<section id="统计表的结构续-1" class="slide level2">
+<h2>统计表的结构（续）</h2>
+<p><strong>注</strong>：1．本表为城市和县城的城镇居民家庭抽样调查材料。2．消费性支出项目包括：食品、衣着、家庭设备用品及服务、医疗保健、交通和通讯、娱乐教育文化服务、居住、杂项商品和服务。</p>
+<p>此例中，总标题位于表上方概括表的内容；列标题（纵栏标题）为表头各栏（项目、单位、1997 年、1998 年）；行标题（横行标题）为左侧各横行（调查户数、家庭人口数、就业人口数、全部收入、实际支出、居住面积等）；数字资料为表中各栏的具体数值；表下注明资料来源与附注（附加）。</p>
+</section>
+<section id="统计表的分类" class="slide level2">
+<h2>统计表的分类</h2>
+<p><strong>1、按用途分类</strong>：广义的统计表可分为调查表、整理表或汇总表、分析表。</p>
+<p><strong>2、按主词的结构分类</strong>：根据主词是否分组和分组的程度，分为简单表、分组表和复合表。</p>
+<ul>
+<li><strong>(1) 简单表</strong>：主词未经任何分组的统计表称为简单表，也称一览表，主词罗列各单位的名称。</li>
+<li><strong>(2) 分组表</strong>：主词只按一个标志进行分组形成的统计表，也称简单分组表。（课本 P67 表 3-14 / 三版 P71 表 3-15）</li>
+<li><strong>(3) 复合表</strong>：主词按两个或两个以上标志进行分组的统计表，也称复合分组表。</li>
+</ul>
+<p><strong>简单表示例：2002 年国际旅游收入居世界前十名的国家</strong>（主词只按顺序罗列，未经任何分组；表含标题、主词（国家与位次）、宾词（旅游收入、占世界比重）与数据资料四部分）：</p>
+</section>
+<section id="统计表的分类续" class="slide level2">
+<h2>统计表的分类（续）</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>国 家</th>
+<th>位次</th>
+<th>旅游收入（亿美元）</th>
+<th>占世界比重（％）</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>美国</td>
+<td>1</td>
+<td>730.0</td>
+<td>16.0</td>
+</tr>
+<tr class="even">
+<td>西班牙</td>
+<td>2</td>
+<td>315.0</td>
+<td>6.9</td>
+</tr>
+<tr class="odd">
+<td>意大利</td>
+<td>3</td>
+<td>310.0</td>
+<td>6.8</td>
+</tr>
+<tr class="even">
+<td>法国</td>
+<td>4</td>
+<td>307.0</td>
+<td>6.7</td>
+</tr>
+<tr class="odd">
+<td>英国</td>
+<td>5</td>
+<td>209.7</td>
+<td>4.6</td>
+</tr>
+<tr class="even">
+<td>德国</td>
+<td>6</td>
+<td>165.0</td>
+<td>3.6</td>
+</tr>
+<tr class="odd">
+<td>中国</td>
+<td>7</td>
+<td>141.0</td>
+<td>3.1</td>
+</tr>
+<tr class="even">
+<td>奥地利</td>
+<td>8</td>
+<td>112.0</td>
+<td>2.5</td>
+</tr>
+<tr class="odd">
+<td>加拿大</td>
+<td>9</td>
+<td>102.8</td>
+<td>2.3</td>
+</tr>
+<tr class="even">
+<td>墨西哥</td>
+<td>10</td>
+<td>78.5</td>
+<td>1.7</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="统计表的分类续-1" class="slide level2">
+<h2>统计表的分类（续）</h2>
+<p><strong>复合表示例：1999 年我国人口数及构成</strong>（人口分别按”性别”和”城乡”两个标志分组）：</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th></th>
+<th></th>
+<th>人口数/万人</th>
+<th>比例/％</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>按性别分</strong></td>
+<td>男</td>
+<td>64 189</td>
+<td>50.98</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>女</td>
+<td>61 720</td>
+<td>49.02</td>
+</tr>
+<tr class="odd">
+<td><strong>按城乡分</strong></td>
+<td>市镇</td>
+<td>38 892</td>
+<td>30.89</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>乡村</td>
+<td>87 017</td>
+<td>69.11</td>
+</tr>
+</tbody>
+</table>
+<p>该表对同一总体（全国人口）分别按性别、按城乡两个标志分组，各组人口数与比例分别合计，便于同时从性别构成和城乡构成两个角度分析人口结构。</p>
+</section>
+<section id="统计表的编制规则" class="slide level2 scrollable">
+<h2>统计表的编制规则</h2>
+<p>编制统计表时应遵循以下规则：</p>
+<ol type="1">
+<li><strong>合理安排统计表的结构</strong>；</li>
+<li><strong>计量单位的标注</strong>：数据计量单位相同时，可放在表的右上角标明；不同时应放在每个指标后或单列出一列标明；</li>
+<li><strong>线条规范</strong>：表中的上下两条横线一般用粗线，其他线用细线；</li>
+<li><strong>不封口原则</strong>：通常情况下，统计表的左右两边不封口；</li>
+<li><strong>数字对齐</strong>：表中的数据一般是右对齐，有小数点时应以小数点对齐，而且小数点的位数应统一；</li>
+<li><strong>空格处理</strong>：对于没有数字的表格单元，一般用”—“表示；</li>
+<li><strong>注释</strong>：必要时可在表的下方加上注释。</li>
+</ol>
+<p><strong>从统计表到学术表：三线表与条件格式（写作视角）</strong></p>
+<p>除上述面向统计报表的编制规则外，学术论文写作对表格另有一套通行规范：中文教材与传统报表习惯使用<strong>封闭框线表</strong>（四周与内部均画线）；英文期刊论文则通行<strong>开放式三线表</strong>——只保留顶线、表头线、底线三条横线，其余线条一律省去，版面更简洁明快。一张规范的表可解剖为五个要素：<strong>表序号（numbering）、表题（title）、表头（header）、主体（body）、表注（footer）</strong>。此外，在电子表格中借助<strong>条件格式</strong>（如按取值好坏将整行着绿/黄/红色）往往比密布的网格线更能引导读者视线。这些内容将在本章末”合理使用图表”小节展开（课程论文建议采用三线表体例）。</p>
+</section>
+<section id="统计图及其分类" class="slide level2">
+<h2>统计图及其分类</h2>
+<p><strong>统计图</strong>是用几何学的点、线、面或具体事物的形象所构成的用来描述统计资料的图形。课件给出了两个典型例子：<strong>圆形图（饼图）</strong>用圆内扇形面积表示各部分比重，按第一至第四季度以不同颜色区分，直观显示各季度占全体的份额；<strong>折线图（线图）</strong>用点、线描述现象随时间的变化趋势，纵轴刻度为 0、20、40、60、80、100，“东部”系列的折线先上升（至第三季度达到高点）后回落，突出变动趋势。圆形图适合表现<strong>结构（构成比）</strong>，折线图适合表现<strong>时间序列的动态趋势</strong>。</p>
+<p><em>（图示说明：页面配有一个四季度的圆形图和一个标注’东部’的折线图，直观示范统计图的两种典型形式及其用途。）</em></p>
+<p><strong>统计图的分类</strong>：以形状为标准，可分为线图、长条图、时间数列曲线图、面积图、洛伦兹曲线图、立体图、统计地图、象形图。日常分析中最常用的统计图有五类：条形图/柱形图、直方图、折线图、曲线图、饼图，应重点掌握其适用场景。</p>
+<p><strong>完整统计图的构成要素</strong>：除图形以外，完整的统计图还应包括以下五个部分：</p>
+</section>
+<section id="统计图及其分类续" class="slide level2 scrollable">
+<h2>统计图及其分类（续）</h2>
+<ol type="1">
+<li><strong>标题</strong>：用简洁的文字写在图的<strong>下方</strong>；</li>
+<li><strong>注脚</strong>：写在图的下方较小或不显著的位置，对图中内容予以必要的说明，如表明所搜集的资料的名称、页数等；</li>
+<li><strong>比值</strong>：必须说明比值的意义，例如是”总数的百分比”还是”增减的百分比”，而不要以”百分比”代之；</li>
+<li><strong>数</strong>：欲强调的数应写在上端或左方，否则可写下端或右方；</li>
+<li><strong>单位</strong>：行或列的数字单位必须特别指明，如标明”￥“或”＄“。</li>
+</ol>
+<p><strong>统计图的解剖：一张图由哪些部件构成（ggplot2 的词汇表）</strong></p>
+</section>
+<section id="统计图及其分类续-1" class="slide level2">
+<h2>统计图及其分类（续）</h2>
+<p>五要素回答了”一张完整统计图要交代什么”。再把目光放进图的内部：一张典型统计图可以<strong>从空画布开始逐层叠加</strong>解剖为以下部件（中英对照）——画布区 → <strong>绘图区 panel</strong>（含主网格 major grid、次网格 minor grid）→ <strong>坐标轴 axis</strong>（下横轴、上横轴、左纵轴、右纵轴）→ <strong>刻度</strong>（轴主标记 major ticks、轴次标记 minor ticks）与<strong>刻度标签值</strong>（axis labels）→ <strong>轴标题 axis title</strong> → <strong>几何对象</strong>（图形类型，记作 geom_xx，如散点 geom_point、条形 geom_col、折线 geom_line）→ <strong>变量数值 data value</strong>（映射到图上的数据本身）→ <strong>图例 legend</strong>（可靠右或靠下放置）→ <strong>图注 footnote 与图题 caption</strong>（常注明数据来源）。</p>
+</section>
+<section id="统计图及其分类续-2" class="slide level2">
+<h2>统计图及其分类（续）</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>图形部件（中/英）</th>
+<th>ggplot2 中的对应</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>绘图区 panel、主/次网格</td>
+<td><code>panel.background</code>、<code>panel.grid.major/minor</code></td>
+</tr>
+<tr class="even">
+<td>坐标轴与刻度 axis、ticks</td>
+<td><code>axis.*</code>、<code>axis.ticks</code>、<code>axis.text</code></td>
+</tr>
+<tr class="odd">
+<td>轴标题 axis title</td>
+<td><code>axis.title.x/y</code>（内容由 <code>labs(x=, y=)</code> 赋值）</td>
+</tr>
+<tr class="even">
+<td>几何对象 geom_xx</td>
+<td><code>geom_point()</code>、<code>geom_col()</code>、<code>geom_line()</code> 等图层函数</td>
+</tr>
+<tr class="odd">
+<td>图例 legend</td>
+<td><code>legend.position</code>（在 <code>theme()</code> 内调整）</td>
+</tr>
+<tr class="even">
+<td>图题/图注 caption</td>
+<td><code>labs(title=, caption=)</code></td>
+</tr>
+</tbody>
+</table>
+<p>这正是一套<strong>图形语法（grammar of graphics）</strong>的词汇表：一张图 = <strong>数据 + 几何对象 + 坐标系 + 标度 + 主题</strong>。本课程先在概念层掌握这些词汇，到 R 上机课写出 <code>geom_point()</code>、调整 <code>theme()</code> 参数时即可一一对应、无缝衔接（配套演练见《新增实践 ch03》实践二）。</p>
+</section>
+<section id="实践二统计图解剖用-annotateelement-逐层标注图形成分" class="slide level2 r-demo">
+<h2>实践二：统计图解剖——用 annotate/element 逐层标注图形成分</h2>
+<p>讲义”统计图的解剖”给出了一串词汇：绘图区 panel、坐标轴 axis、刻度 ticks、轴标题 axis title、几何对象 geom、图例 legend、图注 caption。本实践用 mtcars 数据画一张散点图，再用 <code>annotate()</code> 与 <code>theme()</code> 的 <code>element_*</code> 把每个部件<strong>指名道姓</strong>地标出来——词汇表与代码就此对上号。</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a aria-label="1"></a><span class="co"># 实践二：统计图解剖（anatomy of a ggplot）</span></span>
+<span id="cb5-2"><a aria-label="2"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb5-3"><a aria-label="3"></a></span>
+<span id="cb5-4"><a aria-label="4"></a><span class="co"># 第 1 层：数据 + 几何对象 geom + 标度（图的主体）</span></span>
+<span id="cb5-5"><a aria-label="5"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(mtcars, <span class="fu">aes</span>(<span class="at">x =</span> wt, <span class="at">y =</span> mpg, <span class="at">color =</span> <span class="fu">factor</span>(cyl))) <span class="sc">+</span></span>
+<span id="cb5-6"><a aria-label="6"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb5-7"><a aria-label="7"></a>  <span class="fu">scale_color_brewer</span>(<span class="at">palette =</span> <span class="st">"Set2"</span>, <span class="at">name =</span> <span class="st">"气缸数"</span>) <span class="sc">+</span></span>
+<span id="cb5-8"><a aria-label="8"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"mtcars：车重与油耗的关系（32 辆汽车）"</span>,</span>
+<span id="cb5-9"><a aria-label="9"></a>       <span class="at">x =</span> <span class="st">"车重（千磅）"</span>, <span class="at">y =</span> <span class="st">"每加仑行驶英里数（mpg）"</span>,</span>
+<span id="cb5-10"><a aria-label="10"></a>       <span class="at">caption =</span> <span class="st">"数据来源：R 内置 mtcars 数据集（Henderson &amp; Velleman, 1981）"</span>)</span>
+<span id="cb5-11"><a aria-label="11"></a></span>
+<span id="cb5-12"><a aria-label="12"></a><span class="co"># 第 2 层：annotate() 逐个部件打标签（教学用"解剖图"）</span></span>
+<span id="cb5-13"><a aria-label="13"></a>p <span class="sc">+</span></span>
+<span id="cb5-14"><a aria-label="14"></a>  <span class="fu">annotate</span>(<span class="st">"rect"</span>, <span class="at">xmin =</span> <span class="fl">2.1</span>, <span class="at">ymin =</span> <span class="fl">15.5</span>, <span class="at">xmax =</span> <span class="fl">3.45</span>, <span class="at">ymax =</span> <span class="fl">25.5</span>,</span>
+<span id="cb5-15"><a aria-label="15"></a>           <span class="at">fill =</span> <span class="cn">NA</span>, <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb5-16"><a aria-label="16"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> <span class="fl">2.1</span>, <span class="at">y =</span> <span class="fl">26.8</span>, <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">hjust =</span> <span class="dv">0</span>, <span class="at">size =</span> <span class="fl">3.5</span>,</span>
+<span id="cb5-17"><a aria-label="17"></a>           <span class="at">label =</span> <span class="st">"绘图区 panel（红色虚线框内）"</span>) <span class="sc">+</span></span>
+<span id="cb5-18"><a aria-label="18"></a>  <span class="fu">annotate</span>(<span class="st">"segment"</span>, <span class="at">x =</span> <span class="fl">3.5</span>, <span class="at">y =</span> <span class="fl">11.0</span>, <span class="at">xend =</span> <span class="fl">3.5</span>, <span class="at">yend =</span> <span class="fl">12.6</span>,</span>
+<span id="cb5-19"><a aria-label="19"></a>           <span class="at">arrow =</span> <span class="fu">arrow</span>(<span class="at">length =</span> <span class="fu">unit</span>(<span class="fl">0.15</span>, <span class="st">"cm"</span>)), <span class="at">color =</span> <span class="st">"blue"</span>) <span class="sc">+</span></span>
+<span id="cb5-20"><a aria-label="20"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> <span class="fl">3.6</span>, <span class="at">y =</span> <span class="fl">10.6</span>, <span class="at">color =</span> <span class="st">"blue"</span>, <span class="at">hjust =</span> <span class="dv">0</span>, <span class="at">size =</span> <span class="fl">3.5</span>,</span>
+<span id="cb5-21"><a aria-label="21"></a>           <span class="at">label =</span> <span class="st">"坐标轴 axis 与刻度 ticks（axis.* / axis.ticks）"</span>) <span class="sc">+</span></span>
+<span id="cb5-22"><a aria-label="22"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> <span class="fl">4.6</span>, <span class="at">y =</span> <span class="fl">29.5</span>, <span class="at">color =</span> <span class="st">"darkgreen"</span>, <span class="at">size =</span> <span class="fl">3.5</span>,</span>
+<span id="cb5-23"><a aria-label="23"></a>           <span class="at">label =</span> <span class="st">"轴标题 axis.title（labs(x=, y=) 赋值）"</span>) <span class="sc">+</span></span>
+<span id="cb5-24"><a aria-label="24"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> <span class="fl">2.0</span>, <span class="at">y =</span> <span class="fl">13.4</span>, <span class="at">color =</span> <span class="st">"purple"</span>, <span class="at">size =</span> <span class="fl">3.5</span>,</span>
+<span id="cb5-25"><a aria-label="25"></a>           <span class="at">label =</span> <span class="st">"几何对象 geom_point（散点层）"</span>) <span class="sc">+</span></span>
+<span id="cb5-26"><a aria-label="26"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> <span class="fl">4.9</span>, <span class="at">y =</span> <span class="fl">21.5</span>, <span class="at">color =</span> <span class="st">"orange4"</span>, <span class="at">size =</span> <span class="fl">3.5</span>,</span>
+<span id="cb5-27"><a aria-label="27"></a>           <span class="at">label =</span> <span class="st">"图例 legend（legend.position）"</span>) <span class="sc">+</span></span>
+<span id="cb5-28"><a aria-label="28"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> <span class="fl">5.4</span>, <span class="at">y =</span> <span class="fl">11.0</span>, <span class="at">color =</span> <span class="st">"grey30"</span>, <span class="at">size =</span> <span class="fl">3.2</span>,</span>
+<span id="cb5-29"><a aria-label="29"></a>           <span class="at">label =</span> <span class="st">"图注 caption（labs(caption=)）"</span>)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="ch03-organize-v3_files/figure-revealjs/unnamed-chunk-4-1.png" class="quarto-figure quarto-figure-center" style="width:88.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a aria-label="1"></a><span class="co"># 第 3 层：用 theme() 的 element_* 实际"改造"这些部件</span></span>
+<span id="cb6-2"><a aria-label="2"></a>p <span class="sc">+</span> <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb6-3"><a aria-label="3"></a>  <span class="fu">theme</span>(</span>
+<span id="cb6-4"><a aria-label="4"></a>    <span class="at">panel.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"grey97"</span>),   <span class="co"># 绘图区 panel</span></span>
+<span id="cb6-5"><a aria-label="5"></a>    <span class="at">panel.grid.major =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">"grey85"</span>),  <span class="co"># 主网格 major grid</span></span>
+<span id="cb6-6"><a aria-label="6"></a>    <span class="at">axis.ticks.length =</span> <span class="fu">unit</span>(<span class="fl">0.2</span>, <span class="st">"cm"</span>),                <span class="co"># 刻度 ticks</span></span>
+<span id="cb6-7"><a aria-label="7"></a>    <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>),           <span class="co"># 轴标题样式</span></span>
+<span id="cb6-8"><a aria-label="8"></a>    <span class="at">legend.position =</span> <span class="st">"bottom"</span>,                         <span class="co"># 图例靠右 -&gt; 靠下（课件 p128 两种位置）</span></span>
+<span id="cb6-9"><a aria-label="9"></a>    <span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">color =</span> <span class="st">"grey40"</span>)       <span class="co"># 图注弱化为灰色</span></span>
+<span id="cb6-10"><a aria-label="10"></a>  )</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="ch03-organize-v3_files/figure-revealjs/unnamed-chunk-5-1.png" class="quarto-figure quarto-figure-center" style="width:88.0%"></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a aria-label="1"></a></span>
+<span id="cb7-2"><a aria-label="2"></a><span class="co"># 一句话总结（讲义"图形语法"公式）：一张图 = 数据 + 几何对象 + 坐标系 + 标度 + 主题</span></span>
+<span id="cb7-3"><a aria-label="3"></a><span class="co"># geom_* 管画什么，scale_* 管怎么映射，labs() 管文字，theme()/element_* 管长什么样。</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>注记</strong></p>
+</div>
+<div class="callout-content">
+<p><strong>词汇-代码对照（可做填空自测）</strong></p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>讲义词汇</th>
+<th>本实践代码</th>
+<th>你改动了什么</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>绘图区 panel</td>
+<td><code>panel.background</code></td>
+<td>给绘图区填浅灰底</td>
+</tr>
+<tr class="even">
+<td>主网格 major grid</td>
+<td><code>panel.grid.major</code></td>
+<td>改网格线颜色</td>
+</tr>
+<tr class="odd">
+<td>刻度 ticks</td>
+<td><code>axis.ticks.length</code></td>
+<td>加长刻度</td>
+</tr>
+<tr class="even">
+<td>轴标题 axis title</td>
+<td><code>labs(x=, y=)</code> + <code>axis.title</code></td>
+<td>赋值并加粗</td>
+</tr>
+<tr class="odd">
+<td>几何对象 geom</td>
+<td><code>geom_point()</code></td>
+<td>散点层（换 <code>geom_col()</code> 即柱状图）</td>
+</tr>
+<tr class="even">
+<td>图例 legend</td>
+<td><code>legend.position</code></td>
+<td>从靠右改为靠下</td>
+</tr>
+<tr class="odd">
+<td>图注 caption</td>
+<td><code>labs(caption=)</code></td>
+<td>标注数据来源</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>提示</strong></p>
+</div>
+<div class="callout-content">
+<p><strong>举一反三</strong>：把 <code>geom_point()</code> 换成 <code>geom_col()</code>、<code>geom_line()</code>，其余部件词汇完全复用——这正是”图形语法”的好处：换图型不换语法。第 8、9 章的时序图、双线图将继续使用这套词汇。</p>
+</div>
+</div>
+</div>
+<div class="callout callout-warning callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>警告</strong></p>
+</div>
+<div class="callout-content">
+
+</div>
+</div>
+</div>
+</section>
+<section id="条形图与柱形图" class="slide level2">
+<h2>条形图与柱形图</h2>
+<p><strong>条形图</strong>是用宽度相同的条形的高度或长短来表示数据变动的图形，有<strong>单式、复式</strong>等形式。在表示分类数据的分布时，是用条形图的高度来表示各类别数据的<strong>频数</strong>或<strong>频率</strong>。绘制时，各类别可以放在<strong>纵轴</strong>，称为条形图；也可以放在<strong>横轴</strong>，称为柱形图。</p>
+<p><strong>例：某城市居民关注不同类型广告的人数分布</strong>（各类人数合计为 112+51+9+16+10+2 = 200 人）：</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>广告类型</th>
+<th>关注人数（人）</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>商品广告</td>
+<td>112</td>
+</tr>
+<tr class="even">
+<td>服务广告</td>
+<td>51</td>
+</tr>
+<tr class="odd">
+<td>金融广告</td>
+<td>9</td>
+</tr>
+<tr class="even">
+<td>房地产广告</td>
+<td>16</td>
+</tr>
+<tr class="odd">
+<td>招生招聘广告</td>
+<td>10</td>
+</tr>
+<tr class="even">
+<td>其他广告</td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+<p><em>（图示说明：条形图直观展示定类数据（六类广告）的频数分布，用于讲解分类数据整理与条形图的绘制及解读。）</em></p>
+<p>从图中可直观看出：商品广告关注人数最多（112 人），远高于其他类型；服务广告次之（51 人）；其他广告最少（仅 2 人）。绘制条形图时，横轴为频数刻度（本例为 0～120），纵轴为分类类别，各类别按频数大小排列更便于比较。</p>
+<p><em>（图示说明：水平条形图展示某城市居民关注六类广告的人数分布（商品广告112人为最高），用于讲解条形图对分类数据频数分布的可视化方法。）</em></p>
+</section>
+<section id="条形图与柱形图续" class="slide level2">
+<h2>条形图与柱形图（续）</h2>
+<p><strong>复合条形图示例：每百户市区居民家庭耐用商品拥有量</strong>（对比 1995 年与 2000 年两个时点）：</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>耐用商品（单位）</th>
+<th>1995年</th>
+<th>2000年</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>彩色电视机（台）</td>
+<td>128</td>
+<td>137</td>
+</tr>
+<tr class="even">
+<td>空调器（台）</td>
+<td>88</td>
+<td>103.5</td>
+</tr>
+<tr class="odd">
+<td>家用电脑（台）</td>
+<td>—</td>
+<td>16.5</td>
+</tr>
+<tr class="even">
+<td>洗衣机（台）</td>
+<td>96</td>
+<td>90.5</td>
+</tr>
+<tr class="odd">
+<td>电冰箱（台）</td>
+<td>96</td>
+<td>96.5</td>
+</tr>
+<tr class="even">
+<td>组合音响（套）</td>
+<td>42</td>
+<td>43</td>
+</tr>
+<tr class="odd">
+<td>摩托车（辆）</td>
+<td>22</td>
+<td>51</td>
+</tr>
+</tbody>
+</table>
+<p>复合条形图适合展示两个时点上同一组指标的数量对比。从数据可见：彩色电视机、空调器、家用电脑、摩托车拥有量显著增长（家用电脑 2000 年才出现明显数据），洗衣机略有下降，电冰箱、组合音响基本持平，体现了耐用消费品结构的升级。“每百户拥有量”是强度相对指标，单位分别为台、套、辆。</p>
+
+<img data-src="images/ch03/pic/ch03_s063_07.jpg" class="fig-orig r-stretch"><p><strong>对比条形图（复式条形图）示例：每百户农民家庭耐用商品拥有量</strong>（蓝色条表示 1995 年，红色条表示 2000 年，横轴为数量 0—120，纵轴为项目类别）：</p>
+</section>
+<section id="条形图与柱形图续-1" class="slide level2">
+<h2>条形图与柱形图（续）</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>耐用商品（单位）</th>
+<th>1995年</th>
+<th>2000年</th>
+<th>变化</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>摩托车（辆）</td>
+<td>29</td>
+<td>77</td>
+<td>大幅增长</td>
+</tr>
+<tr class="even">
+<td>液化气炉具（个）</td>
+<td>63</td>
+<td>87</td>
+<td>明显增长</td>
+</tr>
+<tr class="odd">
+<td>沐浴热水器（台）</td>
+<td>6</td>
+<td>19</td>
+<td>明显增长</td>
+</tr>
+<tr class="even">
+<td>录像机（台）</td>
+<td>6</td>
+<td>6</td>
+<td>持平</td>
+</tr>
+<tr class="odd">
+<td>收录机（台）</td>
+<td>56</td>
+<td>23</td>
+<td>明显下降</td>
+</tr>
+<tr class="even">
+<td>电冰箱（台）</td>
+<td>9</td>
+<td>15</td>
+<td>有所增长</td>
+</tr>
+<tr class="odd">
+<td>彩色电视机（台）</td>
+<td>43</td>
+<td>81</td>
+<td>明显增长</td>
+</tr>
+<tr class="even">
+<td>电视机（台）</td>
+<td>97</td>
+<td>106</td>
+<td>略有增长（已趋饱和）</td>
+</tr>
+</tbody>
+</table>
+<p>条形图适用于反映品质数列或时间上的对比。通过两期条形对比可看出：传统大宗耐用品（电视机）趋于饱和，而改善生活质量的耐用品（摩托车、彩色电视机、沐浴热水器、液化气炉具）增长迅速；收录机被更高级的视听产品替代而下降。</p>
+<p><em>（图示说明：复式条形图对比1995年与2000年每百户农民家庭八类耐用商品拥有量，用于讲解条形图的绘制方法及其在生活水平对比分析中的应用。）</em></p>
+</section>
+<section id="直方图" class="slide level2">
+<h2>直方图</h2>
+<p><strong>直方图</strong>是用矩形的<strong>宽度和高度</strong>来表示频数分布的图形。在直角坐标中：<strong>横轴</strong>表示数据分组；<strong>纵轴</strong>表示频数或频率／组距。各组与相应的频数就形成了一个矩形，即<strong>直方图</strong>。</p>
+<p><strong>例：某车间工人日加工零件数的频数分布直方图</strong></p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>日加工零件数分组（个）</th>
+<th>频数（人）</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>105～110</td>
+<td>3</td>
+</tr>
+<tr class="even">
+<td>110～115</td>
+<td>5</td>
+</tr>
+<tr class="odd">
+<td>115～120</td>
+<td>8</td>
+</tr>
+<tr class="even">
+<td>120～125</td>
+<td>15</td>
+</tr>
+<tr class="odd">
+<td>125～130</td>
+<td>10</td>
+</tr>
+<tr class="even">
+<td>130～135</td>
+<td>6</td>
+</tr>
+<tr class="odd">
+<td>135～140</td>
+<td>3</td>
+</tr>
+</tbody>
+</table>
+<p>横轴表示日加工零件数（个），按组距 5 划分为 105、110、115、120、125、130、135、140 各组段；纵轴表示频数（人），刻度为 3、6、9、12、15。直方图呈中间高、两边低的钟形分布，大多数工人的日加工零件数集中在 <strong>120～125 之间</strong>（频数最高，为 15 人）。通过直方图可以直观反映数据分布的形态（对称/偏态）以及频数在各组段之间的分布情况。</p>
+<p><em>（图示说明：频数分布直方图，展示工人日加工零件数呈中间高两边低的分布，教学价值在于直观呈现频数分布形态与集中趋势。）</em></p>
+<p><strong>直方图与条形图的区别</strong>（二者形式相似，但存在四点本质区别）：</p>
+</section>
+<section id="直方图续" class="slide level2 scrollable">
+<h2>直方图（续）</h2>
+<ol type="1">
+<li><strong>编码方式不同</strong>：条形图是用条形的长度（横置时）表示各类别频数的多少，其宽度（表示类别）则是固定的。</li>
+<li><strong>高度与宽度的意义不同</strong>：直方图矩形的高度表示每一组的频数或百分比，宽度则表示各组的组距，其高度与宽度均有意义。</li>
+<li><strong>排列方式不同</strong>：直方图的各矩形通常是连续排列，条形图则是分开排列。</li>
+<li><strong>适用数据类型不同</strong>：条形图主要用于展示分类数据，直方图则主要用于展示数值型数据。</li>
+</ol>
+</section>
+<section id="未分组数据的图示茎叶图箱线图散点图与气泡图" class="slide level2">
+<h2>未分组数据的图示：茎叶图、箱线图、散点图与气泡图</h2>
+<p>直方图与折线图面向<strong>分组后</strong>的频数分布；对于<strong>未分组的原始数据</strong>，以及<strong>两个或三个变量之间关系</strong>的展示，还有一组专门图形。本小节按”分布的图示（茎叶图、箱线图）→ 关系的图示（散点图、气泡图）“的层次逐一简介。</p>
+<p><strong>（一）茎叶图（stem-and-leaf plot）</strong></p>
+<p>茎叶图用于显示<strong>未分组的原始数据</strong>的分布：把每个数据的<strong>高位数值作”茎”</strong>、<strong>低位数字作”叶”</strong>（叶上只保留最后一位数字），茎竖排、叶横排在同一行，图形完全由数字本身组成。</p>
+<p><strong>例：40 名学生课程考试成绩的茎叶图</strong>（茎=十位数字，叶=个位数字）：</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>茎</th>
+<th>叶</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>5</td>
+<td>7</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>0 1 1 2 3 3 4 5 5 6 7 7 8 9</td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td>0 1 1 2 4 6 6 7 8 8 9 9</td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td>0 0 0 1 4 6 7 8 9</td>
+</tr>
+<tr class="odd">
+<td>9</td>
+<td>0 1 2 2</td>
+</tr>
+</tbody>
+</table>
+<p>各茎行叶子的个数即落在该十位数段的频数（5 字头 1 人、6 字头 14 人、7 字头 12 人、8 字头 9 人、9 字头 3 人，合计 40 人）。把整幅图逆时针旋转 90° 看，它恰是一个”由数字砌成的直方图”：成绩集中于 60～89 分段，分布近似钟形。</p>
+</section>
+<section id="未分组数据的图示茎叶图箱线图散点图与气泡图续" class="slide level2">
+<h2>未分组数据的图示：茎叶图、箱线图、散点图与气泡图（续）</h2>
+<p><strong>茎叶图与直方图的取舍</strong>：①直方图可观察一组数据的分布状况，但未给出具体数值；茎叶图既能显示分布状况、又能给出每一个原始数值，<strong>保留了原始数据的信息</strong>；②直方图适用于大批量数据，茎叶图适用于小批量数据（数据过多时”叶”行过长）。但也要看到——“茎叶图曾经的优势（简单、可手工绘制）在今天这个计算机时代已并不突出，除非特殊情况，建议主要使用直方图作为密度（分布）估计的工具”。</p>
+<p><strong>（二）箱线图（box plot）</strong></p>
+<p>箱线图同样用于显示<strong>未分组原始数据</strong>的分布，由一组数据的 <strong>5 个特征值</strong>绘制而成：<strong>最大值（Max）、最小值（Min）、中位数（Me）、下四分位数（QL）、上四分位数（QU）</strong>——连接两个四分位数画出”箱子”，再将两个极值点与箱子相连，故也被称为 Median/Quartile/Range 图。按呈现批次分为<strong>单一箱线图</strong>（一批数据）与<strong>多批箱线图</strong>（多批数据并排比较）。</p>
+</section>
+<section id="未分组数据的图示茎叶图箱线图散点图与气泡图续-1" class="slide level2">
+<h2>未分组数据的图示：茎叶图、箱线图、散点图与气泡图（续）</h2>
+<p><strong>例：仍用上述 40 名学生成绩</strong>（排序后按”上下各半再取中”定四分位数）：Min=57，QL=65.5，Me=75，QU=80.5，Max=92。箱体覆盖 65.5～80.5 分（恰好容纳中间 50% 的成绩），箱内中线标出中位数 75 分，箱外之”须”分别伸至最小值 57 与最大值 92。四分位距 QU−QL=15 分；按”离箱体超过 1.5 倍四分位距者为离群值”的经验规则（下围栏 65.5−22.5=43，上围栏 80.5+22.5=103），本例无离群值。</p>
+<blockquote>
+<p>说明：四分位数的精确定位规则有不同约定（教材常用 (n+1)/4 位置法，统计软件另有默认算法），同一批数据的 QL、QU 可能略有出入（本例 QL 在 65.25～65.75 之间），系统讲解见第 4 章”四分位数与五数概括”。多批箱线图（如按性别分别画成绩箱线图）便于比较各组分布的中心、离散与形态，是第 4 章离中趋势分析的图形基础。</p>
+</blockquote>
+<p><strong>（三）散点图（scatter plot）与气泡图（bubble chart）</strong></p>
+</section>
+<section id="未分组数据的图示茎叶图箱线图散点图与气泡图续-2" class="slide level2">
+<h2>未分组数据的图示：茎叶图、箱线图、散点图与气泡图（续）</h2>
+<p><strong>散点图</strong>展示<strong>两个变量之间的关系</strong>：横轴代表变量 <span class="math inline">\(X_i\)</span>，纵轴代表变量 <span class="math inline">\(Y_i\)</span>，每组数据 <span class="math inline">\((X_i, Y_i)\)</span> 在坐标系中用一个点表示，<span class="math inline">\(n\)</span> 组数据形成 <span class="math inline">\(n\)</span> 个点。经典示例是 R 内置的 mtcars 汽车数据（32 辆汽车）：以车重为横轴、每加仑油耗可行驶英里数为纵轴作散点图，可见车越重、每加仑可行驶里程越少，两变量呈明显的负相关——散点图是第 7 章相关与回归分析的起点图形（需要强调关系方向时可在散点上叠加趋势线）。</p>
+<p><strong>气泡图</strong>是散点图的推广，用于显示<strong>三个变量之间的关系</strong>：数据点的大小依赖于第三个变量。经典示例是 gapminder 2007 年 142 个国家（地区）数据：横轴人均 GDP、纵轴人均预期寿命、气泡大小表示人口、颜色区分大洲，一张图同时呈现”收入—健康—人口规模”三个维度的世界格局。绘制气泡图时，气泡大小应按<strong>面积</strong>（而非直径）成比例缩放，否则第三变量的差异会被平方放大（理由见本章末”合理使用图表”）。</p>
+<p><strong>（四）从”全体图”到”分组图”</strong>：同一批数据还可按一个分类变量拆开分别作图，如某学院 2 000 名学生考试成绩先画全体直方图、再按性别画分组直方图（“条件分布”思想的图形化）。多张分组图并排展示时务必<strong>统一纵坐标刻度</strong>，否则各组之间不可比（理由见”合理使用图表”小节误区与细则）。</p>
+</section>
+<section id="实践三累积曲线与箱线图从向上累计到多批比较" class="slide level2 r-demo scrollable">
+<h2>实践三：累积曲线与箱线图——从向上累计到多批比较</h2>
+<p>讲义第三节”累计频数与累计频率”及新增小节”累积频数分布图”用了 50 户居民月消费支出数据，“未分组数据的图示”用了 40 名学生成绩数据。本实践用 R 复现这两组图形：先画较小制（向上累计）/较大制（向下累计）曲线并读出中位数，再做五数概括箱线图，最后用 mtcars 演示多批箱线图——课件 PDF 中这些图形均藏在选项卡里不可见，这里全部自行复现。</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a aria-label="1"></a><span class="co"># 实践三之一：50 户居民月消费支出的双向累积曲线（讲义累计表/表 2-5）</span></span>
+<span id="cb8-2"><a aria-label="2"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb8-3"><a aria-label="3"></a></span>
+<span id="cb8-4"><a aria-label="4"></a><span class="co"># 各组上限（元）与频数（户），与讲义"向上累计"表逐格一致</span></span>
+<span id="cb8-5"><a aria-label="5"></a>spend <span class="ot">&lt;-</span> <span class="fu">tribble</span>(</span>
+<span id="cb8-6"><a aria-label="6"></a>  <span class="sc">~</span>upper, <span class="sc">~</span>freq,</span>
+<span id="cb8-7"><a aria-label="7"></a>  <span class="dv">900</span>,  <span class="dv">5</span>,</span>
+<span id="cb8-8"><a aria-label="8"></a>  <span class="dv">1000</span>, <span class="dv">1</span>,</span>
+<span id="cb8-9"><a aria-label="9"></a>  <span class="dv">1100</span>, <span class="dv">8</span>,</span>
+<span id="cb8-10"><a aria-label="10"></a>  <span class="dv">1200</span>, <span class="dv">11</span>,</span>
+<span id="cb8-11"><a aria-label="11"></a>  <span class="dv">1300</span>, <span class="dv">11</span>,</span>
+<span id="cb8-12"><a aria-label="12"></a>  <span class="dv">1400</span>, <span class="dv">7</span>,</span>
+<span id="cb8-13"><a aria-label="13"></a>  <span class="dv">1500</span>, <span class="dv">4</span>,</span>
+<span id="cb8-14"><a aria-label="14"></a>  <span class="dv">1600</span>, <span class="dv">2</span>,</span>
+<span id="cb8-15"><a aria-label="15"></a>  <span class="dv">1700</span>, <span class="dv">1</span></span>
+<span id="cb8-16"><a aria-label="16"></a>)</span>
+<span id="cb8-17"><a aria-label="17"></a></span>
+<span id="cb8-18"><a aria-label="18"></a>cum_tab <span class="ot">&lt;-</span> spend <span class="sc">%&gt;%</span></span>
+<span id="cb8-19"><a aria-label="19"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb8-20"><a aria-label="20"></a>    <span class="at">lower   =</span> upper <span class="sc">-</span> <span class="dv">100</span>,                    <span class="co"># 向下累计以各组下限定位</span></span>
+<span id="cb8-21"><a aria-label="21"></a>    <span class="at">cum_up  =</span> <span class="fu">cumsum</span>(freq),                   <span class="co"># 向上累计（较小制累积）</span></span>
+<span id="cb8-22"><a aria-label="22"></a>    <span class="at">cum_dn  =</span> <span class="fu">rev</span>(<span class="fu">cumsum</span>(<span class="fu">rev</span>(freq)))          <span class="co"># 向下累计（较大制累积）</span></span>
+<span id="cb8-23"><a aria-label="23"></a>  )</span>
+<span id="cb8-24"><a aria-label="24"></a>cum_tab  <span class="co"># 核对：cum_up 应为 5,6,14,25,36,43,47,49,50；cum_dn 应为 50,45,44,36,25,14,7,3,1</span></span>
+<span id="cb8-25"><a aria-label="25"></a><span class="co">#&gt; # A tibble: 9 × 5</span></span>
+<span id="cb8-26"><a aria-label="26"></a><span class="co">#&gt;   upper  freq lower cum_up cum_dn</span></span>
+<span id="cb8-27"><a aria-label="27"></a><span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;</span></span>
+<span id="cb8-28"><a aria-label="28"></a><span class="co">#&gt; 1   900     5   800      5     50</span></span>
+<span id="cb8-29"><a aria-label="29"></a><span class="co">#&gt; 2  1000     1   900      6     45</span></span>
+<span id="cb8-30"><a aria-label="30"></a><span class="co">#&gt; 3  1100     8  1000     14     44</span></span>
+<span id="cb8-31"><a aria-label="31"></a><span class="co">#&gt; 4  1200    11  1100     25     36</span></span>
+<span id="cb8-32"><a aria-label="32"></a><span class="co">#&gt; 5  1300    11  1200     36     25</span></span>
+<span id="cb8-33"><a aria-label="33"></a><span class="co">#&gt; 6  1400     7  1300     43     14</span></span>
+<span id="cb8-34"><a aria-label="34"></a><span class="co">#&gt; 7  1500     4  1400     47      7</span></span>
+<span id="cb8-35"><a aria-label="35"></a><span class="co">#&gt; 8  1600     2  1500     49      3</span></span>
+<span id="cb8-36"><a aria-label="36"></a><span class="co">#&gt; 9  1700     1  1600     50      1</span></span>
+<span id="cb8-37"><a aria-label="37"></a></span>
+<span id="cb8-38"><a aria-label="38"></a><span class="fu">ggplot</span>(cum_tab) <span class="sc">+</span></span>
+<span id="cb8-39"><a aria-label="39"></a>  <span class="fu">geom_step</span>(<span class="fu">aes</span>(<span class="at">x =</span> upper, <span class="at">y =</span> cum_up, <span class="at">color =</span> <span class="st">"向上累计(较小制)"</span>), <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb8-40"><a aria-label="40"></a>  <span class="fu">geom_step</span>(<span class="fu">aes</span>(<span class="at">x =</span> lower, <span class="at">y =</span> cum_dn, <span class="at">color =</span> <span class="st">"向下累计(较大制)"</span>), <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb8-41"><a aria-label="41"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">25</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">color =</span> <span class="st">"grey50"</span>) <span class="sc">+</span></span>
+<span id="cb8-42"><a aria-label="42"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">1200</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">color =</span> <span class="st">"grey50"</span>) <span class="sc">+</span></span>
+<span id="cb8-43"><a aria-label="43"></a>  <span class="fu">annotate</span>(<span class="st">"point"</span>, <span class="at">x =</span> <span class="dv">1200</span>, <span class="at">y =</span> <span class="dv">25</span>, <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb8-44"><a aria-label="44"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> <span class="dv">1230</span>, <span class="at">y =</span> <span class="dv">20</span>, <span class="at">hjust =</span> <span class="dv">0</span>, <span class="at">size =</span> <span class="fl">3.3</span>,</span>
+<span id="cb8-45"><a aria-label="45"></a>           <span class="at">label =</span> <span class="st">"交叉点：1200 元 / 25 户 / 50%</span><span class="sc">\n</span><span class="st">=&gt; 中位数读图约 1200 元"</span>) <span class="sc">+</span></span>
+<span id="cb8-46"><a aria-label="46"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"向上累计(较小制)"</span> <span class="ot">=</span> <span class="st">"steelblue"</span>,</span>
+<span id="cb8-47"><a aria-label="47"></a>                                <span class="st">"向下累计(较大制)"</span> <span class="ot">=</span> <span class="st">"firebrick"</span>), <span class="at">name =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
+<span id="cb8-48"><a aria-label="48"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"50 户居民月消费支出累积曲线"</span>,</span>
+<span id="cb8-49"><a aria-label="49"></a>       <span class="at">x =</span> <span class="st">"月消费品支出额分组限（元）"</span>, <span class="at">y =</span> <span class="st">"累计频数（户）"</span>,</span>
+<span id="cb8-50"><a aria-label="50"></a>       <span class="at">caption =</span> <span class="st">"洛伦茨曲线同源：同为'向上累计曲线'思想（见第三节）"</span>) <span class="sc">+</span></span>
+<span id="cb8-51"><a aria-label="51"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="ch03-organize-v3_files/figure-revealjs/unnamed-chunk-6-1.png" class="quarto-figure quarto-figure-center" style="width:88.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a aria-label="1"></a><span class="co"># 实践三之二：40 名学生成绩的五数概括与箱线图（讲义茎叶图同一数据）</span></span>
+<span id="cb9-2"><a aria-label="2"></a>scores <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">63</span>, <span class="dv">88</span>, <span class="dv">72</span>, <span class="dv">69</span>, <span class="dv">80</span>, <span class="dv">80</span>, <span class="dv">61</span>, <span class="dv">68</span>, <span class="dv">79</span>, <span class="dv">81</span>, <span class="dv">76</span>, <span class="dv">76</span>, <span class="dv">77</span>, <span class="dv">78</span>, <span class="dv">90</span>, <span class="dv">89</span>, <span class="dv">61</span>,</span>
+<span id="cb9-3"><a aria-label="3"></a>            <span class="dv">84</span>, <span class="dv">92</span>, <span class="dv">67</span>, <span class="dv">65</span>, <span class="dv">57</span>, <span class="dv">62</span>, <span class="dv">60</span>, <span class="dv">66</span>, <span class="dv">87</span>, <span class="dv">80</span>, <span class="dv">92</span>, <span class="dv">78</span>, <span class="dv">86</span>, <span class="dv">71</span>, <span class="dv">71</span>, <span class="dv">63</span>, <span class="dv">74</span>,</span>
+<span id="cb9-4"><a aria-label="4"></a>            <span class="dv">67</span>, <span class="dv">70</span>, <span class="dv">91</span>, <span class="dv">64</span>, <span class="dv">79</span>, <span class="dv">65</span>)</span>
+<span id="cb9-5"><a aria-label="5"></a></span>
+<span id="cb9-6"><a aria-label="6"></a><span class="fu">fivenum</span>(scores)                <span class="co"># Tukey 对半法：57 65.5 75 80.5 92（与讲义箱线图例一致）</span></span>
+<span id="cb9-7"><a aria-label="7"></a><span class="co">#&gt; [1] 57.0 65.5 75.0 80.5 92.0</span></span>
+<span id="cb9-8"><a aria-label="8"></a><span class="fu">quantile</span>(scores)               <span class="co"># R 默认 type-7：Q1=65.75, Q3=80.25（约定不同，略有出入）</span></span>
+<span id="cb9-9"><a aria-label="9"></a><span class="co">#&gt;    0%   25%   50%   75%  100% </span></span>
+<span id="cb9-10"><a aria-label="10"></a><span class="co">#&gt; 57.00 65.75 75.00 80.25 92.00</span></span>
+<span id="cb9-11"><a aria-label="11"></a><span class="fu">boxplot.stats</span>(scores)<span class="sc">$</span>out      <span class="co"># 离群值：本例为空（1.5 倍四分位距规则）</span></span>
+<span id="cb9-12"><a aria-label="12"></a><span class="co">#&gt; numeric(0)</span></span>
+<span id="cb9-13"><a aria-label="13"></a></span>
+<span id="cb9-14"><a aria-label="14"></a><span class="co"># 单一箱线图：箱体容纳中间 50%，中线=中位数，须伸至正常值范围</span></span>
+<span id="cb9-15"><a aria-label="15"></a><span class="fu">ggplot</span>(<span class="fu">tibble</span>(<span class="at">score =</span> scores), <span class="fu">aes</span>(<span class="at">y =</span> score)) <span class="sc">+</span></span>
+<span id="cb9-16"><a aria-label="16"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">"lightblue"</span>, <span class="at">width =</span> <span class="fl">0.3</span>) <span class="sc">+</span></span>
+<span id="cb9-17"><a aria-label="17"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"40 名学生课程考试成绩：单一箱线图"</span>,</span>
+<span id="cb9-18"><a aria-label="18"></a>       <span class="at">y =</span> <span class="st">"成绩（分）"</span>,</span>
+<span id="cb9-19"><a aria-label="19"></a>       <span class="at">caption =</span> <span class="st">"五数概括：Min=57, QL=65.5, Me=75, QU=80.5, Max=92；无离群值"</span>) <span class="sc">+</span></span>
+<span id="cb9-20"><a aria-label="20"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="ch03-organize-v3_files/figure-revealjs/unnamed-chunk-7-1.png" class="quarto-figure quarto-figure-center" style="width:88.0%"></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a aria-label="1"></a></span>
+<span id="cb10-2"><a aria-label="2"></a><span class="co"># 多批箱线图：mtcars 按气缸数分组的油耗分布（多批比较的标准形）</span></span>
+<span id="cb10-3"><a aria-label="3"></a><span class="fu">ggplot</span>(mtcars, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">factor</span>(cyl), <span class="at">y =</span> mpg, <span class="at">fill =</span> <span class="fu">factor</span>(cyl))) <span class="sc">+</span></span>
+<span id="cb10-4"><a aria-label="4"></a>  <span class="fu">geom_boxplot</span>(<span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb10-5"><a aria-label="5"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"多批箱线图：不同气缸数汽车的油耗分布"</span>,</span>
+<span id="cb10-6"><a aria-label="6"></a>       <span class="at">x =</span> <span class="st">"气缸数（cyl）"</span>, <span class="at">y =</span> <span class="st">"每加仑行驶英里数（mpg）"</span>,</span>
+<span id="cb10-7"><a aria-label="7"></a>       <span class="at">caption =</span> <span class="st">"气缸越多油耗越低；为第 4 章'离中趋势'与四分位数预作铺垫"</span>) <span class="sc">+</span></span>
+<span id="cb10-8"><a aria-label="8"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="ch03-organize-v3_files/figure-revealjs/unnamed-chunk-7-2.png" class="quarto-figure quarto-figure-center" style="width:88.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>注记</strong></p>
+</div>
+<div class="callout-content">
+<p><strong>手算与软件的三处对照</strong></p>
+<ol type="1">
+<li><strong>累计曲线</strong>：<code>cumsum()</code> 算出的向上累计 5→50 与讲义累计表逐格一致；两曲线交叉于 1200 元/25 户/50%，与讲义”两曲线约在频数 25、频率 0.5 处交叉”互证，中位数读图约 1200 元；</li>
+<li><strong>四分位数约定</strong>：<code>fivenum()</code>（Tukey 对半法）得 QL=65.5、QU=80.5，与讲义一致；<code>quantile()</code> 默认算法得 65.75/80.25——这不是谁算错了，教材 (n+1)/4 位置法与软件默认算法本就略有出入（第 4 章系统讲解）；</li>
+<li><strong>箱线图结构</strong>：箱子高度=四分位距（本例 IQR=15 分），须长不超过 1.5×IQR，本例 57 与 92 均在围栏（43～103）内，故无离群点。</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>提示</strong></p>
+</div>
+<div class="callout-content">
+<p><strong>衔接后续章节</strong>：把本实践的 <code>geom_boxplot()</code> 换成 <code>stat_ecdf()</code>（经验累积分布函数），得到的正是”较小制累积频率曲线”的连续版本——洛伦茨曲线（第三节）与第 4 章的分位点估计都建立在这条曲线上。</p>
+</div>
+</div>
+</div>
+<div class="callout callout-warning callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>警告</strong></p>
+</div>
+<div class="callout-content">
+
+</div>
+</div>
+</div>
+</section>
+<section id="饼图圆形图" class="slide level2">
+<h2>饼图（圆形图）</h2>
+<p><strong>饼图</strong>是用<strong>圆形及圆内扇形的面积</strong>来表示数值大小的图形，主要用于表示<strong>总体中各组成部分所占的比例</strong>，对于研究<strong>结构性问题</strong>十分有用。在绘制圆形图时，总体中各部分所占的百分比用圆内的各个扇形面积表示，这些扇形的中心角度是按各部分百分比占 <span class="math inline">\(360^0\)</span> 的相应比例确定的。</p>
+<p><strong>例</strong>：关注服务广告的人数占总人数的百分比为 25.5%，那么其扇形的中心角度就应为</p>
+<p><span class="math display">\[360^0 \times 25.5\% = 91.8^0\]</span></p>
+<p>其余类推。</p>
+<p><strong>例：关注不同类型广告的人数构成</strong>（各扇形面积（角度）与其占比成正比，全部扇形合计为 100%；商品广告占比过半，是居民关注的主要类型）：</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>广告类型</th>
+<th>占比</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>商品广告</td>
+<td>56.0%</td>
+</tr>
+<tr class="even">
+<td>服务广告</td>
+<td>25.5%</td>
+</tr>
+<tr class="odd">
+<td>房地产广告</td>
+<td>8.0%</td>
+</tr>
+<tr class="even">
+<td>招生招聘广告</td>
+<td>5.8%</td>
+</tr>
+<tr class="odd">
+<td>金融广告</td>
+<td>4.5%</td>
+</tr>
+<tr class="even">
+<td>其他广告</td>
+<td>1.0%</td>
+</tr>
+</tbody>
+</table>
+<p><em>（图示说明：三维饼图展示六类广告关注人数的构成比，用于讲解饼图反映总体结构比例的作用。）</em></p>
+<p><strong>圆形图示例：三次产业构成</strong>（三者合计 100%，说明圆形图能直观展示总体中各部分所占比重之和为整体）：</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>产业</th>
+<th>占比</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>第一产业</td>
+<td>21%</td>
+</tr>
+<tr class="even">
+<td>第二产业</td>
+<td>39%</td>
+</tr>
+<tr class="odd">
+<td>第三产业</td>
+<td>42%</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="饼图圆形图续" class="slide level2">
+<h2>饼图（圆形图）（续）</h2>
+<p><em>（图示说明：扇形饼图展示第一、二、三产业分别占21%、39%、42%的构成比例，直观演示圆形图表现总体结构的功能。）</em></p>
+</section>
+<section id="r-实践-一组数据四种统计图" class="slide level2 r-demo">
+<h2>R 实践 · 一组数据，四种统计图</h2>
+<p>仍用 50 名工人日加工零件数，ggplot2 一图流对比<strong>直方图、条形图（分组的）、折线图</strong>：</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a aria-label="1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb11-2"><a aria-label="2"></a>breaks <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">105</span>, <span class="dv">140</span>, <span class="at">by =</span> <span class="dv">5</span>)</span>
+<span id="cb11-3"><a aria-label="3"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">parts =</span> parts)</span>
+<span id="cb11-4"><a aria-label="4"></a>p1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(df, <span class="fu">aes</span>(parts)) <span class="sc">+</span></span>
+<span id="cb11-5"><a aria-label="5"></a>  <span class="fu">geom_histogram</span>(<span class="at">breaks =</span> breaks, <span class="at">fill =</span> <span class="st">"#1a6b54"</span>, <span class="at">color =</span> <span class="st">"white"</span>) <span class="sc">+</span></span>
+<span id="cb11-6"><a aria-label="6"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"直方图（连续排列，展示数值型数据分布）"</span>,</span>
+<span id="cb11-7"><a aria-label="7"></a>       <span class="at">x =</span> <span class="st">"日加工零件数（个）"</span>, <span class="at">y =</span> <span class="st">"频数（人）"</span>)</span>
+<span id="cb11-8"><a aria-label="8"></a>p1</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="ch03-organize-v3_files/figure-revealjs/unnamed-chunk-8-1.png" class="quarto-figure quarto-figure-center" style="width:88.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a aria-label="1"></a>freq <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="fu">table</span>(<span class="fu">cut</span>(parts, breaks, <span class="at">right =</span> <span class="cn">FALSE</span>)))</span>
+<span id="cb12-2"><a aria-label="2"></a>lab  <span class="ot">&lt;-</span> <span class="fu">head</span>(breaks, <span class="sc">-</span><span class="dv">1</span>)</span>
+<span id="cb12-3"><a aria-label="3"></a>p2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="fu">data.frame</span>(lab, freq), <span class="fu">aes</span>(<span class="fu">factor</span>(lab), freq)) <span class="sc">+</span></span>
+<span id="cb12-4"><a aria-label="4"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">"#d97706"</span>, <span class="at">width =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb12-5"><a aria-label="5"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"条形图（分开排列，展示分组频数）"</span>,</span>
+<span id="cb12-6"><a aria-label="6"></a>       <span class="at">x =</span> <span class="st">"按零件数分组（下限）"</span>, <span class="at">y =</span> <span class="st">"频数（人）"</span>)</span>
+<span id="cb12-7"><a aria-label="7"></a>p3 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">head</span>(breaks, <span class="sc">-</span><span class="dv">1</span>) <span class="sc">+</span> <span class="fl">2.5</span>, freq), <span class="fu">aes</span>(x, freq)) <span class="sc">+</span></span>
+<span id="cb12-8"><a aria-label="8"></a>  <span class="fu">geom_line</span>(<span class="at">color =</span> <span class="st">"#2563eb"</span>, <span class="at">lwd =</span> <span class="fl">1.2</span>) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"#2563eb"</span>, <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb12-9"><a aria-label="9"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"折线图（频数分布的走势）"</span>, <span class="at">x =</span> <span class="st">"组中值"</span>, <span class="at">y =</span> <span class="st">"频数（人）"</span>)</span>
+<span id="cb12-10"><a aria-label="10"></a>gridExtra<span class="sc">::</span><span class="fu">grid.arrange</span>(p2, p3, <span class="at">ncol =</span> <span class="dv">2</span>)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="ch03-organize-v3_files/figure-revealjs/unnamed-chunk-9-1.png" class="quarto-figure quarto-figure-center" style="width:88.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<div title="直方图 vs 条形图">
+<div class="callout callout-note callout-titled callout-style-simple">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>直方图 vs 条形图</strong></p>
+</div>
+<div class="callout-content">
+<p>直方图矩形<strong>连续排列</strong>（数值型数据，矩形面积代表频数）；条形图<strong>分开排列</strong>（分类数据，条高代表频数）——在 ggplot2 中分别对应 <code>geom_histogram()</code> 与 <code>geom_col()</code>。</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="环形图" class="slide level2">
+<h2>环形图</h2>
+<p><strong>环形图</strong>中间有一个”空洞”，总体中的每一部分数据用环中的一段表示。环形图与圆形图类似，但又有区别：圆形图只能显示<strong>一个</strong>总体各部分所占的比例；环形图则可以同时绘制<strong>多个总体</strong>的数据系列，每一个总体的数据系列为一个环。因此，环形图可用于进行<strong>比较研究</strong>，也可用于展示分类和顺序的数据。</p>
+<p><strong>例：甲乙两城市家庭对住房状况的评价</strong>（内环与外环分别代表甲、乙两个城市）：</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>评价等级</th>
+<th>内环（甲城市）</th>
+<th>外环（乙城市）</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>非常不满意</td>
+<td>8%</td>
+<td>7%</td>
+</tr>
+<tr class="even">
+<td>不满意</td>
+<td>10%</td>
+<td>13%</td>
+</tr>
+<tr class="odd">
+<td>一般</td>
+<td>36%</td>
+<td>33%</td>
+</tr>
+<tr class="even">
+<td>满意</td>
+<td>31%</td>
+<td>26%</td>
+</tr>
+<tr class="odd">
+<td>非常满意</td>
+<td>15%</td>
+<td>21%</td>
+</tr>
+</tbody>
+</table>
+<p>环形图是饼图的拓展，中间挖空形成圆环，每个环代表一个样本或总体；通过内外环同一扇区位置的对齐比较，可直观观察两个城市家庭住房评价结构的差异。各环内部百分比之和均为 100%（内环：8%+10%+36%+31%+15%=100%；外环：7%+13%+33%+26%+21%=100%）。</p>
+<p><em>（图示说明：双环环形图同时展示甲乙两城市家庭对住房状况评价的构成比例，演示环形图用于多总体结构比较的教学价值。）</em></p>
+</section>
+<section id="r-实践-饼图与交互图形" class="slide level2 r-demo">
+<h2>R 实践 · 饼图与交互图形</h2>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a aria-label="1"></a><span class="co"># 广告关注度数据（对应原课件饼图）</span></span>
+<span id="cb13-2"><a aria-label="2"></a>ad <span class="ot">&lt;-</span> <span class="fu">c</span>(服务类 <span class="ot">=</span> <span class="fl">25.5</span>, 商品类 <span class="ot">=</span> <span class="fl">43.7</span>, 金融类 <span class="ot">=</span> <span class="fl">13.5</span>, 其他 <span class="ot">=</span> <span class="fl">17.3</span>)</span>
+<span id="cb13-3"><a aria-label="3"></a><span class="fu">pie</span>(ad, <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"#1a6b54"</span>, <span class="st">"#d97706"</span>, <span class="st">"#2563eb"</span>, <span class="st">"#94a3b8"</span>),</span>
+<span id="cb13-4"><a aria-label="4"></a>    <span class="at">main =</span> <span class="st">"某城市居民关注不同类型广告的人数构成（%）"</span>,</span>
+<span id="cb13-5"><a aria-label="5"></a>    <span class="at">clockwise =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+
+</div>
+<img data-src="ch03-organize-v3_files/figure-revealjs/unnamed-chunk-10-1.png" class="quarto-figure quarto-figure-center r-stretch" style="width:88.0%"><div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a aria-label="1"></a><span class="co"># plotly 交互直方图：悬停看频数、框选看数据</span></span>
+<span id="cb14-2"><a aria-label="2"></a>plotly<span class="sc">::</span><span class="fu">plot_ly</span>(df, <span class="at">x =</span> <span class="sc">~</span>parts, <span class="at">type =</span> <span class="st">"histogram"</span>,</span>
+<span id="cb14-3"><a aria-label="3"></a>                <span class="at">xbins =</span> <span class="fu">list</span>(<span class="at">start =</span> <span class="dv">105</span>, <span class="at">end =</span> <span class="dv">140</span>, <span class="at">size =</span> <span class="dv">5</span>),</span>
+<span id="cb14-4"><a aria-label="4"></a>                <span class="at">marker =</span> <span class="fu">list</span>(<span class="at">color =</span> <span class="st">"#1a6b54"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb14-5"><a aria-label="5"></a>  plotly<span class="sc">::</span><span class="fu">layout</span>(<span class="at">title =</span> <span class="st">"交互直方图（可悬停/缩放）"</span>,</span>
+<span id="cb14-6"><a aria-label="6"></a>                 <span class="at">xaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">"日加工零件数（个）"</span>),</span>
+<span id="cb14-7"><a aria-label="7"></a>                 <span class="at">yaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">"频数"</span>))</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-23f1679279797b1de743" style="width:88%;height:384px;"></div>
+<script type="application/json" data-for="htmlwidget-23f1679279797b1de743">{"x":{"visdat":{"18f02f7b49e0":["function () ","plotlyVisDat"]},"cur_data":"18f02f7b49e0","attrs":{"18f02f7b49e0":{"x":{},"xbins":{"start":105,"end":140,"size":5},"marker":{"color":"#1a6b54"},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"histogram"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"交互直方图（可悬停/缩放）","xaxis":{"domain":[0,1],"automargin":true,"title":"日加工零件数（个）"},"yaxis":{"domain":[0,1],"automargin":true,"title":"频数"},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":[117,108,110,112,137,122,131,118,134,114,124,125,123,127,120,129,117,126,123,128,139,122,133,119,124,107,133,134,113,115,117,126,127,120,139,130,122,123,123,128,122,118,118,127,124,125,108,112,135,121],"xbins":{"start":105,"end":140,"size":5},"marker":{"color":"#1a6b54","line":{"color":"rgba(31,119,180,1)"}},"type":"histogram","error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</section>
+<section id="折线图频数多边形" class="slide level2">
+<h2>折线图（频数多边形）</h2>
+<p><strong>折线图</strong>也称<strong>频数多边形图</strong>。绘制方法：在<strong>直方图</strong>的基础上，把直方图顶部的中点（即<strong>组中值</strong>）用直线连接起来，再把原来的直方图抹掉，即得折线图。折线图与直方图同样用于展示分组数据的频数分布，但以折线形式呈现，能更直观地反映分布的形态与变化趋势。</p>
+<p><strong>例：某车间工人日加工零件数的折线图</strong>（横轴分组为 105～110、110～115、115～120、120～125、125～130、130～135、135～140；纵轴频数刻度为 3、6、9、12、15，各组频数约为 3、5、8、15、10、6、3）。</p>
+<p><strong>重要性质</strong>：折线图下的面积与直方图下的面积相等！这是因为在绘制折线时，折线两端在横轴上向两侧各延伸半个组距（分别落到首组下限之前与末组上限之后），使折线下方多出的三角形面积恰好等于直方图中被折线截去部分的面积。因此折线图与直方图同样完整地反映了数据的频数分布形态：中间高、两头低，呈近似钟形分布。</p>
+<p><em>（图示说明：以某车间工人日加工零件数为例的折线图，直观展示折线图由直方图各矩形顶端中点连接而成、且两者面积相等的教学要点。）</em></p>
+</section>
+<section id="频数分布的类型" class="slide level2">
+<h2>频数分布的类型</h2>
+<p>频数分布曲线呈现多种形态，常见的类型如下。</p>
+<p><strong>一、钟形分布（中间高、两头低）</strong></p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 14%">
+<col style="width: 23%">
+<col style="width: 61%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>类型</th>
+<th>形态特征</th>
+<th>均值、众数、中位数的关系</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>对称分布</strong></td>
+<td>曲线左右对称（如正态分布）</td>
+<td>均数 ≈ 众数 ≈ 中位数，三者重合于分布中心</td>
+</tr>
+<tr class="even">
+<td><strong>右偏分布</strong></td>
+<td>峰在左侧，右侧拖出长尾</td>
+<td>众数 &lt; 中位数 &lt; 均数（均数受右侧极端值影响被拉向右）</td>
+</tr>
+<tr class="odd">
+<td><strong>左偏分布</strong></td>
+<td>峰在右侧，左侧拖出长尾</td>
+<td>均数 &lt; 中位数 &lt; 众数（均数受左侧极端值影响被拉向左）</td>
+</tr>
+</tbody>
+</table>
+<p>图中在对称分布上标出了三条竖线（均数、中位数、众数位置基本重合）；右偏分布中众数最左、均数最右；左偏分布中三条线从左到右依次为均数、中位数、众数（众数最右）。</p>
+<p><strong>二、J 形分布（单调分布）</strong>：<strong>正 J 型分布</strong>——频数随变量值增大而递增，曲线形如字母 “J”；<strong>反 J 型分布</strong>——频数随变量值增大而递减，曲线形如反写的 “J”。</p>
+<p><strong>三、U 型分布</strong>：频数在两端较高、中间较低，曲线呈 “U” 字形。</p>
+</section>
+<section id="频数分布的类型续" class="slide level2">
+<h2>频数分布的类型（续）</h2>
+<p><strong>四、双峰分布与 M 型分布（补充形态）</strong>：<strong>双峰分布</strong>——频数曲线出现两个明显的峰、两峰之间隔着一段低谷。双峰往往提示总体中<strong>混合了两个性质不同的部分</strong>（如男女混在一起的身高、两个水平悬殊班级合并后的成绩），正确的做法是先按可疑标志分组、再分别考察，而不是用一个单一的钟形分布去概括。<strong>M 型分布</strong>——两侧各起一峰、中间再隆起一峰，整条曲线形如字母 “M”，可视为双峰分布的变体，常见于”两极分化且中间水平也较集中”的场合。</p>
+<p>判别频数分布类型有助于正确选择集中趋势与离中趋势的测度指标，偏态分布下均数易受极端值影响，应结合中位数、众数综合分析。分布形态除目视判断外，还可用<strong>偏度系数、峰度系数</strong>定量刻画（右偏/左偏、尖峰/平峰的数值判读），公式与判定准则将在<strong>第 4 章</strong>系统介绍，此处先建立”形态可度量”的意识即可。</p>
+<p><em>（图示说明：六幅小图分别演示对称分布、右偏分布、左偏分布、正J型、反J型与U型分布曲线形态，其中前三幅用竖线标示均数、中位数、众数的相对位置，直观展示偏态下三者关系的规律。）</em></p>
+</section>
+<section id="时间序列数据曲线图" class="slide level2">
+<h2>时间序列数据：曲线图</h2>
+<p>绘制时间序列曲线图时应注意以下规范：</p>
+<ul>
+<li><strong>时间一般绘在横轴，指标数据绘在纵轴</strong>；</li>
+<li><strong>图形的长宽比例要适当</strong>，其长宽比例大致为 <strong>10：7</strong>；</li>
+<li><strong>一般情况下，纵轴数据下端应从 “0” 开始</strong>，以便于比较。当数据与 “0” 之间的间距过大时，可以采取<strong>折断的符号将纵轴折断</strong>，以保持图形的合理比例和可比性。</li>
+</ul>
+<p><strong>【例】绘制线图</strong>：1991～1998 年我国城乡居民家庭的人均收入数据如下，试根据该表绘制线图，以反映城乡居民收入的变动趋势及城乡差异。</p>
+<p><strong>1991～1998 年城乡居民家庭人均收入（单位：元）</strong></p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>年份</th>
+<th>城镇居民</th>
+<th>农村居民</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1991</td>
+<td>1700.6</td>
+<td>708.6</td>
+</tr>
+<tr class="even">
+<td>1992</td>
+<td>2026.6</td>
+<td>784.0</td>
+</tr>
+<tr class="odd">
+<td>1993</td>
+<td>2577.4</td>
+<td>921.6</td>
+</tr>
+<tr class="even">
+<td>1994</td>
+<td>3496.2</td>
+<td>1221.0</td>
+</tr>
+<tr class="odd">
+<td>1995</td>
+<td>4283.0</td>
+<td>1577.7</td>
+</tr>
+<tr class="even">
+<td>1996</td>
+<td>4838.9</td>
+<td>1926.1</td>
+</tr>
+<tr class="odd">
+<td>1997</td>
+<td>5160.3</td>
+<td>2091.1</td>
+</tr>
+<tr class="even">
+<td>1998</td>
+<td>5425.1</td>
+<td>2162.0</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="时间序列数据曲线图续" class="slide level2">
+<h2>时间序列数据：曲线图（续）</h2>
+<p>以横轴表示年份（时间），纵轴表示人均收入，分别绘制城镇居民和农村居民两条折线（图 8：横轴为 1991—1998 年，纵轴为收入（元），刻度自 0 至 6000（0、2000、4000、6000），图例区分两条折线）。将两个动态数列绘制在同一坐标系中，可直接对比发展水平与发展速度的差异：城乡居民家庭人均收入均呈逐年增长趋势，其中城镇居民折线位置始终高于农村居民，且前期（1992—1996 年）增长尤为明显；城镇居民收入水平始终高于农村居民，两者差距随年份推移呈扩大趋势。折线图（曲线图）是展示时间序列数据发展变化趋势的常用图形。</p>
+<p><strong>【例·对比例】再看 2020 年代：2019—2023 年城乡居民人均可支配收入</strong></p>
+<p>上面 1991—1998 年的例子展示了城乡差距<strong>扩大</strong>的阶段。换用近年公开统计数据，按同样规范重画一张线图，读数结论已经反转：</p>
+</section>
+<section id="时间序列数据曲线图续-1" class="slide level2">
+<h2>时间序列数据：曲线图（续）</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>年份</th>
+<th>城镇居民（元）</th>
+<th>农村居民（元）</th>
+<th>城乡收入比</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>2019</td>
+<td>42 359</td>
+<td>16 021</td>
+<td>2.64</td>
+</tr>
+<tr class="even">
+<td>2020</td>
+<td>43 834</td>
+<td>17 131</td>
+<td>2.56</td>
+</tr>
+<tr class="odd">
+<td>2021</td>
+<td>47 412</td>
+<td>18 931</td>
+<td>2.50</td>
+</tr>
+<tr class="even">
+<td>2022</td>
+<td>49 283</td>
+<td>20 133</td>
+<td>2.45</td>
+</tr>
+<tr class="odd">
+<td>2023</td>
+<td>51 821</td>
+<td>21 691</td>
+<td>2.39</td>
+</tr>
+</tbody>
+</table>
+<p>数据来源：国家统计局历年《国民经济和社会发展统计公报》。</p>
+<p>绘图仍遵守上述三条规范（时间绘横轴、长宽比约 10:7、纵轴从 0 开始；本例数据与 0 的间距不大，无需断轴）。从图中可读出与旧例相反的信息：城乡居民收入同步增长，但<strong>农村增速更快</strong>——2019→2023 年农村人均可支配收入累计增长约 35.4%、城镇约 22.3%，城乡收入比由 2.64 持续降至 2.39，城乡差距呈<strong>缩小</strong>趋势。新旧两例对照说明：图形规范不变，数据更新后同一张图会”讲出”不同的故事；作图与读图都必须交代清楚数据的时间窗口。</p>
+</section>
+<section id="时间序列数据曲线图续-2" class="slide level2">
+<h2>时间序列数据：曲线图（续）</h2>
+<blockquote>
+<p><strong>延伸（多序列线图的时间对齐）</strong>：当多条时间序列的起点事件不同步时（如各国疫情曲线的起始日期不同），可把时间轴改为”以某事件发生日为第 0 天”<strong>对齐</strong>后再画折线，国家之间的比较才公平。这一”数据对齐”思想可参见胡华平课件第03章 8 国新冠疫情死亡率线图案例（3 260 条数据，以死亡率达阈值当日对齐）。</p>
+</blockquote>
+<p><em>（图示说明：折线图（图8）展示1991—1998年城乡居民家庭人均收入两条动态数列的对比，直观反映收入水平的逐年增长及城乡差距扩大趋势。）</em></p>
+</section>
+<section id="r-实践-四种分布形态同一段代码画出来" class="slide level2 r-demo">
+<h2>R 实践 · 四种分布形态，同一段代码画出来</h2>
+<p>教材上的对称、右偏、左偏和 U 型，可以用随机数直接生成，再看均值和中位数谁在左边。</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a aria-label="1"></a><span class="fu">set.seed</span>(<span class="dv">2026</span>)</span>
+<span id="cb15-2"><a aria-label="2"></a>n <span class="ot">&lt;-</span> <span class="dv">500</span></span>
+<span id="cb15-3"><a aria-label="3"></a>shape_df <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
+<span id="cb15-4"><a aria-label="4"></a>  <span class="fu">data.frame</span>(<span class="at">kind =</span> <span class="st">"对称分布"</span>, <span class="at">x =</span> <span class="fu">rnorm</span>(n, <span class="dv">50</span>, <span class="dv">10</span>)),</span>
+<span id="cb15-5"><a aria-label="5"></a>  <span class="fu">data.frame</span>(<span class="at">kind =</span> <span class="st">"右偏分布"</span>, <span class="at">x =</span> <span class="fu">rlnorm</span>(n, <span class="fu">log</span>(<span class="dv">30</span>), <span class="fl">0.55</span>)),</span>
+<span id="cb15-6"><a aria-label="6"></a>  <span class="fu">data.frame</span>(<span class="at">kind =</span> <span class="st">"左偏分布"</span>, <span class="at">x =</span> <span class="dv">120</span> <span class="sc">-</span> <span class="fu">rlnorm</span>(n, <span class="fu">log</span>(<span class="dv">30</span>), <span class="fl">0.55</span>)),</span>
+<span id="cb15-7"><a aria-label="7"></a>  <span class="fu">data.frame</span>(<span class="at">kind =</span> <span class="st">"U 型分布"</span>, <span class="at">x =</span> <span class="fu">rbeta</span>(n, <span class="fl">0.45</span>, <span class="fl">0.45</span>) <span class="sc">*</span> <span class="dv">100</span>)</span>
+<span id="cb15-8"><a aria-label="8"></a>)</span>
+<span id="cb15-9"><a aria-label="9"></a>shape_df<span class="sc">$</span>kind <span class="ot">&lt;-</span> <span class="fu">factor</span>(shape_df<span class="sc">$</span>kind, <span class="at">levels =</span> <span class="fu">unique</span>(shape_df<span class="sc">$</span>kind))</span>
+<span id="cb15-10"><a aria-label="10"></a><span class="fu">aggregate</span>(x <span class="sc">~</span> kind, shape_df, <span class="cf">function</span>(z) {</span>
+<span id="cb15-11"><a aria-label="11"></a>  <span class="fu">c</span>(均值 <span class="ot">=</span> <span class="fu">round</span>(<span class="fu">mean</span>(z), <span class="dv">1</span>), 中位数 <span class="ot">=</span> <span class="fu">round</span>(<span class="fu">median</span>(z), <span class="dv">1</span>))</span>
+<span id="cb15-12"><a aria-label="12"></a>})</span>
+<span id="cb15-13"><a aria-label="13"></a><span class="co">#&gt;       kind x.均值 x.中位数</span></span>
+<span id="cb15-14"><a aria-label="14"></a><span class="co">#&gt; 1 对称分布   50.4     50.6</span></span>
+<span id="cb15-15"><a aria-label="15"></a><span class="co">#&gt; 2 右偏分布   34.4     29.4</span></span>
+<span id="cb15-16"><a aria-label="16"></a><span class="co">#&gt; 3 左偏分布   85.6     90.0</span></span>
+<span id="cb15-17"><a aria-label="17"></a><span class="co">#&gt; 4 U 型分布   51.0     51.9</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a aria-label="1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb16-2"><a aria-label="2"></a><span class="fu">ggplot</span>(shape_df, <span class="fu">aes</span>(x)) <span class="sc">+</span></span>
+<span id="cb16-3"><a aria-label="3"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">28</span>, <span class="at">fill =</span> <span class="st">"#1a6b54"</span>, <span class="at">color =</span> <span class="st">"white"</span>) <span class="sc">+</span></span>
+<span id="cb16-4"><a aria-label="4"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> kind, <span class="at">scales =</span> <span class="st">"free_x"</span>) <span class="sc">+</span></span>
+<span id="cb16-5"><a aria-label="5"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="st">"频数"</span>, <span class="at">title =</span> <span class="st">"频数分布的四种形态"</span>)</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+
+</div>
+<img data-src="ch03-organize-v3_files/figure-revealjs/unnamed-chunk-13-1.png" class="quarto-figure quarto-figure-center r-stretch" style="width:88.0%"><div title="对照">
+<div class="callout callout-note callout-titled callout-style-simple">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>对照</strong></p>
+</div>
+<div class="callout-content">
+<p>右偏时均值大于中位数，左偏时相反，对称时两者接近。U 型两边高、中间低，均值和中位数都落在“人很少”的中间，代表不了典型水平。</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="多变量数据雷达图" class="slide level2 scrollable">
+<h2>多变量数据：雷达图</h2>
+<p><strong>雷达图</strong>是显示多个变量的常用图示方法：</p>
+<ol type="1">
+<li>雷达图是显示多个变量的常用图示方法；</li>
+<li>从雷达图中可以看出指标的实际值与参照值的偏离程度；</li>
+<li>在显示或对比各变量的数值总和时十分有用；</li>
+<li>假定各变量的取值具有相同的正负号，总的绝对值与图形所围成的区域成正比；</li>
+<li>可用于研究多个样本之间的相似程度。</li>
+</ol>
+<p><strong>【例】绘制雷达图</strong>：1997 年我国城乡居民家庭平均每人各项生活消费支出数据如表 3-12，试绘制雷达图。</p>
+<p><strong>表 3-12 1997 年城乡居民家庭平均每人生活消费支出</strong></p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>项 目</th>
+<th>城镇居民</th>
+<th>农村居民</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>食品</td>
+<td>1942.59</td>
+<td>890.28</td>
+</tr>
+<tr class="even">
+<td>衣着</td>
+<td>520.91</td>
+<td>109.41</td>
+</tr>
+<tr class="odd">
+<td>家庭设备用品及服务</td>
+<td>316.89</td>
+<td>85.41</td>
+</tr>
+<tr class="even">
+<td>医疗保健</td>
+<td>179.68</td>
+<td>62.45</td>
+</tr>
+<tr class="odd">
+<td>交通通讯</td>
+<td>232.90</td>
+<td>53.92</td>
+</tr>
+<tr class="even">
+<td>娱乐教育文化服务</td>
+<td>448.38</td>
+<td>148.18</td>
+</tr>
+<tr class="odd">
+<td>居住</td>
+<td>358.64</td>
+<td>233.23</td>
+</tr>
+<tr class="even">
+<td>杂项商品与服务</td>
+<td>185.65</td>
+<td>34.27</td>
+</tr>
+<tr class="odd">
+<td><strong>合 计</strong></td>
+<td><strong>4185.64</strong></td>
+<td><strong>1617.15</strong></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="多变量数据雷达图续" class="slide level2">
+<h2>多变量数据：雷达图（续）</h2>
+<p>雷达图以 8 个消费项目为轴（食品、衣着、家庭设备用品及服务、医疗保健、交通通讯、娱乐教育文化服务、居住、杂项商品与服务），将城镇居民与农村居民两组数据绘制在同一闭合多边形上，各轴标度（单位：元）为 0、500、1000、1500、2000，图例区分<strong>城镇居民</strong>与<strong>农村居民</strong>两条折线。可直观比较城乡消费结构及各项支出水平的差异：城镇居民曲线在食品轴上接近 2000 元，明显高于农村居民；其余各项支出城镇居民也普遍高于农村居民；农村居民各轴取值均靠近原点，说明整体消费支出水平较低。由食品支出占比较大可引出<strong>恩格尔系数</strong>及消费结构分析。</p>
+<p><em>（图示说明：雷达图对比1997年城乡居民在食品、衣着等八类消费支出上的差异，直观展示多维数据的比较方法。）</em></p>
+</section>
+<section id="次数分布图类型的选择" class="slide level2">
+<h2>次数分布图类型的选择</h2>
+<p>选择何种统计图来展示次数分布，取决于变量的类型：</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>图形类型</th>
+<th>适用的变量类型</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>直方图、折线图</td>
+<td>连续性变量</td>
+</tr>
+<tr class="even">
+<td>条形图、饼图</td>
+<td>离散型变量、分类变量、顺序变量</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>连续性变量</strong>（如身高、体重等可连续取值的变量）：应使用<strong>直方图</strong>或<strong>折线图</strong>来呈现其次数分布；</li>
+<li><strong>离散型变量</strong>以及<strong>分类变量、顺序变量</strong>：应使用<strong>条形图</strong>或<strong>饼图</strong>来呈现各类别的次数分布。</li>
+</ul>
+<p><strong>图型选择对比辨析表（v3 升级）</strong>：上面的表只回答了”什么变量类型配什么图”。把选择问题再推进一步——同一场景常有两种以上图型可选，此时按下列决策规则辨析（各细则的图例依据见本章末”合理使用图表”）：</p>
+</section>
+<section id="次数分布图类型的选择续" class="slide level2">
+<h2>次数分布图类型的选择（续）</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>决策问题</th>
+<th>推荐做法</th>
+<th>理由/细则</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>展示部分与整体的关系（份额、构成）</td>
+<td>饼图，但<strong>分块不超过 5 块</strong>，小类合并为”其他”</td>
+<td>块数一多，角度差无法分辨</td>
+</tr>
+<tr class="even">
+<td>比较各类别数量大小</td>
+<td><strong>排序条形图</strong>优于饼图</td>
+<td>人眼判断”长度差”远比”角度/面积差”敏锐</td>
+</tr>
+<tr class="odd">
+<td>时间序列的趋势与模式</td>
+<td><strong>折线图</strong>（线图）</td>
+<td>折线更易感知趋势变化；X 轴为类别（如品牌份额）时才用柱形图</td>
+</tr>
+<tr class="even">
+<td>多个总体的构成对比</td>
+<td>环形图（多环）或百分比堆叠柱形图，<strong>不要并排放多张饼图</strong></td>
+<td>并排饼图之间难以逐项比较</td>
+</tr>
+<tr class="odd">
+<td>分组数据的频数分布（连续变量）</td>
+<td>直方图 / 折线图</td>
+<td>矩形面积承载频数信息</td>
+</tr>
+<tr class="even">
+<td>未分组原始数据的分布</td>
+<td>小批量用茎叶图，分布比较用箱线图；常规分析直方图优先</td>
+<td>见”未分组数据的图示”小节</td>
+</tr>
+<tr class="odd">
+<td>两个数值变量的关系</td>
+<td>散点图（可叠加趋势线）</td>
+<td>第 7 章相关分析的起点</td>
+</tr>
+<tr class="even">
+<td>三个数值变量的关系</td>
+<td>气泡图</td>
+<td>气泡按<strong>面积</strong>而非直径缩放</td>
+</tr>
+<tr class="odd">
+<td>多变量个体画像、多样本相似性</td>
+<td>雷达图</td>
+<td>各轴取值同量纲时方可比较</td>
+</tr>
+<tr class="even">
+<td>平面 or 立体</td>
+<td>一律优先<strong>二维平面图</strong></td>
+<td>3D 透视造成读数失真（见”合理使用图表”误区③）</td>
+</tr>
+<tr class="odd">
+<td>一张图 or 多张小图</td>
+<td>按一个维度拆成多张小图时，各图<strong>纵坐标必须统一</strong></td>
+<td>“否则是四张图，不是一张图”</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="合理使用图表图表素养与批判性阅读" class="slide level2">
+<h2>合理使用图表：图表素养与批判性阅读</h2>
+<p>会画图不等于用好图。统计图一旦失真，比没有图更能误导读者。本小节把”好图表的标准、常见误区、可操作的图/表设计细则”汇总为一个<strong>图表批判素养</strong>模块——它既是读别人图表的”体检表”，也是自己作图的”验收单”，并将在第 8、9 章的 R 绘图实践中作为统一的验收清单复用。</p>
+<p><strong>（一）良好图表的基本特征与鉴别准则（Tufte 式原则）</strong></p>
+<p>一张良好的图表应具备五个基本特征：①<strong>服务于一个明确的目的</strong>；②<strong>显示数据、强调数据之间的比较</strong>；③<strong>有对图表的统计描述和文字说明</strong>；④<strong>让读者把注意力集中在图表的内容上，而不是制作图表的程序（技巧）上</strong>；⑤<strong>避免歪曲</strong>。</p>
+<p>鉴别图表优劣的五条准则：①表述数据的真实情况；②使复杂的观点得到简明、确切、高效的阐述；③精心设计、有助于洞察问题的实质；④<strong>能在最短的时间内、以最少的笔墨，给读者提供最大量的信息</strong>；⑤多维度地对问题进行客观反映。其中第④条是核心判据——评价一张图，不看它”炫不炫”，而看单位笔墨承载了多少真实信息。</p>
+<p><strong>（二）五类常见制图误区（错误示范 → 后果 → 正确做法）</strong></p>
+</section>
+<section id="合理使用图表图表素养与批判性阅读续" class="slide level2">
+<h2>合理使用图表：图表素养与批判性阅读（续）</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>误区</th>
+<th>错误示范</th>
+<th>后果</th>
+<th>正确做法</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>①非零起始点</td>
+<td>柱形图纵轴从某一非零值起画</td>
+<td>条形高度之比不再等于数据之比，微小差异被放大成悬殊对比</td>
+<td>柱形图纵轴<strong>必须从 0 开始</strong>；数据与 0 间距过大确需截断时，必须加<strong>波浪断轴符号</strong>明示（呼应”时间序列曲线图”规范）</td>
+</tr>
+<tr class="even">
+<td>②图片比例拉伸失调</td>
+<td>同一组数据被纵向拉伸或横向压扁</td>
+<td>趋势被人为画陡或画缓，制造”暴涨/平稳”的错觉</td>
+<td>保持适当长宽比（线图约 10:7），不得随意拉伸</td>
+</tr>
+<tr class="odd">
+<td>③炫技乱人心</td>
+<td>3D 透视、阴影、爆炸效果，配戏剧化标题</td>
+<td>透视图上读不出真实高度，标题先声夺人替代了数据</td>
+<td>弃用 3D 与装饰，用平实标题陈述事实</td>
+</tr>
+<tr class="even">
+<td>④视觉误导</td>
+<td>用不断放大的图片（如小人）面积表示一维的薪资增长</td>
+<td>图片面积随高度<strong>平方</strong>增长，视觉差异被二次放大</td>
+<td>一维数据用长度编码（条形），勿用面积/体积图像</td>
+</tr>
+<tr class="odd">
+<td>⑤目标不明确</td>
+<td>十几个科室的爆炸式巨型饼图再配卡通装饰</td>
+<td>读者无从比较，图不服务于任何分析目的</td>
+<td>先问”这张图要让读者比较什么”再选图型；块数过多时改用排序条形图</td>
+</tr>
+</tbody>
+</table>
+<p><strong>（三）图设计要点：14 组”错误 vs 正确”对照的操作性细则</strong></p>
+</section>
+<section id="合理使用图表图表素养与批判性阅读续-1" class="slide level2">
+<h2>合理使用图表：图表素养与批判性阅读（续）</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>对照组</th>
+<th>操作性细则</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>饼图 vs 条形图</td>
+<td>表述市场份额（整体=100%）习惯用饼图，但人们<strong>更习惯从条形图比较大小</strong>，差异看得更醒目</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>线形图 vs 柱状图</td>
+<td>X 轴是时间（时间序列）→<strong>折线图</strong>更利于感知趋势与模式；比较不同品牌份额等类别数据→柱状图</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>平面图 vs 立体图</td>
+<td><strong>二维平面图</strong>更适合观察——人类视觉空间的最低维度是二维，三维并不适合观察</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>3D vs 2D</td>
+<td>尽量不用三维图；若按某维度拆成多张二维图，<strong>必须统一纵坐标</strong>——“否则是四张图，要贴成一张图”</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>颜色 vs 数据</td>
+<td>配色<strong>坚持简单</strong>：花哨刺眼的配色（打印还费墨）会让读者注意配色而非数据</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>选色 vs 选图</td>
+<td>读者看不出差别的比较毫无意义——<strong>选最合适的比较形式</strong>（如两个饼图对比不如堆叠柱形图直观）</td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td>饼图排序 vs 分块</td>
+<td>一个饼图<strong>不应分割超过 5 块</strong>；最大一块从 <strong>12 点钟起始、顺时针降序</strong>，其余各块继续顺时针降序</td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td>实线 vs 虚线</td>
+<td>多序列折线<strong>用实线并以颜色区分</strong>；虚线容易分散注意力</td>
+</tr>
+<tr class="odd">
+<td>9</td>
+<td>条形图排序</td>
+<td>类别应<strong>按数据值大小（或字母/自然顺序）排序</strong>，勿随机排列</td>
+</tr>
+<tr class="even">
+<td>10</td>
+<td>柱宽 vs 间距</td>
+<td>条形之间的间隔应约为 <strong>1/2 柱宽</strong>——过挤过散都影响比较</td>
+</tr>
+<tr class="odd">
+<td>11</td>
+<td>面积图堆叠 vs 透明度</td>
+<td>堆叠面积图要<strong>添加透明度</strong>，确保被压在下面的序列可见，不让数据被设计”吃掉”</td>
+</tr>
+<tr class="even">
+<td>12</td>
+<td>散点图原始 vs 趋势</td>
+<td>散点图应<strong>叠加趋势线</strong>，帮助读者看到关系的方向与强度</td>
+</tr>
+<tr class="odd">
+<td>13</td>
+<td>气泡图形状 vs 数值</td>
+<td>气泡大小应按<strong>面积</strong>（区域）而非直径缩放，否则第三变量的差异被平方放大</td>
+</tr>
+<tr class="even">
+<td>14</td>
+<td>热力图颜色堆 vs 颜色系</td>
+<td>热力图/统计地图配色<strong>采用同一色系（或类比色）渐变</strong>，忌多色堆砌</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="合理使用图表图表素养与批判性阅读续-2" class="slide level2">
+<h2>合理使用图表：图表素养与批判性阅读（续）</h2>
+<p><strong>（四）表设计要点：三线表与条件格式</strong></p>
+<p>图有图的规矩，表有表的章法（与”统计表的编制规则”末段的写作视角呼应）。两组对照：其一，<strong>封闭框线表 vs 开放式三线表</strong>——中文报表习惯封闭边框，但开放式<strong>三线表</strong>（仅保留顶线、表头线、底线，配表序号、表题、表头、主体、表注五要素）更清晰明快，是英文论文与学位论文的通行体例，课程论文建议采用。其二，<strong>网格线 vs 条件格式</strong>——密集的网格线会干扰阅读，更好的做法是弱化线条、用<strong>条件格式</strong>按数值好坏整行着色（如绿=良好、黄=一般、红=较差），让例外自己”跳出来”；字体、数值格式与对齐方式同样服务于”让数据易读”这一目的。</p>
+<p><strong>（五）图表自检清单（本课程作业通用）</strong></p>
+<p>每次交图前逐项打勾（第 8、9 章 R 实践”修坏图”等绘图任务按本清单验收）：</p>
+</section>
+<section id="合理使用图表图表素养与批判性阅读续-3" class="slide level2 scrollable">
+<h2>合理使用图表：图表素养与批判性阅读（续）</h2>
+<ol type="1">
+<li>柱形/条形图纵轴是否从 0 开始？截断轴是否加了断轴符号？</li>
+<li>长宽比是否适当（线图约 10:7）、有无拉伸变形？</li>
+<li>是否弃用了 3D、阴影、爆炸等装饰效果？</li>
+<li>配色是否单色系/低饱和、颜色数量是否克制？</li>
+<li>饼图是否不超过 5 块、是否从 12 点钟顺时针降序排列？</li>
+<li>条形是否按数值或逻辑顺序排序？</li>
+<li>多序列是否用实线加颜色区分（而非多种虚线）？</li>
+<li>多面板小图是否统一了纵坐标？</li>
+<li>气泡是否按面积缩放？散点图是否叠加了趋势线？</li>
+<li>是否标注了标题、轴标题、单位与数据来源（图注 caption）？</li>
+</ol>
+<p>（本清单为上述（二）（三）（四）各细则的汇总提炼；配套 R 上机任务”修坏图”见《新增实践 ch03》实践一。）</p>
+</section>
+<section id="实践一修坏图同一数据的坏图与好图前后对照" class="slide level2 r-demo scrollable">
+<h2>实践一：修坏图——同一数据的坏图与好图前后对照</h2>
+<p>讲义”合理使用图表”小节列出了五类误区与 14 组细则。本实践用讲义自己的数据（某城市居民关注不同类型广告的人数，n=200）先<strong>故意</strong>画两张坏图——一张”非零起点 + 彩虹色 + 戏剧化标题”的柱形图、一张”6 块乱序 + 依赖图例”的饼图——再用 ggplot2 修复成好图，前后对照。</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a aria-label="1"></a><span class="co"># 实践一：修坏图（bad chart -&gt; good chart）</span></span>
+<span id="cb17-2"><a aria-label="2"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb17-3"><a aria-label="3"></a></span>
+<span id="cb17-4"><a aria-label="4"></a><span class="co"># 讲义数据：某城市居民关注不同类型广告的人数（合计 200 人）</span></span>
+<span id="cb17-5"><a aria-label="5"></a>ads <span class="ot">&lt;-</span> <span class="fu">tribble</span>(</span>
+<span id="cb17-6"><a aria-label="6"></a>  <span class="sc">~</span>type, <span class="sc">~</span>n,</span>
+<span id="cb17-7"><a aria-label="7"></a>  <span class="st">"商品广告"</span>, <span class="dv">112</span>,</span>
+<span id="cb17-8"><a aria-label="8"></a>  <span class="st">"服务广告"</span>, <span class="dv">51</span>,</span>
+<span id="cb17-9"><a aria-label="9"></a>  <span class="st">"房地产广告"</span>, <span class="dv">16</span>,</span>
+<span id="cb17-10"><a aria-label="10"></a>  <span class="st">"招生招聘广告"</span>, <span class="dv">10</span>,</span>
+<span id="cb17-11"><a aria-label="11"></a>  <span class="st">"金融广告"</span>, <span class="dv">9</span>,</span>
+<span id="cb17-12"><a aria-label="12"></a>  <span class="st">"其他广告"</span>, <span class="dv">2</span></span>
+<span id="cb17-13"><a aria-label="13"></a>)</span>
+<span id="cb17-14"><a aria-label="14"></a></span>
+<span id="cb17-15"><a aria-label="15"></a><span class="co"># ---------- 坏图 1：非零起点 + 彩虹色 + 戏剧化标题 ----------</span></span>
+<span id="cb17-16"><a aria-label="16"></a><span class="fu">ggplot</span>(ads, <span class="fu">aes</span>(<span class="at">x =</span> type, <span class="at">y =</span> n, <span class="at">fill =</span> type)) <span class="sc">+</span></span>
+<span id="cb17-17"><a aria-label="17"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb17-18"><a aria-label="18"></a>  <span class="fu">coord_cartesian</span>(<span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">8</span>, <span class="dv">118</span>)) <span class="sc">+</span>          <span class="co"># 罪状1：纵轴从 8 起截断</span></span>
+<span id="cb17-19"><a aria-label="19"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">rainbow</span>(<span class="dv">6</span>)) <span class="sc">+</span>     <span class="co"># 罪状2：彩虹色堆砌</span></span>
+<span id="cb17-20"><a aria-label="20"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"商品广告关注暴涨！其他广告几近为零!!"</span>,  <span class="co"># 罪状3：戏剧化标题</span></span>
+<span id="cb17-21"><a aria-label="21"></a>       <span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="st">"人数"</span>) <span class="sc">+</span></span>
+<span id="cb17-22"><a aria-label="22"></a>  <span class="fu">theme_grey</span>()</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="ch03-organize-v3_files/figure-revealjs/unnamed-chunk-14-1.png" class="quarto-figure quarto-figure-center" style="width:88.0%"></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a aria-label="1"></a></span>
+<span id="cb18-2"><a aria-label="2"></a><span class="co"># 坏在哪里：截断轴下"其他广告(2)"整条消失、"金融广告(9)"只剩一线；</span></span>
+<span id="cb18-3"><a aria-label="3"></a><span class="co"># 而真正的差距"商品(112) vs 服务(51)"反被压扁——条高之比不再等于数据之比。</span></span>
+<span id="cb18-4"><a aria-label="4"></a></span>
+<span id="cb18-5"><a aria-label="5"></a><span class="co"># ---------- 坏图 2：6 块乱序彩虹饼图 ----------</span></span>
+<span id="cb18-6"><a aria-label="6"></a><span class="fu">ggplot</span>(ads, <span class="fu">aes</span>(<span class="at">x =</span> <span class="st">""</span>, <span class="at">y =</span> n, <span class="at">fill =</span> type)) <span class="sc">+</span></span>
+<span id="cb18-7"><a aria-label="7"></a>  <span class="fu">geom_col</span>(<span class="at">width =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb18-8"><a aria-label="8"></a>  <span class="fu">coord_polar</span>(<span class="at">theta =</span> <span class="st">"y"</span>) <span class="sc">+</span>                   <span class="co"># 极坐标 -&gt; 饼图</span></span>
+<span id="cb18-9"><a aria-label="9"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">rainbow</span>(<span class="dv">6</span>)) <span class="sc">+</span></span>
+<span id="cb18-10"><a aria-label="10"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"坏饼图：6 块乱序彩虹饼"</span>, <span class="at">fill =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
+<span id="cb18-11"><a aria-label="11"></a>  <span class="fu">theme_void</span>()</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="ch03-organize-v3_files/figure-revealjs/unnamed-chunk-14-2.png" class="quarto-figure quarto-figure-center" style="width:88.0%"></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a aria-label="1"></a></span>
+<span id="cb19-2"><a aria-label="2"></a><span class="co"># 坏在哪里：6 块超过"不超过 5 块"上限；未按大小从 12 点钟降序；</span></span>
+<span id="cb19-3"><a aria-label="3"></a><span class="co"># 读者只能靠图例来回比对角度，"金融"与"其他"两块肉眼几乎无法分辨。</span></span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a aria-label="1"></a><span class="co"># ---------- 好图 1：排序条形图 + 单色系 + 直接标注 + 数据来源 ----------</span></span>
+<span id="cb20-2"><a aria-label="2"></a><span class="fu">ggplot</span>(ads, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">reorder</span>(type, n), <span class="at">y =</span> n)) <span class="sc">+</span>       <span class="co"># 按数值排序（细则 9）</span></span>
+<span id="cb20-3"><a aria-label="3"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">"steelblue"</span>, <span class="at">width =</span> <span class="dv">2</span> <span class="sc">/</span> <span class="dv">3</span>) <span class="sc">+</span>       <span class="co"># 单色系；间隔约 1/2 柱宽（细则 10）</span></span>
+<span id="cb20-4"><a aria-label="4"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> n), <span class="at">hjust =</span> <span class="sc">-</span><span class="fl">0.25</span>, <span class="at">size =</span> <span class="fl">3.5</span>) <span class="sc">+</span>  <span class="co"># 数值直接标注，无需图例</span></span>
+<span id="cb20-5"><a aria-label="5"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb20-6"><a aria-label="6"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">expand =</span> <span class="fu">expansion</span>(<span class="at">mult =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.08</span>))) <span class="sc">+</span>  <span class="co"># 纵轴从 0 起</span></span>
+<span id="cb20-7"><a aria-label="7"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"某城市居民关注不同类型广告的人数分布"</span>,</span>
+<span id="cb20-8"><a aria-label="8"></a>       <span class="at">subtitle =</span> <span class="st">"排序条形图：类别比较大小优于饼图（讲义'图型辨析表'第 2 行）"</span>,</span>
+<span id="cb20-9"><a aria-label="9"></a>       <span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="st">"关注人数（人）"</span>,</span>
+<span id="cb20-10"><a aria-label="10"></a>       <span class="at">caption =</span> <span class="st">"数据：讲义第四节条形图例（n = 200）；规范：本章'合理使用图表'自检清单"</span>) <span class="sc">+</span></span>
+<span id="cb20-11"><a aria-label="11"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="ch03-organize-v3_files/figure-revealjs/unnamed-chunk-15-1.png" class="quarto-figure quarto-figure-center" style="width:88.0%"></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a aria-label="1"></a></span>
+<span id="cb21-2"><a aria-label="2"></a><span class="co"># ---------- 好图 2：若必须用饼图——合并小类至 5 块 + 12 点钟降序 ----------</span></span>
+<span id="cb21-3"><a aria-label="3"></a>ads_pie <span class="ot">&lt;-</span> ads <span class="sc">%&gt;%</span></span>
+<span id="cb21-4"><a aria-label="4"></a>  <span class="fu">mutate</span>(<span class="at">type2 =</span> <span class="fu">if_else</span>(n <span class="sc">&lt;</span> <span class="dv">10</span>, <span class="st">"其他"</span>, type)) <span class="sc">%&gt;%</span>    <span class="co"># 金融+其他 -&gt; 合并"其他"</span></span>
+<span id="cb21-5"><a aria-label="5"></a>  <span class="fu">group_by</span>(type2) <span class="sc">%&gt;%</span></span>
+<span id="cb21-6"><a aria-label="6"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">sum</span>(n)) <span class="sc">%&gt;%</span></span>
+<span id="cb21-7"><a aria-label="7"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(n)) <span class="sc">%&gt;%</span></span>
+<span id="cb21-8"><a aria-label="8"></a>  <span class="fu">mutate</span>(<span class="at">type2 =</span> <span class="fu">factor</span>(type2, <span class="at">levels =</span> type2))        <span class="co"># 因子按降序排列</span></span>
+<span id="cb21-9"><a aria-label="9"></a></span>
+<span id="cb21-10"><a aria-label="10"></a><span class="fu">ggplot</span>(ads_pie, <span class="fu">aes</span>(<span class="at">x =</span> <span class="st">""</span>, <span class="at">y =</span> n, <span class="at">fill =</span> type2)) <span class="sc">+</span></span>
+<span id="cb21-11"><a aria-label="11"></a>  <span class="fu">geom_col</span>(<span class="at">width =</span> <span class="dv">1</span>, <span class="at">color =</span> <span class="st">"white"</span>) <span class="sc">+</span></span>
+<span id="cb21-12"><a aria-label="12"></a>  <span class="fu">coord_polar</span>(<span class="at">theta =</span> <span class="st">"y"</span>, <span class="at">start =</span> pi <span class="sc">/</span> <span class="dv">2</span>, <span class="at">direction =</span> <span class="sc">-</span><span class="dv">1</span>) <span class="sc">+</span>  <span class="co"># 12 点钟起、顺时针</span></span>
+<span id="cb21-13"><a aria-label="13"></a>  <span class="fu">scale_fill_brewer</span>(<span class="at">palette =</span> <span class="st">"Blues"</span>) <span class="sc">+</span>               <span class="co"># 同一色系渐变（细则 14 同理）</span></span>
+<span id="cb21-14"><a aria-label="14"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">paste0</span>(type2, <span class="st">" "</span>, <span class="fu">round</span>(n <span class="sc">/</span> <span class="fu">sum</span>(n) <span class="sc">*</span> <span class="dv">100</span>), <span class="st">"%"</span>)),</span>
+<span id="cb21-15"><a aria-label="15"></a>            <span class="at">position =</span> <span class="fu">position_stack</span>(<span class="at">vjust =</span> <span class="fl">0.5</span>), <span class="at">size =</span> <span class="fl">3.2</span>) <span class="sc">+</span></span>
+<span id="cb21-16"><a aria-label="16"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"广告关注构成（小类合并至 5 块以内）"</span>,</span>
+<span id="cb21-17"><a aria-label="17"></a>       <span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="cn">NULL</span>, <span class="at">fill =</span> <span class="cn">NULL</span>,</span>
+<span id="cb21-18"><a aria-label="18"></a>       <span class="at">caption =</span> <span class="st">"饼图仅用于部分-整体关系；最大一块从 12 点钟顺时针降序"</span>) <span class="sc">+</span></span>
+<span id="cb21-19"><a aria-label="19"></a>  <span class="fu">theme_void</span>()</span></code></pre></div><button title="复制到剪贴板" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="ch03-organize-v3_files/figure-revealjs/unnamed-chunk-15-2.png" class="quarto-figure quarto-figure-center" style="width:88.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>注记</strong></p>
+</div>
+<div class="callout-content">
+<p><strong>对照”图表自检清单”逐项打勾</strong></p>
+<ol type="1">
+<li>好图纵轴从 0 开始（未截断）；将来确需截断时必须加波浪断轴符号；</li>
+<li>单色系（steelblue / Blues）替代彩虹色；戏剧化标题改为平实陈述句；</li>
+<li>类别按数值排序（<code>reorder()</code>），数值直接标在条端，删除冗余图例；</li>
+<li>饼图版本合并小类至 5 块、12 点钟起始顺时针降序、同色系渐变；</li>
+<li><code>labs(caption =)</code> 标注数据来源——这正是”统计图的解剖”里的 caption 部件。</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>提示</strong></p>
+</div>
+<div class="callout-content">
+<p><strong>为什么代码里没有 3D 饼图</strong>：ggplot2 有意不提供 3D 图层——3D 透视使扇形远端变小、近端变大，读数失真（讲义误区③、细则 3/4）。Excel/WPS 中的 3D 饼图、“分离型”饼图同理应避免。教师若要现场演示 3D 有多糟，可另行使用 <code>plotrix::pie3D()</code>（需额外安装，仅演示、不进作业要求）。</p>
+</div>
+</div>
+</div>
+<div class="callout callout-warning callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>警告</strong></p>
+</div>
+<div class="callout-content">
+
+</div>
+</div>
+</div>
+</section>
+<section id="本章知识点清单" class="slide level2 scrollable">
+<h2>本章知识点清单</h2>
+<ol type="1">
+<li><p><strong>统计整理的概念</strong>：根据统计研究目的，对原始资料（初级资料）进行科学的分类和汇总，或对综合资料（次级资料）进行再加工，为统计分析准备系统化、条理化的综合资料；统计整理是统计调查的继续、统计分析的前提；方法是分组、汇总和编表。</p></li>
+<li><p><strong>统计整理的程序</strong>（六步）：设计编制整理方案 → 审核原始资料 → 分组汇总计算 → 再次审核 → 编制统计图表 → 统计数据的积累和保管。</p></li>
+<li><p><strong>数据预处理</strong>：原始数据审核（完整性——全不全；准确性——对不对，方法为逻辑检查与计算检查）；二手数据审核（适用性、时效性、确认是否必要进一步加工整理）；数据筛选（剔除无效数据、筛选符合条件的数据）；数据排序（升序/降序，可用于检查纠错、重新归类分组，有时排序本身就是分析目的）。</p></li>
+<li><p><strong>统计分组的概念</strong>：按某一个标志将总体各单位划分为若干性质不同的部分或组；对总体实行异质分解、对总体单位实行同质组合。</p></li>
+<li><p><strong>统计分组的作用</strong>：划分现象类型（如 8 种经济类型）、研究总体结构（如上海三次产业结构）、研究现象之间的依存关系（如收入与恩格尔系数）。</p></li>
+<li><p><strong>统计分组的原则</strong>：穷尽原则（每一单位都有组可归）、互斥原则（任一单位只能归入某一组）。</p></li>
+<li><p><strong>统计分组的种类</strong>：按标志多少分简单分组与复合分组；按标志性质分品质分组与数量分组；按作用任务分类型分组、结构分组、分析分组；分组体系分平行分组体系与复合分组体系。</p></li>
+<li><p><strong>分组标志的选择原则</strong>：根据研究目的；选择能够反映现象本质特征的标志；符合历史条件和具体情况。</p></li>
+<li><p><strong>品质标志分组</strong>：组数 = 分组标志表现数（如按性别分为 2 组）。</p></li>
+<li><p><strong>单项式分组</strong>：每一个变量值作为一组，组数 = 变量值的个数（如家庭人口 1~6 人分 6 组）。</p></li>
+<li><p><strong>组距式分组</strong>：组数依经验一般分 3～7 组，或按 Sturges 公式 <span class="math inline">\(K = 1 + \frac{\lg(n)}{\lg(2)} = 1 + 3.322\,\lg n\)</span> 确定；组距 <span class="math inline">\(=(\text{最大值}-\text{最小值})\div\text{组数}\)</span>；连续型变量组限用同限、遵循”下闭上开”（上限不在内），离散型变量组限用异限（差数为 1）。组数经验口径另有教材取 5≤K≤15（如胡华平课件第03章），本课程以”3～7 组 + Sturges 公式”为主线，组数确定以能显示分布特征和规律为目的。</p></li>
+<li><p><strong>连续组距式、间断组距式与开口组</strong>：连续型变量组限重叠保证”不漏”，边界值归入后一组；离散型变量可组限间断（如 105~109）；开口组（“XX以上”“XX以下”）用于避免空白组或极端值遗漏。</p></li>
+<li><p><strong>等距分组与异距分组</strong>：异距适用于分布很不均匀、标志值相等量意义不同、标志值按一定比例发展变化三种场合；不等距分组下需用频数密度（频数÷组距）反映分布实际状况。</p></li>
+<li><p><strong>组中值与组距</strong>：闭口组组中值 =（上限＋下限）÷2；缺下限开口组组中值 = 上限 − 邻组组距÷2；缺上限开口组组中值 = 下限 ＋ 邻组组距÷2；连续组距 = 上限 − 下限，间断组距 = 上限 − 下限 ＋ 1。</p></li>
+<li><p><strong>频数分布</strong>：频数（次数）为分布在各组的单位数，频率 = 各组次数 ÷ 总次数；分布数列分品质数列与变量数列，变量数列分离散型（单项式、组距式）与连续型（组距式：等距、不等距）。</p></li>
+<li><p><strong>变量数列编制步骤</strong>：排序并确定全距（R = 最大值 − 最小值）→ 确定数列类型 → 确定组数和组距 → 确定各组单位数 → 绘制次数分布直方图。</p></li>
+<li><p><strong>累计频数（频率）</strong>：向上累计由低到高（表明上限以下的单位数与比重）、向下累计由高到低（表明下限以上的单位数与比重）；累计分布图可用于估计中位数等分位点。</p></li>
+<li><p><strong>洛伦茨曲线与基尼系数</strong>：洛伦茨曲线将分配对象与接受分配者的结构相对数向上累计绘制（纵横轴均为百分比尺度）；绝对平均线为 45° 对角线；基尼系数 = A/(A+B)，取值 0～1，越接近 1 分配越悬殊。</p></li>
+<li><p><strong>统计表</strong>：广义指统计工作各阶段所用的一切表格，狭义专指整理阶段的统计表；结构上分总标题、横行标题、纵栏标题、指标数值（表式）和主词栏、宾词栏（内容）；按用途分调查表、整理表（汇总表）、分析表，按主词结构分简单表、分组表、复合表；编制规则共 7 条（结构合理、计量单位标注、线条规范、左右不封口、数字对齐、空格用”—“、必要时加注释）。</p></li>
+<li><p><strong>统计图</strong>：按形状分为线图、长条图、时间数列曲线图、面积图、洛伦兹曲线图、立体图、统计地图、象形图；完整统计图包括标题（图下方）、注脚、比值、数、单位五要素。</p></li>
+<li><p><strong>各类统计图及其适用</strong>：条形图/柱形图（分类数据的频数或频率）；直方图（组距式分组数据，与条形图有四点区别）；饼图（总体结构，中心角 = 360°×百分比）；环形图（多总体结构比较）；折线图/频数多边形（直方图顶部中点即组中值连线，折线下面积与直方图面积相等）；时间序列曲线图（时间绘横轴，长宽比约 10:7，纵轴一般从 0 开始）；雷达图（多变量、多样本比较）。</p></li>
+<li><p><strong>频数分布的类型</strong>：钟形分布（对称、右偏、左偏，偏态下均数、中位数、众数关系不同）、J 形分布（正 J 型、反 J 型）、U 型分布，另有双峰分布（提示总体混合了两个子总体，应分组考察）与 M 型分布；连续性变量用直方图、折线图，离散型/分类/顺序变量用条形图、饼图；形态还可用偏度/峰度系数定量刻画（见第 4 章）。</p></li>
+<li><p><strong>统计图的解剖（图形语法词汇）</strong>：绘图区 panel（含主/次网格）、坐标轴 axis 与主/次刻度、刻度标签值、轴标题 axis title、几何对象 geom_xx（geom_point/geom_col/geom_line）、变量数值 data value、图例 legend（靠右/靠下）、图注 footnote 与图题 caption——与 ggplot2 的 theme 参数和图层函数一一对应；一张图 = 数据 + 几何对象 + 坐标系 + 标度 + 主题。</p></li>
+<li><p><strong>未分组数据的图示</strong>：茎叶图（茎=高位数值、叶=末位数字，既显分布又保留原始数值，适用小批量数据；计算机时代建议以直方图为主）；箱线图（五特征值 Max/Min/Me/QL/QU，箱子容纳中间 50%，1.5 倍四分位距判离群值；分单一与多批，四分位数计算见第 4 章）；散点图（两变量关系，可叠加趋势线）；气泡图（三变量关系，气泡按面积缩放）；分组图（条件分布思想）须统一纵坐标。</p></li>
+<li><p><strong>累积频数分布图</strong>：较小制累积=向上累计（单调上升曲线，表明上限以下的单位数/比重），较大制累积=向下累计（单调下降曲线，表明下限以上），两曲线互补且约交于累计频率 50% 处；由 50% 线读中位数近似值；洛伦茨曲线即”结构相对数向上累计”思想在百分比坐标系中的应用。</p></li>
+<li><p><strong>图型选择对比辨析</strong>：份额构成→饼图（≤5 块、12 点钟起始顺时针降序）或堆叠柱；类别比较大小→排序条形图优于饼图；时间趋势→折线图；多总体构成→环形图/百分比堆叠柱，勿并排多张饼图；两变量关系→散点图；三变量→气泡图（面积缩放）；多变量画像→雷达图；一律优先二维平面图；拆成多张小图必须统一纵坐标。</p></li>
+<li><p><strong>合理使用图表（图表素养）</strong>：良好图表五特征（明确目的/显示数据强调比较/有统计描述与文字说明/注意力在内容而非程序/避免歪曲）；鉴别准则（核心：“最短时间、最少笔墨、最大信息量”）；五类制图误区（非零起点、比例拉伸失调、3D 炫技、图片面积误导、目标不明确）；14 组图设计细则（饼图≤5 块且 12 点钟降序、条形按值排序、条间隔约 1/2 柱宽、面积图加透明度、散点加趋势线、气泡按面积缩放、热力图同色系渐变等）；表设计（开放式三线表=顶线+表头线+底线，条件格式优于密集网格线）；交图前按”图表自检清单”逐项核验。</p></li>
+<li><p><strong>数据预处理的软件操作（拓展）</strong>：Excel 数据透视表六步（建立数据清单→插入透视表→确定数据源→定输出位置与布局→拖字段至行/列/数据区域→完成；首行必须有列标题）；常用清洗函数（LEFT/RIGHT/MID 提取、LOWER/UPPER/PROPER 大小写、TRIM 去空格、CLEAN 去非打印字符、&amp; 合并、删除重复项、查找替换）；R 对应 dplyr 管道（filter 去缺失、distinct 去重、mutate+trimws 清洗）。</p></li>
+</ol>
+
+
+</section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<div class="footer footer-default">
+
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="site_libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="site_libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="site_libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="site_libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="site_libs/revealjs/plugin/reveal-chalkboard/plugin.js"></script>
+  <script src="site_libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="site_libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="site_libs/revealjs/plugin/search/search.js"></script>
+  <script src="site_libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="site_libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': true,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"8\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'chalkboard': {"buttons":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealChalkboard, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    
+
+    <script>
+
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+
+      // slide changes (different for each slide format).
+
+      (function () {
+
+        // dispatch for htmlwidgets
+
+        function fireSlideEnter() {
+
+          const event = window.document.createEvent("Event");
+
+          event.initEvent("slideenter", true, true);
+
+          window.document.dispatchEvent(event);
+
+        }
+
+    
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+
+          fireSlideEnter();
+
+    
+
+          // dispatch for shiny
+
+          if (window.jQuery) {
+
+            if (previousSlide) {
+
+              window.jQuery(previousSlide).trigger("hidden");
+
+            }
+
+            if (currentSlide) {
+
+              window.jQuery(currentSlide).trigger("shown");
+
+            }
+
+          }
+
+        }
+
+    
+
+        // hookup for slidy
+
+        if (window.w3c_slidy) {
+
+          window.w3c_slidy.add_observer(function (slide_num) {
+
+            // slide_num starts at position 1
+
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+
+          });
+
+        }
+
+    
+
+      })();
+
+    </script>
+
+    
+
+    <script id="quarto-html-after-body" type="application/javascript">
+      window.document.addEventListener("DOMContentLoaded", function (event) {
+        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+        tabsets.forEach(function(tabset) {
+          const tabby = new Tabby('#' + tabset.id);
+        });
+        const isCodeAnnotation = (el) => {
+          for (const clz of el.classList) {
+            if (clz.startsWith('code-annotation-')) {                     
+              return true;
+            }
+          }
+          return false;
+        }
+        const onCopySuccess = function(e) {
+          // button target
+          const button = e.trigger;
+          // don't keep focus
+          button.blur();
+          // flash "checked"
+          button.classList.add('code-copy-button-checked');
+          var currentTitle = button.getAttribute("title");
+          button.setAttribute("title", "已复制");
+          let tooltip;
+          if (window.bootstrap) {
+            button.setAttribute("data-bs-toggle", "tooltip");
+            button.setAttribute("data-bs-placement", "left");
+            button.setAttribute("data-bs-title", "已复制");
+            tooltip = new bootstrap.Tooltip(button, 
+              { trigger: "manual", 
+                customClass: "code-copy-button-tooltip",
+                offset: [0, -8]});
+            tooltip.show();    
+          }
+          setTimeout(function() {
+            if (tooltip) {
+              tooltip.hide();
+              button.removeAttribute("data-bs-title");
+              button.removeAttribute("data-bs-toggle");
+              button.removeAttribute("data-bs-placement");
+            }
+            button.setAttribute("title", currentTitle);
+            button.classList.remove('code-copy-button-checked');
+          }, 1000);
+          // clear code selection
+          e.clearSelection();
+        }
+        const getTextToCopy = function(trigger) {
+          const outerScaffold = trigger.parentElement.cloneNode(true);
+          const codeEl = outerScaffold.querySelector('code');
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+        }
+        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+          text: getTextToCopy
+        });
+        clipboard.on('success', onCopySuccess);
+        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+            text: getTextToCopy,
+            container: window.document.getElementById('quarto-embedded-source-code-modal')
+          });
+          clipboardModal.on('success', onCopySuccess);
+        }
+          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+          var mailtoRegex = new RegExp(/^mailto:/);
+            var filterRegex = new RegExp('/' + window.location.host + '/');
+          var isInternal = (href) => {
+              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+          }
+          // Inspect non-navigation links and adorn them if external
+         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+          for (var i=0; i<links.length; i++) {
+            const link = links[i];
+            if (!isInternal(link.href)) {
+              // undo the damage that might have been done by quarto-nav.js in the case of
+              // links that we want to consider external
+              if (link.dataset.originalHref !== undefined) {
+                link.href = link.dataset.originalHref;
+              }
+            }
+          }
+        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+          const config = {
+            allowHTML: true,
+            maxWidth: 500,
+            delay: 100,
+            arrow: false,
+            appendTo: function(el) {
+                return el.closest('section.slide') || el.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'light-border',
+            placement: 'bottom-start',
+          };
+          if (contentFn) {
+            config.content = contentFn;
+          }
+          if (onTriggerFn) {
+            config.onTrigger = onTriggerFn;
+          }
+          if (onUntriggerFn) {
+            config.onUntrigger = onUntriggerFn;
+          }
+            config['offset'] = [0,0];
+            config['maxWidth'] = 700;
+          window.tippy(el, config); 
+        }
+        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+        for (var i=0; i<noterefs.length; i++) {
+          const ref = noterefs[i];
+          tippyHover(ref, function() {
+            // use id or data attribute instead here
+            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+            try { href = new URL(href).hash; } catch {}
+            const id = href.replace(/^#\/?/, "");
+            const note = window.document.getElementById(id);
+            if (note) {
+              return note.innerHTML;
+            } else {
+              return "";
+            }
+          });
+        }
+        const findCites = (el) => {
+          const parentEl = el.parentElement;
+          if (parentEl) {
+            const cites = parentEl.dataset.cites;
+            if (cites) {
+              return {
+                el,
+                cites: cites.split(' ')
+              };
+            } else {
+              return findCites(el.parentElement)
+            }
+          } else {
+            return undefined;
+          }
+        };
+        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+        for (var i=0; i<bibliorefs.length; i++) {
+          const ref = bibliorefs[i];
+          const citeInfo = findCites(ref);
+          if (citeInfo) {
+            tippyHover(citeInfo.el, function() {
+              var popup = window.document.createElement('div');
+              citeInfo.cites.forEach(function(cite) {
+                var citeDiv = window.document.createElement('div');
+                citeDiv.classList.add('hanging-indent');
+                citeDiv.classList.add('csl-entry');
+                var biblioDiv = window.document.getElementById('ref-' + cite);
+                if (biblioDiv) {
+                  citeDiv.innerHTML = biblioDiv.innerHTML;
+                }
+                popup.appendChild(citeDiv);
+              });
+              return popup.innerHTML;
+            });
+          }
+        }
+      });
+      </script>
+    
+
+</body></html>
